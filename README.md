@@ -15,8 +15,7 @@ There are six scripts that can be executed independently:
 
 * Fig. 1: [fig_01_plot_key_galaxy_properties.py](/fig_01_plot_key_galaxy_properties.py)
   * Plots the halo mass, <i>M</i><sub>200</sub>,
-  stellar mass, <i>M</i><sub>*</sub>, and
-  mass in GCs, <i>M</i><sub>GC</sub>,
+  stellar mass, <i>M</i><sub>*</sub>, and mass in GCs, <i>M</i><sub>GC</sub>,
   vs. lookback time.
 * Fig. 2: [fig_02_plot_z0_mass_function.py](/fig_02_plot_z0_mass_function.py)
   * Plots the $z=0$ and birth mass functions of all clusters that survive to
