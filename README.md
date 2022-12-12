@@ -24,7 +24,7 @@ There are six scripts that can be executed independently:
 * Fig. 3: [fig_03_plot_rates_of_change.py](/fig_03_plot_rates_of_change.py)
   * Plots the star formation rate, GC formation rate, GC destruction rate, and
   net change in GC mass vs. lookback time.
-* Figs 4 & 5: [figs_45_plot_gc_properties.py](/figs_45_plot_gc_properties.py)
+* Figs 4 & 5: [fig_04_05_plot_gc_properties.py](/fig_04_05_plot_gc_properties.py)
   * Plots the stellar and GC birth pressures, M<sub>c,*</sub>, and cluster
   formation efficiency vs. lookback time.
   * Plots the specific frequency, <i>T</i><sub>N</sub> and <i>S</i><sub>M</sub>
