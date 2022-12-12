@@ -13,33 +13,38 @@ All plotting scripts should be executed from this directory.
 
 There are six scripts that can be executed independently:
 
-* Fig. 1: [plot_key_galaxy_properties.py](/plot_key_galaxy_properties.py)
+* Fig. 1: [fig_01_plot_key_galaxy_properties.py](/fig_01_plot_key_galaxy_properties.py)
   * Plots the halo mass, <i>M</i><sub>200</sub>,
   stellar mass, <i>M</i><sub>*</sub>, and
   mass in GCs, <i>M</i><sub>GC</sub>,
   vs. lookback time.
-* Fig. 2: [plot_z0_mass_function.py](/plot_z0_mass_function.py)
+* Fig. 2: [fig_02_plot_z0_mass_function.py](/fig_02_plot_z0_mass_function.py)
   * Plots the $z=0$ and birth mass functions of all clusters that survive to
   $z=0$.
-* Fig. 3: [plot_rates_of_change.py](/plot_rates_of_change.py)
+* Fig. 3: [fig_03_plot_rates_of_change.py](/fig_03_plot_rates_of_change.py)
   * Plots the star formation rate, GC formation rate, GC destruction rate, and
   net change in GC mass vs. lookback time.
-* Figs 4 & 5: [plot_gc_properties.py](/plot_gc_properties.py)
+* Figs 4 & 5: [figs_45_plot_gc_properties.py](/figs_45_plot_gc_properties.py)
   * Plots the stellar and GC birth pressures, M<sub>c,*</sub>, and cluster
   formation efficiency vs. lookback time.
   * Plots the specific frequency, <i>T</i><sub>N</sub> and <i>S</i><sub>M</sub>
   vs. lookback time.
-* Fig. 6: [plot_gas_bh_properties.py](/plot_gas_bh_properties.py)
+* Fig. 6: [fig_06_plot_gas_bh_properties.py](/fig_06_plot_gas_bh_properties.py)
   * Plots the mass of star-forming gas and the central black hole mass vs.
   lookback time.
-* Fig. 7: [plot_fhalo.py](/plot_fhalo.py)
+* Fig. 7: [fig_07_plot_fhalo.py](/fig_07_plot_fhalo.py)
   * Plots the fraction of mass in halo stars contributed by the destruction of
   star clusters.
-
 
 There is also a master script, [run_all_scripts.py](/run_all_scripts.py),
 that will run all of the above scripts when executed. This produces .svg
 and .pdf versions of each figure in the paper.
+
+### Supplementary scripts
+* [common_functions.py](/common_functions.py)
+  * A set of functions common to more than one of the main scripts.
+* [process_data.py](/process_data.py)
+  * Contains classes and functions to handle basic processing of data.
 
 ## 2.0 Data
 
