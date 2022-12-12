@@ -74,10 +74,11 @@ class Z0Data(object):
         with h5py.File(z0_data_file.format(self.sim), 'r') as f:
             groups = [
                 'Current clusters', 'Fully disrupted', 'Partially disrupted',
-                'Field'
+                'Field', 'Undisrupted'
             ]
             group_prefixes = [
-                'current_cluster_', 'disrupted_', 'part_disrupted_', 'field_'
+                'current_cluster_', 'disrupted_', 'part_disrupted_', 'field_',
+                'undisrupted_'
             ]
             # Read in current cluster data
             for group, prefix in zip(groups, group_prefixes):
@@ -182,6 +183,12 @@ class Z0Data(object):
         select_part_disrupted_gcs = (select_part_disrupted_clusters *
                                      (self.part_disrupted_m_birth >= m_gc))
 
+        select_undisrupted_clusters = (
+            (self.undisrupted_distance >= self.r_half) *
+            (self.undisrupted_distance <= outer_radius))
+        select_undisrupted_gcs = (select_undisrupted_clusters *
+                                  (self.undisrupted_m_birth >= m_gc))
+
         # Sum masses of disrupted objects
         m_disrupted_cl = np.nansum(self.disrupted_m_disrupted *
                                    select_disrupted_clusters,
@@ -199,7 +206,7 @@ class Z0Data(object):
             self.disrupted_stellar_evolution_fraction * select_disrupted_gcs,
             axis=0)
 
-        # Sum mass sloughed by partially disrupted objects
+        # Sum mass sloughed by partially disrupted objects (i.e. zero)
         m_part_disrupted_cl = np.nansum(self.part_disrupted_m_disrupted *
                                         select_part_disrupted_clusters,
                                         axis=0)
@@ -218,17 +225,38 @@ class Z0Data(object):
             select_part_disrupted_gcs,
             axis=0)
 
+        # Sum mass sloughed by undisrupted objects
+        m_undisrupted_cl = np.nansum(self.undisrupted_m_disrupted *
+                                     select_undisrupted_clusters,
+                                     axis=0)
+        m_undisrupted_gc = np.nansum(self.undisrupted_m_disrupted *
+                                     select_undisrupted_clusters *
+                                     select_undisrupted_gcs,
+                                     axis=0)
+        m_init_undisrupted_cl = np.nansum(
+            self.undisrupted_m_disrupted *
+            self.undisrupted_stellar_evolution_fraction *
+            select_undisrupted_clusters,
+            axis=0)
+        m_init_undisrupted_gc = np.nansum(
+            self.undisrupted_m_disrupted *
+            self.undisrupted_stellar_evolution_fraction *
+            select_undisrupted_gcs,
+            axis=0)
+
         # Sum mass of halo stars
         m_halo = np.nansum(self.field_m_current * select_field_stars, axis=0)
 
-        self.f_halo_all_clusters = (m_disrupted_cl +
-                                    m_part_disrupted_cl) / m_halo
-        self.f_halo_formed_as_gcs = (m_disrupted_gc +
-                                     m_part_disrupted_gc) / m_halo
+        self.f_halo_all_clusters = (m_disrupted_cl + m_part_disrupted_cl +
+                                    m_undisrupted_cl) / m_halo
+        self.f_halo_formed_as_gcs = (m_disrupted_gc + m_part_disrupted_gc +
+                                     m_undisrupted_gc) / m_halo
         self.f_halo_init_all_clusters = (m_init_disrupted_cl +
-                                         m_init_part_disrupted_cl) / m_halo
+                                         m_init_part_disrupted_cl +
+                                         m_init_undisrupted_cl) / m_halo
         self.f_halo_init_formed_as_gcs = (m_init_disrupted_gc +
-                                          m_init_part_disrupted_gc) / m_halo
+                                          m_init_part_disrupted_gc +
+                                          m_init_undisrupted_gc) / m_halo
 
         return (self.f_halo_all_clusters, self.f_halo_formed_as_gcs,
                 self.f_halo_init_all_clusters, self.f_halo_init_formed_as_gcs)
