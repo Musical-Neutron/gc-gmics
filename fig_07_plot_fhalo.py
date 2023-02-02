@@ -3,13 +3,10 @@
 # Place import files below
 import matplotlib.pyplot as plt
 import numpy as np
-from common_functions import save_figures, plot_merger_arrow
+
+from common_functions import save_figures
 from process_data import Z0Data
-from universal_settings import (figure_handler, plot_styles, sim_list,
-                                sim_names, sim_tlb_major_merger,
-                                sim_tlb_target_merger, mm_arrow_properties,
-                                tm_arrow_properties, axis_rescale,
-                                arrow_length, z0_data_file)
+from universal_settings import (plot_styles, sim_list, sim_names)
 
 
 def main():
@@ -32,7 +29,7 @@ def main():
 
     fig, axs = plt.subplots(2,
                             1,
-                            figsize=(8, 8 * np.ceil(2 / 3.)),
+                            figsize=(8, 8 * (1. + 0.3 * (2 - 1.))),
                             sharex=True,
                             gridspec_kw={
                                 "width_ratios": [1],
@@ -52,6 +49,14 @@ def main():
              n_bins=n_radial_bins, outer_radius=outer_radius, m_gc=gc_mass)
         max_rhalf = z0_data.max_rhalf
 
+        # FHalo in radial bins
+        med_fcl, spread_fcl = med_spread(f_halo_cl, confidence=CL)
+        med_fgc, spread_fgc = med_spread(f_halo_gcs, confidence=CL)
+        (med_fcl_init, spread_fcl_init) = med_spread(f_halo_init_cl,
+                                                     confidence=CL)
+        (med_fgc_init, spread_fgc_init) = med_spread(f_halo_init_gcs,
+                                                     confidence=CL)
+
         # FHalo (Reina-Campos definition) data
         # Radius at which to plot Reina-Campos-style data
         rc_x = (max_rhalf + outer_radius) / 2.
@@ -62,14 +67,6 @@ def main():
                                                        confidence=CL)
         med_rc_init_gc, spread_rc_init_gc = med_spread(rc_init_gcs,
                                                        confidence=CL)
-
-        # Radial FHalo
-        med_fcl, spread_fcl = med_spread(f_halo_cl, confidence=CL)
-        med_fgc, spread_fgc = med_spread(f_halo_gcs, confidence=CL)
-        (med_fcl_init, spread_fcl_init) = med_spread(f_halo_init_cl,
-                                                     confidence=CL)
-        (med_fgc_init, spread_fgc_init) = med_spread(f_halo_init_gcs,
-                                                     confidence=CL)
 
         # Plot median
         line, = axs[0].plot(radius_mid_bins,
@@ -95,19 +92,32 @@ def main():
                             alpha=0.3)
 
         # Plot FHalo (Reina-Campos definition)
-        axs[0].errorbar(rc_x,
-                        med_rc_cl,
-                        yerr=[[err]
-                              for err in np.abs(spread_rc_cl - med_rc_cl)],
-                        marker='.',
-                        color=line.get_color(),
-                        markersize=5,
-                        lw=None,
-                        elinewidth=1,
-                        capsize=3,
-                        capthick=1,
-                        label=r'$F^{\rm halo}$',
-                        zorder=0)
+        axs[0].errorbar(
+            rc_x,
+            med_rc_init_cl,
+            yerr=[[err] for err in np.abs(spread_rc_init_cl - med_rc_init_cl)],
+            marker='.',
+            color=line.get_color(),
+            markersize=5,
+            lw=None,
+            elinewidth=1,
+            capsize=3,
+            capthick=1,
+            label=r'$F^{\rm halo}$',
+            zorder=0)
+        # axs[0].errorbar(rc_x,
+        #                 med_rc_cl,
+        #                 yerr=[[err]
+        #                       for err in np.abs(spread_rc_cl - med_rc_cl)],
+        #                 marker='.',
+        #                 color=line.get_color(),
+        #                 markersize=5,
+        #                 lw=None,
+        #                 elinewidth=1,
+        #                 capsize=3,
+        #                 capthick=1,
+        #                 label=r'$F^{\rm halo}$',
+        #                 zorder=0)
 
         # Plot median
         line, = axs[1].plot(radius_mid_bins,
@@ -133,19 +143,32 @@ def main():
                             alpha=0.3)
 
         # Plot FHalo (Reina-Campos definition)
-        axs[1].errorbar(rc_x,
-                        med_rc_gc,
-                        yerr=[[err]
-                              for err in np.abs(spread_rc_gc - med_rc_gc)],
-                        marker='.',
-                        color=line.get_color(),
-                        markersize=5,
-                        lw=None,
-                        elinewidth=1,
-                        capsize=3,
-                        capthick=1,
-                        label=r'$F^{\rm halo}$',
-                        zorder=0)
+        axs[1].errorbar(
+            rc_x,
+            med_rc_init_gc,
+            yerr=[[err] for err in np.abs(spread_rc_init_gc - med_rc_init_gc)],
+            marker='.',
+            color=line.get_color(),
+            markersize=5,
+            lw=None,
+            elinewidth=1,
+            capsize=3,
+            capthick=1,
+            label=r'$F^{\rm halo}$',
+            zorder=0)
+        # axs[1].errorbar(rc_x,
+        #                 med_rc_gc,
+        #                 yerr=[[err]
+        #                       for err in np.abs(spread_rc_gc - med_rc_gc)],
+        #                 marker='.',
+        #                 color=line.get_color(),
+        #                 markersize=5,
+        #                 lw=None,
+        #                 elinewidth=1,
+        #                 capsize=3,
+        #                 capthick=1,
+        #                 label=r'$F^{\rm halo}$',
+        #                 zorder=0)
 
     axs[0].minorticks_on()
     axs[1].minorticks_on()

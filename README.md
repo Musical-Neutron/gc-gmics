@@ -11,7 +11,7 @@ All plotting scripts should be executed from this directory.
 
 ## 1.0 Scripts
 
-There are six scripts that can be executed independently:
+There are seven scripts that can be executed independently:
 
 * Fig. 1: [fig_01_plot_key_galaxy_properties.py](/fig_01_plot_key_galaxy_properties.py)
   * Plots the halo mass, <i>M</i><sub>200</sub>,
@@ -34,6 +34,8 @@ There are six scripts that can be executed independently:
 * Fig. 7: [fig_07_plot_fhalo.py](/fig_07_plot_fhalo.py)
   * Plots the fraction of mass in halo stars contributed by the destruction of
   star clusters.
+* [print_paper_results.py](/print_paper_results.py)
+  * Prints information relevant to the paper to stdout.
 
 There is also a master script, [run_all_scripts.py](/run_all_scripts.py),
 that will run all of the above scripts when executed. This produces .svg

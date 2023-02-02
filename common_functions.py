@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 # Place import files below
 import os
+import string
+
 import numpy as np
 import scipy.integrate as integrate
 from astropy import constants as const
 from matplotlib.ticker import Locator
+
+panel_labels = [it + ")" for it in list(string.ascii_lowercase)]
 
 
 def embed_symbols(pdf_file):

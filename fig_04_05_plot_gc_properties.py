@@ -3,13 +3,13 @@
 # Place import files below
 import matplotlib.pyplot as plt
 import numpy as np
-from common_functions import save_figures, plot_merger_arrow
+
+from common_functions import plot_merger_arrow, save_figures
 from process_data import EvolutionData, return_plot_format_lists
-from universal_settings import (figure_handler, plot_styles, sim_list,
+from universal_settings import (arrow_length, axis_rescale, figure_handler,
+                                mm_arrow_properties, plot_styles, sim_list,
                                 sim_names, sim_tlb_major_merger,
-                                sim_tlb_target_merger, mm_arrow_properties,
-                                tm_arrow_properties, axis_rescale,
-                                arrow_length)
+                                sim_tlb_target_merger, tm_arrow_properties)
 
 
 def main():

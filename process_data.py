@@ -2,11 +2,10 @@
 
 # Place import files below
 import h5py
-import copy
 import numpy as np
-import os
-from universal_settings import (data_file_template, sim_list, sim_names,
-                                gc_mass, evo_property_dict, z0_data_file)
+
+from universal_settings import (data_file_template, evo_property_dict, gc_mass,
+                                z0_data_file)
 
 
 def return_plot_format_lists(properties_to_plot,
@@ -34,6 +33,27 @@ def return_plot_format_lists(properties_to_plot,
         yscales.append(property_dict[sub]['yscale'])
         ylims.append(property_dict[sub]['ylim'])
     return ylabels, yscales, ylims
+
+
+def return_print_format_lists(properties_to_print,
+                              property_dict=evo_property_dict):
+    """Returns stdout print properties associated with a given attribute
+
+    Args:
+        properties_to_print (list): List of str designating the desired
+            properties to print.
+        property_dict (dict, optional): Dictionary of properties
+            associated with each attribute.
+            Defaults to evo_property_dict.
+
+    Returns:
+        list: Print labels.
+    """
+
+    labels = []
+    for sub in properties_to_print:
+        labels.append(property_dict[sub]['printlabel'])
+    return labels
 
 
 def quantity_in_shells(quantity_to_sum, distances, shell_r):
@@ -189,6 +209,43 @@ class Z0Data(object):
         select_undisrupted_gcs = (select_undisrupted_clusters *
                                   (self.undisrupted_m_birth >= m_gc))
 
+        prefixes = ['disrupted_', 'part_disrupted_', 'undisrupted_']
+        prefix_selections = [
+            [select_disrupted_clusters, select_disrupted_gcs],
+            [select_part_disrupted_clusters, select_part_disrupted_gcs],
+            [select_undisrupted_clusters, select_undisrupted_gcs]
+        ]
+
+        m_cl = []
+        m_gcs = []
+        m_init_cl = []
+        m_init_gcs = []
+
+        for prefix, selections in zip(prefixes, prefix_selections):
+            cl_selection, gc_selection = selections
+
+            # Mass lost from clusters
+            m_cl.append(
+                np.nansum(getattr(self, prefix + 'm_disrupted') * cl_selection,
+                          axis=0))
+            # Mass lost from GCs
+            m_gcs.append(
+                np.nansum(getattr(self, prefix + 'm_disrupted') * gc_selection,
+                          axis=0))
+
+            m_init_cl.append(
+                np.nansum(
+                    getattr(self, prefix + 'm_birth') *
+                    getattr(self, prefix + 'stellar_evolution_fraction') *
+                    cl_selection,
+                    axis=0))
+            m_init_gcs.append(
+                np.nansum(
+                    getattr(self, prefix + 'm_birth') *
+                    getattr(self, prefix + 'stellar_evolution_fraction') *
+                    gc_selection,
+                    axis=0))
+
         # Sum masses of disrupted objects
         m_disrupted_cl = np.nansum(self.disrupted_m_disrupted *
                                    select_disrupted_clusters,
@@ -202,7 +259,7 @@ class Z0Data(object):
             select_disrupted_clusters,
             axis=0)
         m_init_disrupted_gc = np.nansum(
-            self.disrupted_m_disrupted *
+            self.disrupted_m_birth *
             self.disrupted_stellar_evolution_fraction * select_disrupted_gcs,
             axis=0)
 
@@ -215,12 +272,12 @@ class Z0Data(object):
                                         select_part_disrupted_gcs,
                                         axis=0)
         m_init_part_disrupted_cl = np.nansum(
-            self.part_disrupted_m_disrupted *
+            self.part_disrupted_m_birth *
             self.part_disrupted_stellar_evolution_fraction *
             select_part_disrupted_clusters,
             axis=0)
         m_init_part_disrupted_gc = np.nansum(
-            self.part_disrupted_m_disrupted *
+            self.part_disrupted_m_birth *
             self.part_disrupted_stellar_evolution_fraction *
             select_part_disrupted_gcs,
             axis=0)
@@ -234,12 +291,12 @@ class Z0Data(object):
                                      select_undisrupted_gcs,
                                      axis=0)
         m_init_undisrupted_cl = np.nansum(
-            self.undisrupted_m_disrupted *
+            self.undisrupted_m_birth *
             self.undisrupted_stellar_evolution_fraction *
             select_undisrupted_clusters,
             axis=0)
         m_init_undisrupted_gc = np.nansum(
-            self.undisrupted_m_disrupted *
+            self.undisrupted_m_birth *
             self.undisrupted_stellar_evolution_fraction *
             select_undisrupted_gcs,
             axis=0)
@@ -247,16 +304,20 @@ class Z0Data(object):
         # Sum mass of halo stars
         m_halo = np.nansum(self.field_m_current * select_field_stars, axis=0)
 
-        self.f_halo_all_clusters = (m_disrupted_cl + m_part_disrupted_cl +
-                                    m_undisrupted_cl) / m_halo
-        self.f_halo_formed_as_gcs = (m_disrupted_gc + m_part_disrupted_gc +
-                                     m_undisrupted_gc) / m_halo
-        self.f_halo_init_all_clusters = (m_init_disrupted_cl +
-                                         m_init_part_disrupted_cl +
-                                         m_init_undisrupted_cl) / m_halo
-        self.f_halo_init_formed_as_gcs = (m_init_disrupted_gc +
-                                          m_init_part_disrupted_gc +
-                                          m_init_undisrupted_gc) / m_halo
+        # self.f_halo_all_clusters = (m_disrupted_cl + m_part_disrupted_cl +
+        #                             m_undisrupted_cl) / m_halo
+        self.f_halo_all_clusters = np.nansum(m_cl, axis=0) / m_halo
+        # self.f_halo_formed_as_gcs = (m_disrupted_gc + m_part_disrupted_gc +
+        #                              m_undisrupted_gc) / m_halo
+        self.f_halo_formed_as_gcs = np.nansum(m_gcs, axis=0) / m_halo
+        # self.f_halo_init_all_clusters = (m_init_disrupted_cl +
+        #                                  m_init_part_disrupted_cl +
+        #                                  m_init_undisrupted_cl) / m_halo
+        self.f_halo_init_all_clusters = np.nansum(m_init_cl, axis=0) / m_halo
+        # self.f_halo_init_formed_as_gcs = (m_init_disrupted_gc +
+        #                                   m_init_part_disrupted_gc +
+        #                                   m_init_undisrupted_gc) / m_halo
+        self.f_halo_init_formed_as_gcs = np.nansum(m_init_gcs, axis=0) / m_halo
 
         return (self.f_halo_all_clusters, self.f_halo_formed_as_gcs,
                 self.f_halo_init_all_clusters, self.f_halo_init_formed_as_gcs)

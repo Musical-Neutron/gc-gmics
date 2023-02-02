@@ -2,14 +2,13 @@
 
 # Place import files below
 import matplotlib.pyplot as plt
-import numpy as np
-from common_functions import save_figures, plot_merger_arrow
+
+from common_functions import panel_labels, plot_merger_arrow, save_figures
 from process_data import EvolutionData, return_plot_format_lists
-from universal_settings import (figure_handler, plot_styles, sim_list,
+from universal_settings import (arrow_length, axis_rescale, figure_handler,
+                                mm_arrow_properties, plot_styles, sim_list,
                                 sim_names, sim_tlb_major_merger,
-                                sim_tlb_target_merger, mm_arrow_properties,
-                                tm_arrow_properties, axis_rescale,
-                                arrow_length)
+                                sim_tlb_target_merger, tm_arrow_properties)
 
 
 def main():
@@ -29,7 +28,7 @@ def main():
     fig, axs = plt.subplots(
         len(property_list),
         1,
-        figsize=(8, 8 * np.ceil(len(property_list) / 3.)),
+        figsize=(8, 8 * (1. + 0.3 * (len(property_list) - 1.))),
         sharex=True,
         gridspec_kw={
             "width_ratios": [1],
@@ -39,7 +38,8 @@ def main():
         })
 
     # Iterate over each axis and plot data
-    for a_i, (ax, property_to_plot) in enumerate(zip(axs, property_list)):
+    for a_i, (ax, ax_label, property_to_plot) in enumerate(
+            zip(axs, panel_labels, property_list)):
         for (sim_data, sim, sim_name, tlb_mm,
              tlb_tm) in zip(ev_data, sim_list, sim_names, sim_tlb_major_merger,
                             sim_tlb_target_merger):
@@ -87,6 +87,13 @@ def main():
                                       arrow_length,
                                       arrow_properties=tm_arrow_properties,
                                       loc='lower')
+
+        ax.text(0.02,
+                0.94,
+                ax_label,
+                color='k',
+                verticalalignment='top',
+                transform=ax.transAxes)
 
     # Set common properties of the plots using the figure handler
     figure_handler.set_stacked_figure_properties(axs,
