@@ -104,7 +104,7 @@ evo_property_dict = {
         'printlabel': 'CFE(r < 30 kpc)'
     },
     'GCDR': {
-        'ylim': [-1.45, 0.3],
+        'ylim': [-1.45, 0.2],
         'yscale': 'linear',
         'ylabel': r'${\rm GCDR\, \left[M_\odot\, yr^{-1}\right]}$',
         'printlabel': 'GCDR(r < 30 kpc) [Msun / yr]'

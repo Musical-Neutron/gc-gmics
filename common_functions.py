@@ -370,9 +370,11 @@ class FigureHandler(object):
         else:
             text_label_arg_list = text_label_args
 
-        for i, (ax, ylabel, ylim, yscale, t_label, t_label_args) in enumerate(
-                zip(axs, ylabels, ylim_list, yscale_prop_list, text_label_list,
-                    text_label_arg_list)):
+        for i, (ax, ax_label, ylabel, ylim, yscale, t_label,
+                t_label_args) in enumerate(
+                    zip(axs, panel_labels, ylabels, ylim_list,
+                        yscale_prop_list, text_label_list,
+                        text_label_arg_list)):
             # Add redshift x-axis on the topmost panel only
             if (((direction == 'vertical') and (i == 0))
                     or (direction == 'horizontal')):
@@ -413,6 +415,14 @@ class FigureHandler(object):
 
             if direction == 'horizontal':
                 new_x_ax.invert_axis()
+
+            if len(axs) > 2:
+                ax.text(0.02,
+                        0.96,
+                        ax_label,
+                        color='k',
+                        verticalalignment='top',
+                        transform=ax.transAxes)
 
         if direction == 'vertical':
             new_x_ax.invert_axis()

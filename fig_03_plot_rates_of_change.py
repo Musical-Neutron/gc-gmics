@@ -3,7 +3,7 @@
 # Place import files below
 import matplotlib.pyplot as plt
 
-from common_functions import panel_labels, plot_merger_arrow, save_figures
+from common_functions import plot_merger_arrow, save_figures
 from process_data import EvolutionData, return_plot_format_lists
 from universal_settings import (arrow_length, axis_rescale, figure_handler,
                                 mm_arrow_properties, plot_styles, sim_list,
@@ -38,8 +38,7 @@ def main():
         })
 
     # Iterate over each axis and plot data
-    for a_i, (ax, ax_label, property_to_plot) in enumerate(
-            zip(axs, panel_labels, property_list)):
+    for a_i, (ax, property_to_plot) in enumerate(zip(axs, property_list)):
         for (sim_data, sim, sim_name, tlb_mm,
              tlb_tm) in zip(ev_data, sim_list, sim_names, sim_tlb_major_merger,
                             sim_tlb_target_merger):
@@ -87,13 +86,6 @@ def main():
                                       arrow_length,
                                       arrow_properties=tm_arrow_properties,
                                       loc='lower')
-
-        ax.text(0.02,
-                0.94,
-                ax_label,
-                color='k',
-                verticalalignment='top',
-                transform=ax.transAxes)
 
     # Set common properties of the plots using the figure handler
     figure_handler.set_stacked_figure_properties(axs,
