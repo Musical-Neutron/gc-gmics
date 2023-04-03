@@ -33,8 +33,9 @@ sim_list = [
     'z2_od_1p000_HiRes_noBH',
     'z2_od_1p000_mz1p7_0p800_HiRes_noBH',
 ]
-sim_tlb_major_merger = [9.3, 10., 9.6, 9.3, 10., 9.6]  # Gyr
-sim_tlb_target_merger = [8.07, 6.71, None, 8.07, 6.71, None]  # Gyr
+# Onset of merger
+sim_tlb_major_merger = [9.85, 10.00, 9.95, 9.85, 10.00, 9.95]  # Gyr
+sim_tlb_target_merger = [7.49, 6.95, None, 7.49, 6.95, None]  # Gyr
 sim_names = [
     r'$\textsc{enhanced}$',
     r'$\textsc{organic}$',
@@ -57,12 +58,13 @@ axis_rescale = np.abs(np.diff(tlb_lim)[0])
 common_arrow_properties = {
     'head_width': arrow_length * 0.2,
     'head_length': arrow_length * 0.3,
+    'width': arrow_length * 0.075,
     'shape': 'full',
     'length_includes_head': True,
     'zorder': 99
 }
 mm_arrow_properties = copy.deepcopy(common_arrow_properties)
-mm_arrow_properties.update({'ls': ':'})
+mm_arrow_properties.update({'ls': ':', 'hatch': '/' * 5})
 tm_arrow_properties = copy.deepcopy(common_arrow_properties)
 tm_arrow_properties.update({'ls': '-'})
 
