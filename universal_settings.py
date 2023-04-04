@@ -35,7 +35,9 @@ sim_list = [
 ]
 # Onset of merger
 sim_tlb_major_merger = [9.85, 10.00, 9.95, 9.85, 10.00, 9.95]  # Gyr
-sim_tlb_target_merger = [7.49, 6.95, None, 7.49, 6.95, None]  # Gyr
+sim_dtlb_mm = [0.325, 0.259, 0.129, 0.325, 0.259, 0.129]  # Gyr
+sim_tlb_target_merger = [7.49, 6.89, None, 7.49, 6.89, None]  # Gyr
+sim_dtlb_tm = [0.486, 0.107, None, 0.486, 0.107, None]  # Gyr
 sim_names = [
     r'$\textsc{enhanced}$',
     r'$\textsc{organic}$',
