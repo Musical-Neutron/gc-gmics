@@ -2,7 +2,7 @@
 
 # Place import files below
 import matplotlib.pyplot as plt
-
+import numpy as np
 from common_functions import plot_merger_arrow, save_figures
 from process_data import EvolutionData, return_plot_format_lists
 from universal_settings import (arrow_length, axis_rescale, figure_handler,
@@ -39,10 +39,13 @@ def main():
 
     # Iterate over each axis and plot data
     for a_i, (ax, property_to_plot) in enumerate(zip(axs, property_list)):
+        print(property_to_plot)
         for (sim_data, sim, sim_name, tlb_mm,
              tlb_tm) in zip(ev_data, sim_list, sim_names, sim_tlb_major_merger,
                             sim_tlb_target_merger):
             med, spread = sim_data.med_spread(property_to_plot)
+
+            print("{}: {}".format(sim, np.nanmean(med[sim_data.t_lb < 6.5])))
             # Plot median
             line, = ax.plot(sim_data.t_lb,
                             med,

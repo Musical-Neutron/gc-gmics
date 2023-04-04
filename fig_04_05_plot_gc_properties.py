@@ -41,10 +41,15 @@ def main():
 
     # Iterate over each axis and plot data
     for a_i, (ax, property_to_plot) in enumerate(zip(axs, property_list)):
+        print(property_to_plot)
         for (sim_data, sim, sim_name, tlb_mm,
              tlb_tm) in zip(ev_data, sim_list, sim_names, sim_tlb_major_merger,
                             sim_tlb_target_merger):
             med, spread = sim_data.med_spread(property_to_plot)
+
+            print("{}: {}".format(sim_name,
+                                  np.nanmean(med[sim_data.t_lb < 9])))
+
             # Plot median
             line, = ax.plot(sim_data.t_lb,
                             med,
