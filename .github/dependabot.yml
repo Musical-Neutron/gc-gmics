@@ -13,3 +13,5 @@ updates:
       timezone: "Europe/London"
       # Check for updates on Sundays
       day: "sunday"
+    reviewers:
+      - "Musical-Neutron"
