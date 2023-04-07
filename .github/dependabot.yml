@@ -15,3 +15,5 @@ updates:
       day: "sunday"
     reviewers:
       - "Musical-Neutron"
+    asignees:
+      - "Musical-Neutron"
