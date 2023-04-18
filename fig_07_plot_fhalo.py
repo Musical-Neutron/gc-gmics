@@ -21,7 +21,7 @@ def main():
     # Analysis settings
     outer_radius = 50.  # kpc
     gc_mass = 1.e5  # Msun
-    n_radial_bins = 40
+    n_radial_bins = 21
     CL = [16., 84.]
 
     # Load data for figures
@@ -85,26 +85,36 @@ def main():
                     med_fcl_init,
                     ls='--',
                     color=line.get_color())
-        # Scatter
-        axs[0].fill_between(radius_mid_bins,
-                            *spread_fcl_init,
-                            color=line.get_color(),
-                            alpha=0.3)
+        # # Scatter
+        # axs[0].fill_between(radius_mid_bins,
+        #                     *spread_fcl_init,
+        #                     color=line.get_color(),
+        #                     alpha=0.3)
 
         # Plot FHalo (Reina-Campos definition)
-        axs[0].errorbar(
-            rc_x,
-            med_rc_init_cl,
-            yerr=[[err] for err in np.abs(spread_rc_init_cl - med_rc_init_cl)],
-            marker='.',
-            color=line.get_color(),
-            markersize=5,
-            lw=None,
-            elinewidth=1,
-            capsize=3,
-            capthick=1,
-            label=r'$F^{\rm halo}$',
-            zorder=0)
+
+        axs[0].axhline(med_rc_init_cl,
+                       ls=':',
+                       color=line.get_color(),
+                       zorder=1)
+        axs[0].axhspan(*spread_rc_init_cl,
+                       color=line.get_color(),
+                       zorder=0,
+                       ec=None,
+                       alpha=0.2)
+        # axs[0].errorbar(
+        #     rc_x,
+        #     med_rc_init_cl,
+        #     yerr=[[err] for err in np.abs(spread_rc_init_cl - med_rc_init_cl)],
+        #     marker='.',
+        #     color=line.get_color(),
+        #     markersize=5,
+        #     lw=None,
+        #     elinewidth=1,
+        #     capsize=3,
+        #     capthick=1,
+        #     label=r'$F^{\rm halo}$',
+        #     zorder=0)
         # axs[0].errorbar(rc_x,
         #                 med_rc_cl,
         #                 yerr=[[err]
@@ -136,26 +146,35 @@ def main():
                     med_fgc_init,
                     ls='--',
                     color=line.get_color())
-        # Scatter
-        axs[1].fill_between(radius_mid_bins,
-                            *spread_fgc_init,
-                            color=line.get_color(),
-                            alpha=0.3)
+        # # Scatter
+        # axs[1].fill_between(radius_mid_bins,
+        #                     *spread_fgc_init,
+        #                     color=line.get_color(),
+        #                     alpha=0.3)
 
         # Plot FHalo (Reina-Campos definition)
-        axs[1].errorbar(
-            rc_x,
-            med_rc_init_gc,
-            yerr=[[err] for err in np.abs(spread_rc_init_gc - med_rc_init_gc)],
-            marker='.',
-            color=line.get_color(),
-            markersize=5,
-            lw=None,
-            elinewidth=1,
-            capsize=3,
-            capthick=1,
-            label=r'$F^{\rm halo}$',
-            zorder=0)
+        axs[1].axhline(med_rc_init_gc,
+                       ls=':',
+                       color=line.get_color(),
+                       zorder=1)
+        axs[1].axhspan(*spread_rc_init_gc,
+                       color=line.get_color(),
+                       zorder=0,
+                       ec=None,
+                       alpha=0.2)
+        # axs[1].errorbar(
+        #     rc_x,
+        #     med_rc_init_gc,
+        #     yerr=[[err] for err in np.abs(spread_rc_init_gc - med_rc_init_gc)],
+        #     marker='.',
+        #     color=line.get_color(),
+        #     markersize=5,
+        #     lw=None,
+        #     elinewidth=1,
+        #     capsize=3,
+        #     capthick=1,
+        #     label=r'$F^{\rm halo}$',
+        #     zorder=0)
         # axs[1].errorbar(rc_x,
         #                 med_rc_gc,
         #                 yerr=[[err]
@@ -174,10 +193,12 @@ def main():
     axs[1].minorticks_on()
     axs[0].legend()
     axs[0].set(ylabel=r'$M_{\rm field,\, CL}\, /\, M_{\rm field,\, tot}$',
-               yscale='log')
+               yscale='log',
+               ylim=[None, 4.e-1])
     axs[1].set(xlabel=r'$r\, \left[{\rm kpc}\right]$',
                ylabel=r'$M_{\rm field,\, GC}\, /\, M_{\rm field,\, tot}$',
-               yscale='log')
+               yscale='log',
+               ylim=[None, 8.e-2])
 
     # Save figures
     save_figures(fig, fig7_out_file)

@@ -107,7 +107,11 @@ class Z0Data(object):
             self.r_half = f['R_half'][()]
         return None
 
-    def f_halo_vs_distance(self, n_bins=40, outer_radius=50., m_gc=1.e5):
+    def f_halo_vs_distance(self,
+                           n_bins=40,
+                           outer_radius=50.,
+                           m_gc=1.e5,
+                           metallicity_range=None):
         # Identify largest stellar half-mass radius
         self.max_rhalf = np.nanmax(self.r_half)
 
@@ -115,20 +119,39 @@ class Z0Data(object):
         radius_bins = np.linspace(self.max_rhalf, outer_radius, n_bins)
         radius_mid_bins = (radius_bins[1:] + radius_bins[:-1]) / 2.
 
+        # Select objects in the given metallicity range
+        if metallicity_range is not None:
+            select_field_metallicity = (
+                (self.field_fe_h >= np.nanmin(metallicity_range)) *
+                (self.field_fe_h < np.nanmax(metallicity_range)))
+        else:
+            select_field_metallicity = np.ones(self.field_distance.shape,
+                                               dtype=bool)
+
         # Select objects between the max stellar half-mass radius and
         # outer_radius
         # Field
-        select_field_stars = ((self.field_distance >= self.max_rhalf) *
-                              (self.field_distance <= outer_radius))
+        select_field_radius = ((self.field_distance >= self.max_rhalf) *
+                               (self.field_distance <= outer_radius))
         field_m_shell = quantity_in_shells(
-            self.field_m_current * select_field_stars, self.field_distance,
-            radius_bins)
+            self.field_m_current * select_field_radius *
+            select_field_metallicity, self.field_distance, radius_bins)
 
         ################################################################
         # Disrupted objects
+        # Select objects in the given metallicity range
+        if metallicity_range is not None:
+            select_disrupted_metallicity = (
+                (self.disrupted_fe_h >= np.nanmin(metallicity_range)) *
+                (self.disrupted_fe_h < np.nanmax(metallicity_range)))
+        else:
+            select_disrupted_metallicity = np.ones(
+                self.disrupted_distance.shape, dtype=bool)
+
         select_disrupted_clusters = (
             (self.disrupted_distance >= self.max_rhalf) *
-            (self.disrupted_distance <= outer_radius))
+            (self.disrupted_distance <= outer_radius) *
+            select_disrupted_metallicity)
         select_disrupted_gcs = (select_disrupted_clusters *
                                 (self.disrupted_m_birth >= m_gc))
 
@@ -150,9 +173,18 @@ class Z0Data(object):
 
         ################################################################
         # Partially disrupted objects
+        # Select objects in the given metallicity range
+        if metallicity_range is not None:
+            select_part_disrupted_metallicity = (
+                (self.part_disrupted_fe_h >= np.nanmin(metallicity_range)) *
+                (self.part_disrupted_fe_h < np.nanmax(metallicity_range)))
+        else:
+            select_part_disrupted_metallicity = np.ones(
+                self.part_disrupted_distance.shape, dtype=bool)
         select_part_disrupted_clusters = (
             (self.part_disrupted_distance >= self.max_rhalf) *
-            (self.part_disrupted_distance <= outer_radius))
+            (self.part_disrupted_distance <= outer_radius) *
+            select_part_disrupted_metallicity)
         select_part_disrupted_gcs = (select_part_disrupted_clusters *
                                      (self.part_disrupted_m_birth >= m_gc))
 
@@ -186,26 +218,57 @@ class Z0Data(object):
         return (radius_mid_bins, f_halo_cl, f_halo_gcs, f_halo_init_cl,
                 f_halo_init_gcs)
 
-    def reina_campos_f_halo(self, outer_radius=50., m_gc=1.e5):
+    def reina_campos_f_halo(self,
+                            outer_radius=50.,
+                            m_gc=1.e5,
+                            metallicity_range=None):
         # Select objects between the stellar half-mass radius and
         # outer_radius
-        select_field_stars = ((self.field_distance >= self.r_half) *
-                              (self.field_distance <= outer_radius))
+        select_field_radius = ((self.field_distance >= self.r_half) *
+                               (self.field_distance <= outer_radius))
 
-        select_disrupted_clusters = ((self.disrupted_distance >= self.r_half) *
-                                     (self.disrupted_distance <= outer_radius))
+        # Select objects in the given metallicity range
+        if metallicity_range is not None:
+            select_field_metallicity = (
+                (self.field_fe_h >= np.nanmin(metallicity_range)) *
+                (self.field_fe_h < np.nanmax(metallicity_range)))
+            select_undisrupted_metallicity = (
+                (self.undisrupted_fe_h >= np.nanmin(metallicity_range)) *
+                (self.undisrupted_fe_h < np.nanmax(metallicity_range)))
+            select_disrupted_metallicity = (
+                (self.disrupted_fe_h >= np.nanmin(metallicity_range)) *
+                (self.disrupted_fe_h < np.nanmax(metallicity_range)))
+            select_part_disrupted_metallicity = (
+                (self.part_disrupted_fe_h >= np.nanmin(metallicity_range)) *
+                (self.part_disrupted_fe_h < np.nanmax(metallicity_range)))
+        else:
+            select_field_metallicity = np.ones(self.field_distance.shape,
+                                               dtype=bool)
+            select_undisrupted_metallicity = np.ones(
+                self.undisrupted_distance.shape, dtype=bool)
+            select_disrupted_metallicity = np.ones(
+                self.disrupted_distance.shape, dtype=bool)
+            select_part_disrupted_metallicity = np.ones(
+                self.part_disrupted_distance.shape, dtype=bool)
+
+        select_disrupted_clusters = (
+            (self.disrupted_distance >= self.r_half) *
+            (self.disrupted_distance <= outer_radius) *
+            select_disrupted_metallicity)
         select_disrupted_gcs = (select_disrupted_clusters *
                                 (self.disrupted_m_birth >= m_gc))
 
         select_part_disrupted_clusters = (
             (self.part_disrupted_distance >= self.r_half) *
-            (self.part_disrupted_distance <= outer_radius))
+            (self.part_disrupted_distance <= outer_radius) *
+            select_part_disrupted_metallicity)
         select_part_disrupted_gcs = (select_part_disrupted_clusters *
                                      (self.part_disrupted_m_birth >= m_gc))
 
         select_undisrupted_clusters = (
             (self.undisrupted_distance >= self.r_half) *
-            (self.undisrupted_distance <= outer_radius))
+            (self.undisrupted_distance <= outer_radius) *
+            select_undisrupted_metallicity)
         select_undisrupted_gcs = (select_undisrupted_clusters *
                                   (self.undisrupted_m_birth >= m_gc))
 
@@ -302,7 +365,9 @@ class Z0Data(object):
             axis=0)
 
         # Sum mass of halo stars
-        m_halo = np.nansum(self.field_m_current * select_field_stars, axis=0)
+        m_halo = np.nansum(self.field_m_current * select_field_radius *
+                           select_field_metallicity,
+                           axis=0)
 
         # self.f_halo_all_clusters = (m_disrupted_cl + m_part_disrupted_cl +
         #                             m_undisrupted_cl) / m_halo
