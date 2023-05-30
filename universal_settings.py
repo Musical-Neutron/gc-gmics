@@ -24,6 +24,11 @@ cosmology_parameters = {
 cosmology_object = Cosmology(cosmology_parameters)
 
 ########################################################################
+# Observations
+caldwell_m31_data_file = os.path.join(data_dir,
+                                      'caldwell_2011_logMstar_FeH.csv')
+
+########################################################################
 # Simulations
 sim_list = [
     'z2_od_1p000_mz1p7_1p100_HiRes',
@@ -34,8 +39,10 @@ sim_list = [
     'z2_od_1p000_mz1p7_0p800_HiRes_noBH',
 ]
 # Onset of merger
+sim_z_major_merger = [1.63, 1.7, 1.68, 1.63, 1.7, 1.68]
 sim_tlb_major_merger = [9.85, 10.00, 9.95, 9.85, 10.00, 9.95]  # Gyr
 sim_dtlb_mm = [0.325, 0.259, 0.129, 0.325, 0.259, 0.129]  # Gyr
+sim_z_target_merger = [0.89, 0.77, None, 0.89, 0.77, None]
 sim_tlb_target_merger = [7.49, 6.89, None, 7.49, 6.89, None]  # Gyr
 sim_dtlb_tm = [0.486, 0.107, None, 0.486, 0.107, None]  # Gyr
 sim_names = [
