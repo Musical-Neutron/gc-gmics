@@ -57,11 +57,15 @@ sim_names = [
 ########################################################################
 # Plotting settings
 tlb_lim = [0, 12.]
-all_redshifts = np.arange(0, 8.2, 0.2)
+z_lim = [0., 8.]
+fine_spacing = 0.2
+z_cut = 6.5
+coarse_spacing = 1.
+all_redshifts = np.arange(*z_lim, fine_spacing)
 major_redshifts = all_redshifts[~(all_redshifts % 1).astype(bool)]
 minor_redshifts = all_redshifts[(all_redshifts % 1).astype(bool)]
-minor_redshifts = np.concatenate((minor_redshifts[:24], np.arange(6.5, 8.,
-                                                                  1.)))
+minor_redshifts = np.concatenate((minor_redshifts[minor_redshifts < z_cut],
+                                  np.arange(z_cut, z_lim[-1], coarse_spacing)))
 arrow_length = 0.1
 axis_rescale = np.abs(np.diff(tlb_lim)[0])
 common_arrow_properties = {
