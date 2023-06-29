@@ -27,6 +27,13 @@ cosmology_object = Cosmology(cosmology_parameters)
 # Observations
 caldwell_m31_data_file = os.path.join(data_dir,
                                       'caldwell_2011_logMstar_FeH.csv')
+johnson_m31_data_file = os.path.join(data_dir, 'johnson_2017_dNdlogM_M.csv')
+caldwell_m31_old_data_file = os.path.join(data_dir,
+                                          'caldwell_2009_old_clusters.csv')
+caldwell_m31_int_data_file = os.path.join(
+    data_dir, 'caldwell_2009_intermediate_clusters.csv')
+caldwell_m31_young_data_file = os.path.join(
+    data_dir, 'caldwell_2009_young_clusters.csv')
 
 ########################################################################
 # Simulations
@@ -145,9 +152,15 @@ evo_property_dict = {
     'M_GC': {
         'ylim': [5.e7, None],
         'yscale': 'log',
-        'ylabel': r'$M_{\rm GC}\!\left(r < 30\, {\rm kpc}\right)\, ' +
-        r'\left[{\rm M_\odot}\right]$',
+        'ylabel': r'$M_{\rm GC}\, \left[{\rm M_\odot}\right]$',
         'printlabel': 'M_GC(r < 30 kpc) [Msun]'
+    },
+    'M_GC_r200': {
+        'ylim': [5.e7, None],
+        'yscale': 'log',
+        'ylabel': r'$M_{\rm GC}\!\left(r < R_{200}\right)\, ' +
+        r'\left[{\rm M_\odot}\right]$',
+        'printlabel': 'M_GC(r < R_200) [Msun]'
     },
     'M_gas,SF': {
         'ylim': [8.e8, None],
@@ -155,12 +168,24 @@ evo_property_dict = {
         'ylabel': r'$M_{\rm gas,\, SF}\, \left[{\rm M_\odot}\right]$',
         'printlabel': 'M_gas,SF(r < 30 kpc) [Msun]'
     },
+    'M_gas,SF_r200': {
+        'ylim': [8.e8, None],
+        'yscale': 'log',
+        'ylabel': r'$M_{\rm gas,\, SF}\, \left[{\rm M_\odot}\right]$',
+        'printlabel': 'M_gas,SF(r < R_200) [Msun]'
+    },
     'M_star': {
         'ylim': [5.e9, 1.e11],
         'yscale': 'log',
-        'ylabel': r'$M_\ast\!\left(r < 30\, {\rm kpc}\right)\, ' +
-        r'\left[{\rm M_\odot}\right]$',
+        'ylabel': r'$M_\ast\, \left[{\rm M_\odot}\right]$',
         'printlabel': 'M_star(r < 30 kpc) [Msun]'
+    },
+    'M_star_r200': {
+        'ylim': [5.e9, 1.e12],
+        'yscale': 'log',
+        'ylabel': r'$M_\ast\!\left(r < R_{200}\right)\, ' +
+        r'\left[{\rm M_\odot}\right]$',
+        'printlabel': 'M_star(r < R_200) [Msun]'
     },
     'Mc_star': {
         'ylim': None,
@@ -213,6 +238,13 @@ evo_property_dict = {
         r'= 100\, M_{\rm GC}\, /\, M_\ast$',
         'printlabel': 'S_M,0(r < 30 kpc)'
     },
+    'SM_model0_r200': {
+        'ylim': [0., 10.],
+        'yscale': 'linear',
+        'ylabel': r'$S_{\rm M}\!\left(r < R_{200}\right)' +
+        r'= 100\, M_{\rm GC}\, /\, M_\ast$',
+        'printlabel': 'S_M,0(r < R_200)'
+    },
     'SM_model3': {
         'ylim': [0., 10.],
         'yscale': 'linear',
@@ -231,6 +263,17 @@ evo_property_dict = {
         r'\left[\left({\rm 10^9\, M_\odot}\right)^{-1}\right]$',
         'printlabel':
         'T_N,0(r < 30 kpc) [10^-9 Msun^-1]'
+    },
+    'TN_model0_r200': {
+        'ylim': [0., 2.e2],
+        'yscale':
+        'linear',
+        'ylabel':
+        r'$T_{\rm N}\!\left(r < R_{200}\right)' +
+        r'= N_{\rm GC}\, /\, M_\ast\, ' +
+        r'\left[\left({\rm 10^9\, M_\odot}\right)^{-1}\right]$',
+        'printlabel':
+        'T_N,0(r < R_200) [10^-9 Msun^-1]'
     },
     'TN_model3': {
         'ylim': [0., 2.e2],

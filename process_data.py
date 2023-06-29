@@ -93,12 +93,12 @@ class Z0Data(object):
     def process_data(self):
         with h5py.File(z0_data_file.format(self.sim), 'r') as f:
             groups = [
-                'Current clusters', 'Fully disrupted', 'Partially disrupted',
-                'Field', 'Undisrupted'
+                'All clusters', 'Current clusters', 'Fully disrupted',
+                'Partially disrupted', 'Field', 'Undisrupted'
             ]
             group_prefixes = [
-                'current_cluster_', 'disrupted_', 'part_disrupted_', 'field_',
-                'undisrupted_'
+                'all_cluster_', 'current_cluster_', 'disrupted_',
+                'part_disrupted_', 'field_', 'undisrupted_'
             ]
             # Read in current cluster data
             for group, prefix in zip(groups, group_prefixes):

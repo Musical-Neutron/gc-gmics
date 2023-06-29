@@ -17,6 +17,7 @@ def main():
         pass
     # File location
     fig7_out_file = 'fig7_mcfield_mfield.pdf'
+    out_file_template = '{}_vs_tlb.pdf'
 
     # Analysis settings
     outer_radius = 50.  # kpc
@@ -37,6 +38,10 @@ def main():
                                 "wspace": 0,
                                 "hspace": 0
                             })
+
+    property_list = ['fhalo_cl', 'fhalo_gc']
+    indiv_figs = [plt.figure(figsize=(8, 8)) for _ in property_list]
+    indiv_axs = [fig.add_subplot(111) for fig in indiv_figs]
 
     for sim, sim_name, z0_data in zip(sim_list, sim_names, all_z0_data):
         # Reina-Campos definition
@@ -73,11 +78,19 @@ def main():
                             med_fcl,
                             label=sim_name,
                             **plot_styles[sim])
+        indiv_line, = indiv_axs[0].plot(radius_mid_bins,
+                                        med_fcl,
+                                        label=sim_name,
+                                        **plot_styles[sim])
         # Plot scatter
         axs[0].fill_between(radius_mid_bins,
                             *spread_fcl,
                             color=line.get_color(),
                             alpha=0.3)
+        indiv_axs[0].fill_between(radius_mid_bins,
+                                  *spread_fcl,
+                                  color=indiv_line.get_color(),
+                                  alpha=0.3)
 
         # Plot evolved initial mass
         # Median
@@ -85,6 +98,10 @@ def main():
                     med_fcl_init,
                     ls='--',
                     color=line.get_color())
+        indiv_axs[0].plot(radius_mid_bins,
+                          med_fcl_init,
+                          ls='--',
+                          color=indiv_line.get_color())
         # # Scatter
         # axs[0].fill_between(radius_mid_bins,
         #                     *spread_fcl_init,
@@ -93,15 +110,24 @@ def main():
 
         # Plot FHalo (Reina-Campos definition)
 
-        axs[0].axhline(med_rc_init_cl,
-                       ls=':',
-                       color=line.get_color(),
-                       zorder=1)
-        axs[0].axhspan(*spread_rc_init_cl,
+        print(sim)
+        print("Clusters")
+        print(med_rc_cl)
+        axs[0].axhline(med_rc_cl, ls=':', color=line.get_color(), zorder=1)
+        axs[0].axhspan(*spread_rc_cl,
                        color=line.get_color(),
                        zorder=0,
                        ec=None,
                        alpha=0.2)
+        indiv_axs[0].axhline(med_rc_cl,
+                             ls=':',
+                             color=indiv_line.get_color(),
+                             zorder=1)
+        indiv_axs[0].axhspan(*spread_rc_cl,
+                             color=indiv_line.get_color(),
+                             zorder=0,
+                             ec=None,
+                             alpha=0.2)
         # axs[0].errorbar(
         #     rc_x,
         #     med_rc_init_cl,
@@ -134,11 +160,19 @@ def main():
                             med_fgc,
                             label=sim_name,
                             **plot_styles[sim])
+        indiv_line, = indiv_axs[1].plot(radius_mid_bins,
+                                        med_fgc,
+                                        label=sim_name,
+                                        **plot_styles[sim])
         # Plot scatter
         axs[1].fill_between(radius_mid_bins,
                             *spread_fgc,
                             color=line.get_color(),
                             alpha=0.3)
+        indiv_axs[1].fill_between(radius_mid_bins,
+                                  *spread_fgc,
+                                  color=indiv_line.get_color(),
+                                  alpha=0.3)
 
         # Plot evolved initial mass
         # Median
@@ -146,6 +180,10 @@ def main():
                     med_fgc_init,
                     ls='--',
                     color=line.get_color())
+        indiv_axs[1].plot(radius_mid_bins,
+                          med_fgc_init,
+                          ls='--',
+                          color=indiv_line.get_color())
         # # Scatter
         # axs[1].fill_between(radius_mid_bins,
         #                     *spread_fgc_init,
@@ -153,15 +191,23 @@ def main():
         #                     alpha=0.3)
 
         # Plot FHalo (Reina-Campos definition)
-        axs[1].axhline(med_rc_init_gc,
-                       ls=':',
-                       color=line.get_color(),
-                       zorder=1)
-        axs[1].axhspan(*spread_rc_init_gc,
+        print("Globular Clusters")
+        print(med_rc_gc)
+        axs[1].axhline(med_rc_gc, ls=':', color=line.get_color(), zorder=1)
+        axs[1].axhspan(*spread_rc_gc,
                        color=line.get_color(),
                        zorder=0,
                        ec=None,
                        alpha=0.2)
+        indiv_axs[1].axhline(med_rc_gc,
+                             ls=':',
+                             color=indiv_line.get_color(),
+                             zorder=1)
+        indiv_axs[1].axhspan(*spread_rc_gc,
+                             color=indiv_line.get_color(),
+                             zorder=0,
+                             ec=None,
+                             alpha=0.2)
         # axs[1].errorbar(
         #     rc_x,
         #     med_rc_init_gc,
@@ -199,9 +245,27 @@ def main():
                ylabel=r'$M_{\rm field,\, GC}\, /\, M_{\rm field,\, tot}$',
                yscale='log',
                ylim=[None, 8.e-2])
+    indiv_axs[0].minorticks_on()
+    indiv_axs[1].minorticks_on()
+    indiv_axs[0].legend()
+    indiv_axs[0].set(
+        xlabel=r'$r\, \left[{\rm kpc}\right]$',
+        ylabel=r'$M_{\rm field,\, CL}\, /\, M_{\rm field,\, tot}$',
+        yscale='log',
+        ylim=[None, 4.e-1])
+    indiv_axs[1].set(
+        xlabel=r'$r\, \left[{\rm kpc}\right]$',
+        ylabel=r'$M_{\rm field,\, GC}\, /\, M_{\rm field,\, tot}$',
+        yscale='log',
+        ylim=[None, 8.e-2])
+
+    # plt.show()
 
     # Save figures
     save_figures(fig, fig7_out_file)
+
+    for prop_name, fig in zip(property_list, indiv_figs):
+        save_figures(fig, out_file_template.format(prop_name))
 
     return None
 

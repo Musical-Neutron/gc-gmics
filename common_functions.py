@@ -257,6 +257,9 @@ class FigureHandler(object):
             if yscale_prop == 'symlog':
                 yscale_prop = None
                 sym_scale = True
+            if (ylim is not None):
+                if (ylim[0] is not None) and (ylim[0] < 0.):
+                    ax.axhline(0., color='k', linestyle=':', zorder=0)
             ax.set(xlabel=self.x_label,
                    ylabel=ylabel,
                    yscale=yscale_prop,
@@ -268,7 +271,18 @@ class FigureHandler(object):
 
             new_x_ax.invert_axis()
             if not no_legend:
-                ax.legend(fontsize='small', loc=leg_loc)
+                legend = ax.legend(
+                    markerfirst=False,
+                    fontsize='small',
+                    loc=leg_loc,
+                    handlelength=0,
+                    handletextpad=0.,
+                    labelspacing=0.,
+                )
+
+                for t_item, line in zip(legend.get_texts(),
+                                        legend.get_lines()):
+                    t_item.set_color(line.get_color())
 
             sym_scale = False
 
@@ -406,9 +420,22 @@ class FigureHandler(object):
                 ax.set_yscale('symlog', linthresh=linthresh)
                 ax.yaxis.set_minor_locator(MinorSymLogLocator(linthresh))
 
-            # Sets legend in the first panel
-            if i == 0:
-                ax.legend(fontsize='small', loc=leg_loc)
+            # Sets legend in the first (vertical) or final (horizontal)
+            # panel
+            if (((direction == 'vertical') and (i == 0))
+                    or ((direction == 'horizontal') and (i == len(axs) - 1))):
+                legend = ax.legend(
+                    markerfirst=False,
+                    fontsize='small',
+                    loc=leg_loc,
+                    handlelength=0,
+                    handletextpad=0.,
+                    labelspacing=0.,
+                )
+
+                for t_item, line in zip(legend.get_texts(),
+                                        legend.get_lines()):
+                    t_item.set_color(line.get_color())
 
             if t_label is not None:
                 ax.text(s=t_label, transform=ax.transAxes, **t_label_args)

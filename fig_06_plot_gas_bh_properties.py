@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 # Place import files below
+import copy
+
 import matplotlib.pyplot as plt
 
 from common_functions import plot_merger_arrow, save_figures
@@ -19,6 +21,7 @@ def main():
         pass
         # File location
     out_file = 'fig6_mgassf_mbh.pdf'
+    out_file_template = '{}_vs_tlb.pdf'
 
     # Load data for figures
     property_list = ['M_gas,SF', 'M_BH']
@@ -36,9 +39,13 @@ def main():
             "wspace": 0,
             "hspace": 0
         })
+    indiv_figs = [plt.figure(figsize=(8, 8)) for _ in property_list]
+    indiv_axs = [fig.add_subplot(111) for fig in indiv_figs]
 
     # Iterate over each axes object and plot data
-    for a_i, (ax, property_to_plot) in enumerate(zip(axs, property_list)):
+    for a_i, (ax, indiv_ax,
+              property_to_plot) in enumerate(zip(axs, indiv_axs,
+                                                 property_list)):
         for (sim_data, sim, sim_name, tlb_mm,
              tlb_tm) in zip(ev_data, sim_list, sim_names, sim_tlb_major_merger,
                             sim_tlb_target_merger):
@@ -48,11 +55,25 @@ def main():
                             med,
                             label=sim_name,
                             **plot_styles[sim])
+            indiv_line, = indiv_ax.plot(sim_data.t_lb,
+                                        med,
+                                        label=sim_name,
+                                        **plot_styles[sim])
+            if property_list[a_i] == 'M_gas,SF':
+                msfgas_r200_med, _ = sim_data.med_spread('M_gas,SF_r200')
+                temp_style = copy.deepcopy(plot_styles[sim])
+                temp_style.update({'ls': ':'})
+                ax.plot(sim_data.t_lb, msfgas_r200_med, **temp_style)
+                indiv_ax.plot(sim_data.t_lb, msfgas_r200_med, **temp_style)
             # Plot scatter
             ax.fill_between(sim_data.t_lb,
                             *spread,
                             color=line.get_color(),
                             alpha=0.3)
+            indiv_ax.fill_between(sim_data.t_lb,
+                                  *spread,
+                                  color=indiv_line.get_color(),
+                                  alpha=0.3)
 
             # Plot merger arrows on first and last panels
             # First major merger
@@ -87,14 +108,44 @@ def main():
                                       arrow_properties=tm_arrow_properties,
                                       loc='lower')
 
+            plot_merger_arrow(indiv_ax,
+                              mm_x,
+                              arrow_length,
+                              arrow_properties=mm_arrow_properties,
+                              loc='upper')
+            if tlb_tm is not None:
+                plot_merger_arrow(indiv_ax,
+                                  tm_x,
+                                  arrow_length,
+                                  arrow_properties=tm_arrow_properties,
+                                  loc='upper')
+            plot_merger_arrow(indiv_ax,
+                              mm_x,
+                              arrow_length,
+                              arrow_properties=mm_arrow_properties,
+                              loc='lower')
+            if tlb_tm is not None:
+                plot_merger_arrow(indiv_ax,
+                                  tm_x,
+                                  arrow_length,
+                                  arrow_properties=tm_arrow_properties,
+                                  loc='lower')
+
     # Set common properties of the plots using the figure handler
     figure_handler.set_stacked_figure_properties(axs,
                                                  ylabels,
                                                  yscale=yscales,
                                                  ylims=ylims)
+    figure_handler.set_figure_properties(indiv_axs,
+                                         ylabels,
+                                         yscale=yscales,
+                                         ylims=ylims)
 
     # Save figures
     save_figures(fig, out_file)
+
+    for prop_name, fig in zip(property_list, indiv_figs):
+        save_figures(fig, out_file_template.format(prop_name))
 
     return None
 
