@@ -25,14 +25,15 @@ cosmology_object = Cosmology(cosmology_parameters)
 
 ########################################################################
 # Observations
-caldwell_m31_data_file = os.path.join(data_dir,
-                                      'caldwell_2011_logMstar_FeH.csv')
-johnson_m31_data_file = os.path.join(data_dir, 'johnson_2017_dNdlogM_M.csv')
-caldwell_m31_old_data_file = os.path.join(data_dir,
-                                          'caldwell_2009_old_clusters.csv')
-caldwell_m31_int_data_file = os.path.join(
+caldwell_2011_m31_mstar_feh_data_file = os.path.join(
+    data_dir, 'caldwell_2011_logMstar_FeH.csv')
+johnson_2017_m31_dNdlogM_data_file = os.path.join(
+    data_dir, 'johnson_2017_dNdlogM_M.csv')
+caldwell_2009_m31_old_data_file = os.path.join(
+    data_dir, 'caldwell_2009_old_clusters.csv')
+caldwell_2009_m31_int_data_file = os.path.join(
     data_dir, 'caldwell_2009_intermediate_clusters.csv')
-caldwell_m31_young_data_file = os.path.join(
+caldwell_2009_m31_young_data_file = os.path.join(
     data_dir, 'caldwell_2009_young_clusters.csv')
 
 ########################################################################

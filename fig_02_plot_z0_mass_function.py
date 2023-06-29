@@ -6,12 +6,11 @@ import numpy as np
 
 from common_functions import save_figures
 from process_data import Z0Data
-from universal_settings import (caldwell_m31_data_file, johnson_m31_data_file,
-                                caldwell_m31_old_data_file,
-                                caldwell_m31_int_data_file,
-                                caldwell_m31_young_data_file,
-                                cosmology_parameters, plot_styles, sim_list,
-                                sim_names)
+from universal_settings import (
+    caldwell_2011_m31_mstar_feh_data_file, johnson_2017_m31_dNdlogM_data_file,
+    caldwell_2009_m31_old_data_file, caldwell_2009_m31_int_data_file,
+    caldwell_2009_m31_young_data_file, cosmology_parameters, plot_styles,
+    sim_list, sim_names)
 
 
 def main():
@@ -22,13 +21,15 @@ def main():
         pass
     # File location
     fig2_out_file = 'fig2_dn_dlogM.pdf'
-    caldwell_m31_data = np.genfromtxt(caldwell_m31_data_file, skip_header=True)
-    johnson_m31_data = np.genfromtxt(johnson_m31_data_file, skip_header=True)
-    caldwell_m31_old_data = np.genfromtxt(caldwell_m31_old_data_file,
+    caldwell_m31_data = np.genfromtxt(caldwell_2011_m31_mstar_feh_data_file,
+                                      skip_header=True)
+    johnson_m31_data = np.genfromtxt(johnson_2017_m31_dNdlogM_data_file,
+                                     skip_header=True)
+    caldwell_m31_old_data = np.genfromtxt(caldwell_2009_m31_old_data_file,
                                           skip_header=True)
-    caldwell_m31_int_data = np.genfromtxt(caldwell_m31_int_data_file,
+    caldwell_m31_int_data = np.genfromtxt(caldwell_2009_m31_int_data_file,
                                           skip_header=True)
-    caldwell_m31_yng_data = np.genfromtxt(caldwell_m31_young_data_file,
+    caldwell_m31_yng_data = np.genfromtxt(caldwell_2009_m31_young_data_file,
                                           skip_header=True)
     johnson_dlogM = 0.1
     caldwell_dlogM = 0.2
@@ -230,18 +231,18 @@ def main():
     print("Current cluster mass")
     print("#" * 75)
     print("Enhanced / Organic")
-    # print(current_med[0] / current_med[1])
+    print(current_med[0] / current_med[1])
     print("Suppressed / Organic")
-    # print(current_med[2] / current_med[1])
+    print(current_med[2] / current_med[1])
 
     print()
     print("#" * 75)
     print("Birth cluster mass")
     print("#" * 75)
     print("Enhanced / Organic")
-    # print(all_birth_med[0] / all_birth_med[1])
+    print(all_birth_med[0] / all_birth_med[1])
     print("Suppressed / Organic")
-    # print(all_birth_med[2] / all_birth_med[1])
+    print(all_birth_med[2] / all_birth_med[1])
     # print("Enhanced / Organic")
     # print(birth_med[0] / birth_med[1])
     # print("Suppressed / Organic")
