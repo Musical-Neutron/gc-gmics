@@ -67,18 +67,18 @@ def main():
     # Plot surviving cluster mass function in M31
     ################################################################
     # Plot median
+    ax.plot(10.**caldwell_m31_old_data[:, 0],
+            dN_dlogM_m31_all,
+            label=r'Caldwell et al. (2009)',
+            color='c')
     ax.plot(mid_data_logmbins,
             dN_dlogM_m31,
-            label='M31 (Caldwell et al., 2011)',
+            label='Caldwell et al. (2011)',
             color='k')
     ax.plot(10.**johnson_m31_data[:, 0],
             4 * johnson_m31_data[:, 1] / johnson_dlogM,
-            label=r'$4 \times$ M31 (Johnson et al., 2017)',
+            label=r'$4 \times$ YCs (Johnson et al., 2017)',
             color='m')
-    ax.plot(10.**caldwell_m31_old_data[:, 0],
-            dN_dlogM_m31_all,
-            label=r'M31 (Caldwell et al. 2009)',
-            color='c')
 
     current_med = []
     birth_med = []
@@ -208,7 +208,7 @@ def main():
            ylabel=r'$dN\, /\, d \log M_{\rm cl}$',
            xscale='log',
            yscale='log',
-           xlim=np.array([10.**(3 * 0.95), None]))
+           xlim=np.array([10.**(3 * 0.95), 5.e7]))
     legend = ax.legend(
         markerfirst=False,
         loc='upper right',

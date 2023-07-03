@@ -95,16 +95,16 @@ figure_handler = FigureHandler(major_redshifts=major_redshifts,
                                cos_obj=cosmology_object)
 plot_styles = {
     'z2_od_1p000_mz1p7_1p100_HiRes': {
-        'color': '#2F3BD6'
+        'color': '#7E317B'
     },
     'z2_od_1p000_HiRes': {
         'color': '#34B83B'
     },
     'z2_od_1p000_mz1p7_0p800_HiRes': {
-        'color': '#7E317B'
+        'color': '#2F3BD6'
     },
     'z2_od_1p000_mz1p7_1p100_HiRes_noBH': {
-        'color': '#2F3BD6',
+        'color': '#7E317B',
         'marker': '.',
         'ls': '--'
     },
@@ -114,7 +114,7 @@ plot_styles = {
         'ls': '--'
     },
     'z2_od_1p000_mz1p7_0p800_HiRes_noBH': {
-        'color': '#7E317B',
+        'color': '#2F3BD6',
         'marker': '.',
         'ls': '--'
     },
@@ -224,6 +224,18 @@ evo_property_dict = {
         r'\left[{\rm K\, cm^{-3}}\right]$',
         'printlabel':
         'P_k,birth,star [K cm^-3]'
+    },
+    'Pk_SFgas': {
+        'ylim':
+        None,
+        'yscale':
+        'log',
+        'ylabel':
+        r'$\left(P\, /\, k_{\rm B}\right)_{\rm SF\, gas}\!' +
+        r'\left(r < 30\, {\rm kpc}\right)\, ' +
+        r'\left[{\rm K\, cm^{-3}}\right]$',
+        'printlabel':
+        'P_k,SFgas [K cm^-3]'
     },
     'SFR': {
         'ylim': [-1.4, None],
