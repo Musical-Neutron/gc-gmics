@@ -2,7 +2,7 @@ astropy <5.4
 contourpy==1.1.1
 cycler==0.11.0
 fonttools==4.42.1
-h5py==3.9.0
+h5py==3.10.0
 kiwisolver==1.4.5
 matplotlib <3.9
 numpy <1.27
