@@ -9,12 +9,13 @@ from common_functions import Cosmology, FigureHandler
 ########################################################################
 # File locations
 data_dir = "data"
-data_file_template = os.path.join(data_dir, "{}_gcmass_{:g}_paper_data.hdf5")
+data_file_template = os.path.join(data_dir,
+                                  "{}_gcmass_{:g}_paper_data_new.hdf5")
 z0_data_file = os.path.join(data_dir, '{}_paper_z0_gc_properties.hdf5')
 
 ########################################################################
 # Analysis settings
-aperture = 30.  # kpc
+aperture = 30.  # ckpc
 gc_mass = 1.e5  # Msun
 cosmology_parameters = {
     'omega_M': 0.3156,
@@ -35,9 +36,15 @@ caldwell_2009_m31_int_data_file = os.path.join(
     data_dir, 'caldwell_2009_intermediate_clusters.csv')
 caldwell_2009_m31_young_data_file = os.path.join(
     data_dir, 'caldwell_2009_young_clusters.csv')
+baumgardt_2019_mw_cluster_file = os.path.join(data_dir,
+                                              'baumgardt_2019_mw_gcs.csv')
 
 ########################################################################
 # Simulations
+bastian_2020_sm_mstar_data_file = os.path.join(data_dir,
+                                               'bastian2020_SM_Mstar_z0.csv')
+bastian_2020_sminit_mstar_data_file = os.path.join(
+    data_dir, 'bastian2020_SMinit_Mstar_z0.csv')
 sim_list = [
     'z2_od_1p000_mz1p7_1p100_HiRes',
     'z2_od_1p000_HiRes',
@@ -121,22 +128,22 @@ plot_styles = {
 }
 evo_property_dict = {
     'CFE': {
-        'ylim': [0., 0.75],
+        'ylim': [0., 0.8],
         'yscale': 'linear',
-        'ylabel': r'$\Gamma\!\left(r < 30\, {\rm kpc}\right)$',
-        'printlabel': 'CFE(r < 30 kpc)'
+        'ylabel': r'$\Gamma$',
+        'printlabel': 'CFE(r < {} ckpc)'.format(aperture)
     },
     'GCDR': {
         'ylim': [-1.45, 0.2],
         'yscale': 'linear',
         'ylabel': r'${\rm GCDR\, \left[M_\odot\, yr^{-1}\right]}$',
-        'printlabel': 'GCDR(r < 30 kpc) [Msun / yr]'
+        'printlabel': 'GCDR(r < {} ckpc) [Msun / yr]'.format(aperture)
     },
     'GCFR': {
         'ylim': [-0.2, 4.6],
         'yscale': 'linear',
         'ylabel': r'${\rm GCFR\, \left[M_\odot\, yr^{-1}\right]}$',
-        'printlabel': 'GCFR(r < 30 kpc) [Msun / yr]'
+        'printlabel': 'GCFR(r < {} ckpc) [Msun / yr]'.format(aperture)
     },
     'M_200': {
         'ylim': [1.e11, None],
@@ -154,7 +161,7 @@ evo_property_dict = {
         'ylim': [5.e7, None],
         'yscale': 'log',
         'ylabel': r'$M_{\rm GC}\, \left[{\rm M_\odot}\right]$',
-        'printlabel': 'M_GC(r < 30 kpc) [Msun]'
+        'printlabel': 'M_GC(r < {} ckpc) [Msun]'.format(aperture)
     },
     'M_GC_r200': {
         'ylim': [5.e7, None],
@@ -167,7 +174,7 @@ evo_property_dict = {
         'ylim': [8.e8, None],
         'yscale': 'log',
         'ylabel': r'$M_{\rm gas,\, SF}\, \left[{\rm M_\odot}\right]$',
-        'printlabel': 'M_gas,SF(r < 30 kpc) [Msun]'
+        'printlabel': 'M_gas,SF(r < {} ckpc) [Msun]'.format(aperture)
     },
     'M_gas,SF_r200': {
         'ylim': [8.e8, None],
@@ -179,7 +186,7 @@ evo_property_dict = {
         'ylim': [5.e9, 1.e11],
         'yscale': 'log',
         'ylabel': r'$M_\ast\, \left[{\rm M_\odot}\right]$',
-        'printlabel': 'M_star(r < 30 kpc) [Msun]'
+        'printlabel': 'M_star(r < {} ckpc) [Msun]'.format(aperture)
     },
     'M_star_r200': {
         'ylim': [5.e9, 1.e12],
@@ -202,101 +209,107 @@ evo_property_dict = {
         'printlabel': 'Net dM_GC/dt [Msun / yr]'
     },
     'Pk_birth,GC': {
-        'ylim':
-        None,
+        'ylim': [1.1e3, 8.e8],
         'yscale':
         'log',
         'ylabel':
         r'$\left(P\, /\, k_{\rm B}\right)_{\rm birth,\, GC}\!' +
-        r'\left(r < 30\, {\rm kpc}\right)\, ' +
+        r'\left(r < {:.0f}\, {{\rm ckpc}}\right)\, '.format(aperture) +
         r'\left[{\rm K\, cm^{-3}}\right]$',
         'printlabel':
         'P_k,birth,GC [K cm^-3]'
     },
     'Pk_birth,star': {
-        'ylim':
-        None,
+        'ylim': [1.1e3, 8.e8],
         'yscale':
         'log',
         'ylabel':
         r'$\left(P\, /\, k_{\rm B}\right)_{\rm birth,\, \ast}\!' +
-        r'\left(r < 30\, {\rm kpc}\right)\, ' +
+        r'\left(r < {:.0f}\, {{\rm ckpc}}\right)\, '.format(aperture) +
         r'\left[{\rm K\, cm^{-3}}\right]$',
         'printlabel':
         'P_k,birth,star [K cm^-3]'
     },
     'Pk_SFgas': {
-        'ylim':
-        None,
+        'ylim': [1.1e3, 8.e8],
         'yscale':
         'log',
         'ylabel':
         r'$\left(P\, /\, k_{\rm B}\right)_{\rm SF\, gas}\!' +
-        r'\left(r < 30\, {\rm kpc}\right)\, ' +
+        r'\left(r < {:.0f}\, {{\rm ckpc}}\right)\, '.format(aperture) +
         r'\left[{\rm K\, cm^{-3}}\right]$',
         'printlabel':
         'P_k,SFgas [K cm^-3]'
     },
     'SFR': {
         'ylim': [-1.4, None],
-        'yscale': 'linear',
-        'ylabel': r'${\rm SFR}\!\left(r < 30\, {\rm kpc}\right)\, ' +
-        r'\left[{\rm M_\odot\, yr^{-1}}\right]$',
-        'printlabel': 'SFR(r < 30 kpc) [Msun / yr]'
+        'yscale':
+        'linear',
+        'ylabel':
+        r'${{\rm SFR}}\!\left(r < {:.0f}\, {{\rm ckpc}}\right)\, '.format(
+            aperture) + r'\left[{\rm M_\odot\, yr^{-1}}\right]$',
+        'printlabel':
+        'SFR(r < {} ckpc) [Msun / yr]'.format(aperture)
     },
     'SM_model0': {
-        'ylim': [0., 10.],
+        'ylim': [0., 12.5],
         'yscale': 'linear',
-        'ylabel': r'$S_{\rm M}\!\left(r < 30\, {\rm kpc}\right)' +
-        r'= 100\, M_{\rm GC}\, /\, M_\ast$',
-        'printlabel': 'S_M,0(r < 30 kpc)'
+        'ylabel': r'$S_{\rm M} = 100\, M_{\rm GC}\, /\, M_\ast$',
+        'printlabel': 'S_M,0(r < {} ckpc)'.format(aperture)
     },
     'SM_model0_r200': {
-        'ylim': [0., 10.],
+        'ylim': [0., 12.5],
         'yscale': 'linear',
-        'ylabel': r'$S_{\rm M}\!\left(r < R_{200}\right)' +
-        r'= 100\, M_{\rm GC}\, /\, M_\ast$',
+        'ylabel': r'$S_{\rm M} = 100\, M_{\rm GC}\, /\, M_\ast$',
         'printlabel': 'S_M,0(r < R_200)'
     },
     'SM_model3': {
-        'ylim': [0., 10.],
+        'ylim': [0., 12.5],
         'yscale': 'linear',
         'ylabel':
-        r'$S_{\rm M}_{\rm no\, phys}\!\left(r < 30\, {\rm kpc}\right)' +
-        r'= 100\, M_{\rm GC}\, /\, M_\ast$',
-        'printlabel': 'S_M,3(r < 30 kpc)'
+        r'$S_{\rm M}_{\rm no\, phys} = 100\, M_{\rm GC}\, /\, M_\ast$',
+        'printlabel': 'S_M,3(r < {} ckpc)'.format(aperture)
+    },
+    'SM_birth_model0': {
+        'ylim': [0., 13.],
+        'yscale': 'linear',
+        'ylabel':
+        r'$S_{\rm M,\, birth} = 100\, M_{\rm GC,\, birth}\, /\, M_\ast$',
+        'printlabel': 'S_M_birth,0(r < {} ckpc)'.format(aperture)
     },
     'TN_model0': {
-        'ylim': [0., 2.e2],
-        'yscale':
-        'linear',
-        'ylabel':
-        r'$T_{\rm N}\!\left(r < 30\, {\rm kpc}\right)' +
-        r'= N_{\rm GC}\, /\, M_\ast\, ' +
+        'ylim': [0., 2.25e2],
+        'yscale': 'linear',
+        'ylabel': r'$T_{\rm N} = N_{\rm GC}\, /\, M_\ast\, ' +
         r'\left[\left({\rm 10^9\, M_\odot}\right)^{-1}\right]$',
-        'printlabel':
-        'T_N,0(r < 30 kpc) [10^-9 Msun^-1]'
+        'printlabel': 'T_N,0(r < {} ckpc) [10^-9 Msun^-1]'.format(aperture)
     },
     'TN_model0_r200': {
-        'ylim': [0., 2.e2],
-        'yscale':
-        'linear',
-        'ylabel':
-        r'$T_{\rm N}\!\left(r < R_{200}\right)' +
-        r'= N_{\rm GC}\, /\, M_\ast\, ' +
+        'ylim': [0., 2.25e2],
+        'yscale': 'linear',
+        'ylabel': r'$T_{\rm N} = N_{\rm GC}\, /\, M_\ast\, ' +
         r'\left[\left({\rm 10^9\, M_\odot}\right)^{-1}\right]$',
-        'printlabel':
-        'T_N,0(r < R_200) [10^-9 Msun^-1]'
+        'printlabel': 'T_N,0(r < R_200) [10^-9 Msun^-1]'
     },
     'TN_model3': {
-        'ylim': [0., 2.e2],
-        'yscale':
-        'linear',
-        'ylabel':
-        r'$T_{\rm N\, no\, phys}\!\left(r < 30\, {\rm kpc}\right)' +
-        r'= N_{\rm GC}\, /\, M_\ast\, ' +
+        'ylim': [0., 2.25e2],
+        'yscale': 'linear',
+        'ylabel': r'$T_{\rm N\, no\, phys} = N_{\rm GC}\, /\, M_\ast\, ' +
         r'\left[\left({\rm 10^9\, M_\odot}\right)^{-1}\right]$',
-        'printlabel':
-        'T_N,3(r < 30 kpc) [10^-9 Msun^-1]'
+        'printlabel': 'T_N,3(r < {} ckpc) [10^-9 Msun^-1]'.format(aperture)
+    },
+    'SFR_MgasSF': {
+        'ylim': np.asarray([0.3, 3]) * 1.e-9,
+        'yscale': 'log',
+        'ylabel': r'${\rm SFR}\, /\, M_{\rm gas,\, SF}\, ' +
+        r'\left[{\rm yr^{-1}}\right]$',
+        'printlabel': 'SFR/MgasSF(r < {} ckpc) [yr^-1]'.format(aperture)
+    },
+    'dMgc_dt_MgasSF': {
+        'ylim': np.asarray([-2.5, 5]) * 1.e-10,
+        'yscale': 'linear',
+        'ylabel': r'$dM_{\rm GC}\, /\, dt\, /\, M_{\rm gas,\, SF}\, ' +
+        r'\left[{\rm yr^{-1}}\right]$',
+        'printlabel': 'dMgc_dt/MgasSF(r < {} ckpc) [yr^-1]'.format(aperture)
     },
 }
