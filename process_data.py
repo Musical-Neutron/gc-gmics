@@ -4,8 +4,12 @@
 import h5py
 import numpy as np
 
-from universal_settings import (data_file_template, evo_property_dict, gc_mass,
-                                z0_data_file)
+from universal_settings import (
+    data_file_template,
+    evo_property_dict,
+    gc_mass,
+    z0_data_file,
+)
 
 
 def return_plot_format_lists(properties_to_plot,
@@ -394,7 +398,9 @@ class EvolutionData(object):
         self.sim = sim
         self.gc_mass = gc_mass
         self.process_data()
-        pass
+        self.make_specific_gas_dmgc_sfr()
+
+        return None
 
     def process_data(self):
         with h5py.File(data_file_template.format(self.sim, gc_mass), 'r') as f:
@@ -402,6 +408,22 @@ class EvolutionData(object):
                 data = f['z evolution'][key][()]
                 str_key = key.strip().replace(' ', '_')
                 setattr(self, str_key, data)
+        return None
+
+    def make_specific_gas_dmgc_sfr(self):
+        sfr = getattr(self, 'SFR')
+        net_dmgc = getattr(self, 'Net_dM_GCdt')
+        mgas_sf = getattr(self, 'M_gas,SF')
+
+        sfr_mgas_sf = sfr / mgas_sf
+        dmgc_mgas_sf = net_dmgc / mgas_sf
+
+        sfr_mgas_sf[np.isinf(sfr_mgas_sf)] = np.nan
+        dmgc_mgas_sf[np.isinf(dmgc_mgas_sf)] = np.nan
+
+        setattr(self, 'SFR_MgasSF', sfr_mgas_sf)
+        setattr(self, 'dMgc_dt_MgasSF', dmgc_mgas_sf)
+
         return None
 
     def med_spread(self, attr_name, confidence=[16., 84.]):
@@ -417,6 +439,8 @@ class EvolutionData(object):
             tuple:  [0]: Median.
                     [1]: Lower and upper percentiles.
         """
+        # print(np.all(~np.isnan(getattr(self, attr_name)), axis=0).sum())
+        print(np.sum(~np.isnan(getattr(self, attr_name)), axis=1))
         med = np.nanmedian(getattr(self, attr_name), axis=1)
         spread = np.nanpercentile(getattr(self, attr_name), confidence, axis=1)
         return (med, spread)

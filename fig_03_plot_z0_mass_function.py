@@ -7,10 +7,10 @@ import numpy as np
 from common_functions import save_figures
 from process_data import Z0Data
 from universal_settings import (
-    caldwell_2011_m31_mstar_feh_data_file, johnson_2017_m31_dNdlogM_data_file,
-    caldwell_2009_m31_old_data_file, caldwell_2009_m31_int_data_file,
-    caldwell_2009_m31_young_data_file, cosmology_parameters, plot_styles,
-    sim_list, sim_names)
+    baumgardt_2019_mw_cluster_file, caldwell_2009_m31_int_data_file,
+    caldwell_2009_m31_old_data_file, caldwell_2009_m31_young_data_file,
+    caldwell_2011_m31_mstar_feh_data_file, cosmology_parameters,
+    johnson_2017_m31_dNdlogM_data_file, plot_styles, sim_list, sim_names)
 
 
 def main():
@@ -21,16 +21,18 @@ def main():
         pass
     # File location
     fig2_out_file = 'fig2_dn_dlogM.pdf'
+    baumgardt_mw_data = np.genfromtxt(baumgardt_2019_mw_cluster_file,
+                                      skip_header=True)
     caldwell_m31_data = np.genfromtxt(caldwell_2011_m31_mstar_feh_data_file,
                                       skip_header=True)
-    johnson_m31_data = np.genfromtxt(johnson_2017_m31_dNdlogM_data_file,
-                                     skip_header=True)
     caldwell_m31_old_data = np.genfromtxt(caldwell_2009_m31_old_data_file,
                                           skip_header=True)
     caldwell_m31_int_data = np.genfromtxt(caldwell_2009_m31_int_data_file,
                                           skip_header=True)
     caldwell_m31_yng_data = np.genfromtxt(caldwell_2009_m31_young_data_file,
                                           skip_header=True)
+    johnson_m31_data = np.genfromtxt(johnson_2017_m31_dNdlogM_data_file,
+                                     skip_header=True)
     johnson_dlogM = 0.1
     caldwell_dlogM = 0.2
 
@@ -49,8 +51,11 @@ def main():
     # Load data for figures
     all_z0_data = [Z0Data(sim) for sim in sim_list[:3]]
     m31_mass_data = 10.**caldwell_m31_data[:, 1]  # Msun
+    mw_mass_data = baumgardt_mw_data[:, 1]  # Msun
     dN_dlogM_m31 = np.histogram(m31_mass_data[~np.isnan(m31_mass_data)],
                                 data_m_bins)[0] / data_dlogM
+    dN_dlogM_mw = np.histogram(mw_mass_data[~np.isnan(mw_mass_data)],
+                               data_m_bins)[0] / data_dlogM
     dN_dlogM_m31_old = caldwell_m31_old_data[:, 1] / caldwell_dlogM
     dN_dlogM_m31_int = caldwell_m31_int_data[:, 1] / caldwell_dlogM
     dN_dlogM_m31_yng = caldwell_m31_yng_data[:, 1] / caldwell_dlogM
@@ -75,6 +80,10 @@ def main():
             dN_dlogM_m31,
             label='Caldwell et al. (2011)',
             color='k')
+    ax.plot(mid_data_logmbins,
+            dN_dlogM_mw,
+            label='Baumgardt et al. (2019)',
+            color='orange')
     ax.plot(10.**johnson_m31_data[:, 0],
             4 * johnson_m31_data[:, 1] / johnson_dlogM,
             label=r'$4 \times$ YCs (Johnson et al., 2017)',
@@ -248,8 +257,6 @@ def main():
     # print("Suppressed / Organic")
     # print(birth_med[2] / birth_med[1])
     ####################################################################
-
-    plt.show()
 
     return None
 

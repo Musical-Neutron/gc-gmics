@@ -90,6 +90,13 @@ def main():
                          norm_med,
                          label=sim_name,
                          **plot_styles[sim])
+            # if ('0p800' in sim) or ('1p000_HiRes' in sim):
+            #     hr_sim_data = EvolutionData(sim + '_hc')
+            #     hr_med, hr_spread = hr_sim_data.med_spread(property_to_plot)
+            #     temp_style = copy.deepcopy(plot_styles[sim])
+            #     temp_style.update({'ls': '--'})
+            #     ax.plot(hr_sim_data.t_lb, hr_med, **temp_style)
+            #     indiv_ax.plot(hr_sim_data.t_lb, hr_med, **temp_style)
             if property_list[a_i] == 'M_star':
                 star_r200_med, _ = sim_data.med_spread('M_star_r200')
                 temp_style = copy.deepcopy(plot_styles[sim])

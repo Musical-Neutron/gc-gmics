@@ -22,7 +22,7 @@ def main():
     # Analysis settings
     outer_radius = 50.  # kpc
     gc_mass = 1.e5  # Msun
-    n_radial_bins = 21
+    n_bins = 16
     CL = [16., 84.]
 
     # Load data for figures
@@ -43,6 +43,8 @@ def main():
     indiv_figs = [plt.figure(figsize=(8, 8)) for _ in property_list]
     indiv_axs = [fig.add_subplot(111) for fig in indiv_figs]
 
+    plt.rc('hatch', color='k', linewidth=0.5)
+
     for sim, sim_name, z0_data in zip(sim_list, sim_names, all_z0_data):
         # Reina-Campos definition
         rc_cl, rc_gcs, rc_init_cl, rc_init_gcs = z0_data.reina_campos_f_halo(
@@ -51,7 +53,7 @@ def main():
         # Radial calculation
         (radius_mid_bins, f_halo_cl, f_halo_gcs, f_halo_init_cl,
          f_halo_init_gcs) = z0_data.f_halo_vs_distance(
-             n_bins=n_radial_bins, outer_radius=outer_radius, m_gc=gc_mass)
+             n_bins=n_bins, outer_radius=outer_radius, m_gc=gc_mass)
         max_rhalf = z0_data.max_rhalf
 
         # FHalo in radial bins
@@ -85,11 +87,17 @@ def main():
         # Plot scatter
         axs[0].fill_between(radius_mid_bins,
                             *spread_fcl,
-                            color=line.get_color(),
+                            hatch='xxx',
+                            color='None',
+                            edgecolor=indiv_line.get_color(),
+                            linewidth=0.5,
                             alpha=0.3)
         indiv_axs[0].fill_between(radius_mid_bins,
                                   *spread_fcl,
-                                  color=indiv_line.get_color(),
+                                  hatch='xxx',
+                                  color='None',
+                                  edgecolor=indiv_line.get_color(),
+                                  linewidth=0.5,
                                   alpha=0.3)
 
         # Plot evolved initial mass
@@ -167,12 +175,18 @@ def main():
         # Plot scatter
         axs[1].fill_between(radius_mid_bins,
                             *spread_fgc,
-                            color=line.get_color(),
+                            hatch='xxx',
+                            color='None',
+                            edgecolor=indiv_line.get_color(),
+                            linewidth=0.5,
                             alpha=0.3)
         indiv_axs[1].fill_between(radius_mid_bins,
                                   *spread_fgc,
-                                  color=indiv_line.get_color(),
-                                  alpha=0.3)
+                                  hatch='xxx',
+                                  color='None',
+                                  edgecolor=indiv_line.get_color(),
+                                  linewidth=0.1,
+                                  alpha=0.5)
 
         # Plot evolved initial mass
         # Median
@@ -235,9 +249,26 @@ def main():
         #                 label=r'$F^{\rm halo}$',
         #                 zorder=0)
 
+    legend_markers = [
+        plt.Line2D([0, 1], [0, 0], color='k', linestyle='-'),
+        plt.Line2D([0, 1], [0, 0], color='k', linestyle='--'),
+        plt.Line2D([0, 1], [0, 0], color='k', linestyle=':')
+    ]
+    legend_labels = [
+        'Partially disrupted', 'Fully disrupted', r'$F^{\rm halo}$'
+    ]
+
     axs[0].minorticks_on()
     axs[1].minorticks_on()
-    axs[0].legend()
+    orig_legend = axs[0].legend(markerfirst=False,
+                                loc='upper right',
+                                handlelength=0.,
+                                handletextpad=0.,
+                                labelspacing=0.)
+    for t_item, line in zip(orig_legend.get_texts(), orig_legend.get_lines()):
+        t_item.set_color(line.get_color())
+    axs[0].legend(legend_markers, legend_labels, loc='upper left')
+    axs[0].add_artist(orig_legend)
     axs[0].set(ylabel=r'$M_{\rm field,\, CL}\, /\, M_{\rm field,\, tot}$',
                yscale='log',
                ylim=[None, 4.e-1])
@@ -247,7 +278,15 @@ def main():
                ylim=[None, 8.e-2])
     indiv_axs[0].minorticks_on()
     indiv_axs[1].minorticks_on()
-    indiv_axs[0].legend()
+    orig_legend = indiv_axs[0].legend(markerfirst=False,
+                                      loc='upper right',
+                                      handlelength=0.,
+                                      handletextpad=0.,
+                                      labelspacing=0.)
+    for t_item, line in zip(orig_legend.get_texts(), orig_legend.get_lines()):
+        t_item.set_color(line.get_color())
+    indiv_axs[0].legend(legend_markers, legend_labels, loc='upper left')
+    indiv_axs[0].add_artist(orig_legend)
     indiv_axs[0].set(
         xlabel=r'$r\, \left[{\rm kpc}\right]$',
         ylabel=r'$M_{\rm field,\, CL}\, /\, M_{\rm field,\, tot}$',
