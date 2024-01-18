@@ -1,5 +1,5 @@
 astropy <6.1
-contourpy==1.1.1
+contourpy==1.2.0
 cycler==0.12.1
 fonttools==4.43.1
 h5py==3.10.0
