@@ -26,14 +26,49 @@ def embed_symbols(pdf_file):
     return None
 
 
-def plot_merger_arrow(
-        ax,
-        x,
-        length,
-        #   ls='-',
-        #   fc='k',
-        arrow_properties={},
-        loc='upper'):
+class MergerArrow(object):
+
+    def __init__(self, ax, arrow_properties) -> None:
+        self.ax = ax
+        self.arrow_properties = arrow_properties
+        self.length = self.arrow_properties['length']
+        pass
+
+    def plot_merger_arrow(self, x, loc='upper'):
+        if loc == 'upper':
+            y = 1. - self.length
+            dy = self.length
+        elif loc == 'lower':
+            y = self.length
+            dy = -self.length
+        else:
+            y = 1.
+            dy = 1.
+
+        self.ax.arrow(x,
+                      y,
+                      0.,
+                      dy,
+                      transform=self.ax.transAxes,
+                      **self.arrow_properties)
+        return None
+
+    def plot_horizontal_merger_arrow(self, x, loc='upper'):
+        if loc == 'upper':
+            y = 1. - self.length
+            dy = self.length
+        elif loc == 'lower':
+            y = self.length
+            dy = -self.length
+        else:
+            y = 1.
+            dy = 1.
+
+        self.ax.arrow(x, y, 0., dy, **self.arrow_properties)
+        return None
+
+
+def plot_merger_arrow(ax, x, length, arrow_properties={}, loc='upper'):
     if loc == 'upper':
         y = 1. - length
         dy = length
@@ -424,7 +459,7 @@ class FigureHandler(object):
             # panel
             if (((direction == 'vertical') and (i == 0))
                     or ((direction == 'horizontal') and (i == len(axs) - 1))):
-                legend = ax.legend(
+                self.legend = ax.legend(
                     markerfirst=False,
                     fontsize='small',
                     loc=leg_loc,
@@ -433,8 +468,8 @@ class FigureHandler(object):
                     labelspacing=0.,
                 )
 
-                for t_item, line in zip(legend.get_texts(),
-                                        legend.get_lines()):
+                for t_item, line in zip(self.legend.get_texts(),
+                                        self.legend.get_lines()):
                     t_item.set_color(line.get_color())
 
             if t_label is not None:

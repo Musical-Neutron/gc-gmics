@@ -7,10 +7,18 @@ import matplotlib.pyplot as plt
 
 from common_functions import plot_merger_arrow, save_figures
 from process_data import EvolutionData, return_plot_format_lists
-from universal_settings import (arrow_length, axis_rescale, figure_handler,
-                                mm_arrow_properties, plot_styles, sim_list,
-                                sim_names, sim_tlb_major_merger,
-                                sim_tlb_target_merger, tm_arrow_properties)
+from universal_settings import (
+    arrow_length,
+    axis_rescale,
+    figure_handler,
+    mm_arrow_properties,
+    plot_styles,
+    sim_list,
+    sim_names,
+    sim_tlb_major_merger,
+    sim_tlb_target_merger,
+    tm_arrow_properties,
+)
 
 
 def main():
@@ -20,11 +28,11 @@ def main():
     except OSError:
         pass
         # File location
-    out_file = 'fig6_mgassf_mbh.pdf'
+    out_file = 'fig02_mgassf_mbh.pdf'
     out_file_template = '{}_vs_tlb.pdf'
 
     # Load data for figures
-    property_list = ['M_gas,SF', 'M_BH']
+    property_list = ['SFR', 'M_gas,SF', 'M_BH']
     ev_data = [EvolutionData(sim) for sim in sim_list[:3]]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
 
