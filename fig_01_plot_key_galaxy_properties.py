@@ -1,18 +1,27 @@
 #!/usr/bin/env python3
 
 # Place import files below
+import copy
+
 import matplotlib.pyplot as plt
 import numpy as np
-import copy
 
 from common_functions import plot_merger_arrow, save_figures
 from process_data import EvolutionData, return_plot_format_lists
-from universal_settings import (arrow_length, axis_rescale,
-                                caldwell_2011_m31_mstar_feh_data_file,
-                                figure_handler, gc_mass, mm_arrow_properties,
-                                plot_styles, sim_list, sim_names,
-                                sim_tlb_major_merger, sim_tlb_target_merger,
-                                tm_arrow_properties)
+from universal_settings import (
+    arrow_length,
+    axis_rescale,
+    caldwell_2011_m31_mstar_feh_data_file,
+    figure_handler,
+    gc_mass,
+    mm_arrow_properties,
+    plot_styles,
+    sim_list,
+    sim_names,
+    sim_tlb_major_merger,
+    sim_tlb_target_merger,
+    tm_arrow_properties,
+)
 
 
 def main():
@@ -32,10 +41,10 @@ def main():
     property_list = ['M_200', 'M_star', 'M_GC']
     ev_data = [EvolutionData(sim) for sim in sim_list[:3]]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
-    (mstar_r200_ylabels, mstar_r200_yscales,
-     mstar_r200_ylims) = return_plot_format_lists(['M_star_r200'])
-    (mgc_r200_ylabels, mgc_r200_yscales,
-     mgc_r200_ylims) = return_plot_format_lists(['M_GC_r200'])
+    # (mstar_r200_ylabels, mstar_r200_yscales,
+    #  mstar_r200_ylims) = return_plot_format_lists(['M_star_r200'])
+    # (mgc_r200_ylabels, mgc_r200_yscales,
+    #  mgc_r200_ylims) = return_plot_format_lists(['M_GC_r200'])
 
     fig, axs = plt.subplots(
         len(property_list),
@@ -48,7 +57,7 @@ def main():
             "wspace": 0,
             "hspace": 0
         })
-    norm_fig, norm_axs = plt.subplots(
+    _, norm_axs = plt.subplots(
         len(property_list),
         1,
         figsize=(8, 8 * (1. + 0.3 * (len(property_list) - 1.))),
@@ -180,9 +189,9 @@ def main():
                                   arrow_properties=tm_arrow_properties,
                                   loc='lower')
 
-    Mgc_M31 = np.nansum(m31_mass_data[m31_mass_data >= gc_mass])
+    mgc_m31 = np.nansum(m31_mass_data[m31_mass_data >= gc_mass])
     axs[-1].scatter(0.15,
-                    Mgc_M31,
+                    mgc_m31,
                     color='k',
                     marker='s',
                     label='M31 (observed)')
