@@ -34,6 +34,7 @@ def main():
     # Load data for figures
     property_list = ['SFR', 'M_gas,SF', 'M_BH']
     ev_data = [EvolutionData(sim) for sim in sim_list[:3]]
+    ev_data_nobh = [EvolutionData(sim) for sim in sim_list[3:]]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
 
     fig, axs = plt.subplots(
@@ -54,9 +55,10 @@ def main():
     for a_i, (ax, indiv_ax,
               property_to_plot) in enumerate(zip(axs, indiv_axs,
                                                  property_list)):
-        for (sim_data, sim, sim_name, tlb_mm,
-             tlb_tm) in zip(ev_data, sim_list, sim_names, sim_tlb_major_merger,
-                            sim_tlb_target_merger):
+        for (sim_data, sim, sim_name, tlb_mm, tlb_tm,
+             sim_data_nobh) in zip(ev_data, sim_list, sim_names,
+                                   sim_tlb_major_merger, sim_tlb_target_merger,
+                                   ev_data_nobh):
             med, spread = sim_data.med_spread(property_to_plot)
             # Plot median
             line, = ax.plot(sim_data.t_lb,
@@ -68,7 +70,9 @@ def main():
                                         label=sim_name,
                                         **plot_styles[sim])
             if property_list[a_i] == 'M_gas,SF':
-                msfgas_r200_med, _ = sim_data.med_spread('M_gas,SF_r200')
+                # msfgas_r200_med, _ = sim_data.med_spread('M_gas,SF_r200')
+                msfgas_r200_med, _ = sim_data_nobh.med_spread(property_to_plot)
+                print(msfgas_r200_med)
                 temp_style = copy.deepcopy(plot_styles[sim])
                 temp_style.update({'ls': ':'})
                 ax.plot(sim_data.t_lb, msfgas_r200_med, **temp_style)
