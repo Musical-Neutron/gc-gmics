@@ -88,10 +88,9 @@ class Z0Data(object):
         pass
 
     def _iter_read_file_data(self, f, group_name, prefix):
-        for key in f[group_name].keys():
-            data = f[group_name][key][()]
+        for key, data in f[group_name].items():
             str_key = prefix + key.strip().lower().replace(' ', '_')
-            setattr(self, str_key, data)
+            setattr(self, str_key, data[()])
         return None
 
     def process_data(self):
@@ -404,10 +403,9 @@ class EvolutionData(object):
 
     def process_data(self):
         with h5py.File(data_file_template.format(self.sim, gc_mass), 'r') as f:
-            for key in f['z evolution'].keys():
-                data = f['z evolution'][key][()]
+            for key, data in f['z evolution'].items():
                 str_key = key.strip().replace(' ', '_')
-                setattr(self, str_key, data)
+                setattr(self, str_key, data[()])
         return None
 
     def make_specific_gas_dmgc_sfr(self):

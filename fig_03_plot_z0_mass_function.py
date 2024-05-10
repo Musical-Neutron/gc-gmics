@@ -7,10 +7,16 @@ import numpy as np
 from common_functions import save_figures
 from process_data import Z0Data
 from universal_settings import (
-    baumgardt_2019_mw_cluster_file, caldwell_2009_m31_int_data_file,
-    caldwell_2009_m31_old_data_file, caldwell_2009_m31_young_data_file,
-    caldwell_2011_m31_mstar_feh_data_file, cosmology_parameters,
-    johnson_2017_m31_dNdlogM_data_file, plot_styles, sim_list, sim_names)
+    baumgardt_2019_mw_cluster_file,
+    caldwell_2009_m31_int_data_file,
+    caldwell_2009_m31_old_data_file,
+    caldwell_2009_m31_young_data_file,
+    caldwell_2011_m31_mstar_feh_data_file,
+    johnson_2017_m31_dNdlogM_data_file,
+    plot_styles,
+    sim_list,
+    sim_names,
+)
 
 
 def main():
@@ -33,35 +39,35 @@ def main():
                                           skip_header=True)
     johnson_m31_data = np.genfromtxt(johnson_2017_m31_dNdlogM_data_file,
                                      skip_header=True)
-    johnson_dlogM = 0.1
-    caldwell_dlogM = 0.2
+    johnson_dlogm = 0.1
+    caldwell_dlogm = 0.2
 
     # Analysis settings
     n_bins = 30
     m_bins = np.logspace(2, 8, n_bins)  # Msun / h
-    dlogM = np.log10(m_bins[1:]) - np.log10(m_bins[:-1])
-    mid_logmbins = 10.**(np.log10(m_bins[:-1]) + dlogM / 2.)
+    dlogm = np.log10(m_bins[1:]) - np.log10(m_bins[:-1])
+    mid_logmbins = 10.**(np.log10(m_bins[:-1]) + dlogm / 2.)
     data_m_bins = np.logspace(2, 8, int(n_bins / 2))  # Msun
-    data_dlogM = np.log10(data_m_bins[1:]) - np.log10(data_m_bins[:-1])
-    mid_data_logmbins = 10.**(np.log10(data_m_bins[:-1]) + data_dlogM / 2.)
+    data_dlogm = np.log10(data_m_bins[1:]) - np.log10(data_m_bins[:-1])
+    mid_data_logmbins = 10.**(np.log10(data_m_bins[:-1]) + data_dlogm / 2.)
     # aperture = 30. * cosmology_parameters['h']  # kpc / h
     # aperture_volume = (4. * np.pi * aperture**3.) / 3.  # h^-3 kpc^3
-    CL = [16., 84.]
+    cl = [16., 84.]
 
     # Load data for figures
     all_z0_data = [Z0Data(sim) for sim in sim_list[:3]]
     m31_mass_data = 10.**caldwell_m31_data[:, 1]  # Msun
     mw_mass_data = baumgardt_mw_data[:, 1]  # Msun
-    dN_dlogM_m31 = np.histogram(m31_mass_data[~np.isnan(m31_mass_data)],
-                                data_m_bins)[0] / data_dlogM
-    dN_dlogM_mw = np.histogram(mw_mass_data[~np.isnan(mw_mass_data)],
-                               data_m_bins)[0] / data_dlogM
-    dN_dlogM_m31_old = caldwell_m31_old_data[:, 1] / caldwell_dlogM
-    dN_dlogM_m31_int = caldwell_m31_int_data[:, 1] / caldwell_dlogM
-    dN_dlogM_m31_yng = caldwell_m31_yng_data[:, 1] / caldwell_dlogM
-    dN_dlogM_m31_all = (caldwell_m31_old_data[:, 1] +
+    dn_dlogm_m31 = np.histogram(m31_mass_data[~np.isnan(m31_mass_data)],
+                                data_m_bins)[0] / data_dlogm
+    dn_dlogm_mw = np.histogram(mw_mass_data[~np.isnan(mw_mass_data)],
+                               data_m_bins)[0] / data_dlogm
+    dn_dlogm_m31_old = caldwell_m31_old_data[:, 1] / caldwell_dlogm
+    dn_dlogm_m31_int = caldwell_m31_int_data[:, 1] / caldwell_dlogm
+    dn_dlogm_m31_yng = caldwell_m31_yng_data[:, 1] / caldwell_dlogm
+    dn_dlogm_m31_all = (caldwell_m31_old_data[:, 1] +
                         caldwell_m31_int_data[:, 1] +
-                        caldwell_m31_yng_data[:, 1]) / caldwell_dlogM
+                        caldwell_m31_yng_data[:, 1]) / caldwell_dlogm
     # dn_dlogM_m31 = np.histogram(m31_mass_data[~np.isnan(m31_mass_data)],
     #                             m_bins)[0] / dlogM  / aperture_volume
 
@@ -73,19 +79,19 @@ def main():
     ################################################################
     # Plot median
     ax.plot(10.**caldwell_m31_old_data[:, 0],
-            dN_dlogM_m31_all,
+            dn_dlogm_m31_all,
             label=r'Caldwell et al. (2009)',
             color='c')
     ax.plot(mid_data_logmbins,
-            dN_dlogM_m31,
+            dn_dlogm_m31,
             label='Caldwell et al. (2011)',
             color='k')
     ax.plot(mid_data_logmbins,
-            dN_dlogM_mw,
+            dn_dlogm_mw,
             label='Baumgardt et al. (2019)',
             color='orange')
     ax.plot(10.**johnson_m31_data[:, 0],
-            4 * johnson_m31_data[:, 1] / johnson_dlogM,
+            4 * johnson_m31_data[:, 1] / johnson_dlogm,
             label=r'$4 \times$ YCs (Johnson et al., 2017)',
             color='m')
 
@@ -110,20 +116,20 @@ def main():
         # all_mcl_birth = np.row_stack(
         #     [getattr(z0_data, prefix + 'm_birth') for prefix in prefixes])
 
-        dN_dlogM_current = np.column_stack([
-            np.histogram(mass_data, m_bins)[0] / dlogM
+        dN_dlogm_current = np.column_stack([
+            np.histogram(mass_data, m_bins)[0] / dlogm
             for mass_data in mcl_current.T
         ])
         # dn_dlogM_current = np.column_stack([
         #     np.histogram(mass_data, m_bins)[0] / dlogM / aperture_volume
         #     for mass_data in mcl_current.T
         # ])
-        dN_dlogM_birth = np.column_stack([
-            np.histogram(mass_data, m_bins)[0] / dlogM
+        dN_dlogm_birth = np.column_stack([
+            np.histogram(mass_data, m_bins)[0] / dlogm
             for mass_data in mcl_birth.T
         ])
-        dallN_dlogM_birth = np.column_stack([
-            np.histogram(mass_data, m_bins)[0] / dlogM
+        dallN_dlogm_birth = np.column_stack([
+            np.histogram(mass_data, m_bins)[0] / dlogm
             for mass_data in all_mcl_birth.T
         ])
         # dn_dlogM_birth = np.column_stack([
@@ -159,15 +165,14 @@ def main():
                     r' $(M_{\rm cl,\, birth} \leq 2\times10^4)$')
 
         med_dNlogM_current, spread_dNlogM_current = med_spread(
-            dN_dlogM_current, confidence=CL)
+            dN_dlogm_current, confidence=cl)
         # med_dnlogM_current, spread_dnlogM_current = med_spread(
         #     dN_dlogM_current, confidence=CL)
-        med_dNlogM_birth, spread_dNlogM_birth = med_spread(dN_dlogM_birth,
-                                                           confidence=CL)
+        med_dNlogM_birth, _ = med_spread(dN_dlogm_birth, confidence=cl)
         # med_dnlogM_birth, spread_dnlogM_birth = med_spread(dN_dlogM_birth,
         #                                                    confidence=CL)
         med_dallNlogM_birth, spread_dallNlogM_birth = med_spread(
-            dallN_dlogM_birth, confidence=CL)
+            dallN_dlogm_birth, confidence=cl)
 
         med_dNlogM_current[med_dNlogM_current == 0] = np.nan
         med_dNlogM_birth[med_dNlogM_birth == 0] = np.nan
@@ -261,14 +266,14 @@ def main():
     return None
 
 
-def med_spread(data, confidence=[16., 84.], axis=None):
+def med_spread(data, confidence=np.asarray([16., 84.]), axis=None):
     if axis is not None:
-        axis = axis
+        axis_value = axis
     else:
-        axis = len(data.shape) - 1
+        axis_value = len(data.shape) - 1
 
-    med = np.nanmedian(data, axis=axis)
-    percentiles = np.nanpercentile(data, confidence, axis=axis)
+    med = np.nanmedian(data, axis=axis_value)
+    percentiles = np.nanpercentile(data, confidence, axis=axis_value)
     return med, percentiles
 
 

@@ -6,7 +6,7 @@ import numpy as np
 
 from common_functions import save_figures
 from process_data import Z0Data
-from universal_settings import (plot_styles, sim_list, sim_names)
+from universal_settings import plot_styles, sim_list, sim_names
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
     except OSError:
         pass
     # File location
-    fig7_out_file = 'fig7_mcfield_mfield.pdf'
+    fig7_out_file = 'fig07_mcfield_mfield.pdf'
     out_file_template = '{}_vs_tlb.pdf'
 
     # Analysis settings
@@ -269,11 +269,11 @@ def main():
         t_item.set_color(line.get_color())
     axs[0].legend(legend_markers, legend_labels, loc='upper left')
     axs[0].add_artist(orig_legend)
-    axs[0].set(ylabel=r'$M_{\rm field,\, CL}\, /\, M_{\rm field,\, tot}$',
+    axs[0].set(ylabel=r'$M^{\rm halo}_{\rm CL}\, /\, M^{\rm halo}_{\rm tot}$',
                yscale='log',
                ylim=[None, 4.e-1])
     axs[1].set(xlabel=r'$r\, \left[{\rm kpc}\right]$',
-               ylabel=r'$M_{\rm field,\, GC}\, /\, M_{\rm field,\, tot}$',
+               ylabel=r'$M^{\rm halo}_{\rm GC}\, /\, M^{\rm halo}_{\rm tot}$',
                yscale='log',
                ylim=[None, 8.e-2])
     indiv_axs[0].minorticks_on()
