@@ -5,7 +5,6 @@ import string
 
 import numpy as np
 import scipy.integrate as integrate
-from astropy import constants as const
 from matplotlib.ticker import Locator
 
 panel_labels = [it + ")" for it in list(string.ascii_lowercase)]
@@ -232,7 +231,7 @@ class Cosmology(object):
                 [0]: Value of H_0
                 [1]: Dict of attributes, esp. units
         """
-        return self.h / (10. * const.pc.value)  # [1 / s]
+        return self.h / (10. * 3.085677581491367e+16)  # [1 / s]
 
 
 class FigureHandler(object):
@@ -308,7 +307,7 @@ class FigureHandler(object):
             if not no_legend:
                 legend = ax.legend(
                     markerfirst=False,
-                    fontsize='small',
+                    fontsize='medium',
                     loc=leg_loc,
                     handlelength=0,
                     handletextpad=0.,
@@ -364,7 +363,7 @@ class FigureHandler(object):
                 ax[1].set_yscale('symlog', linthresh=linthresh)
                 ax[1].yaxis.set_minor_locator(MinorSymLogLocator(linthresh))
             new_x_ax.invert_axis()
-            ax[1].legend(fontsize='small', loc=leg_loc)
+            ax[1].legend(fontsize='medium', loc=leg_loc)
         return None
 
     def set_stacked_figure_properties(
@@ -458,10 +457,11 @@ class FigureHandler(object):
             # Sets legend in the first (vertical) or final (horizontal)
             # panel
             if (((direction == 'vertical') and (i == 0))
-                    or ((direction == 'horizontal') and (i == len(axs) - 1))):
+                    or ((direction == 'horizontal') and (i == 0))):
+                # or ((direction == 'horizontal') and (i == len(axs) - 1))):
                 self.legend = ax.legend(
                     markerfirst=False,
-                    fontsize='small',
+                    fontsize='medium',
                     loc=leg_loc,
                     handlelength=0,
                     handletextpad=0.,
@@ -475,26 +475,46 @@ class FigureHandler(object):
             if t_label is not None:
                 ax.text(s=t_label, transform=ax.transAxes, **t_label_args)
 
+            # Manipulate axis label fontsize for multiple axes
+            current_fontsize = ax.yaxis.get_label().get_fontsize()
+            if len(axs) > 1:
+                new_fontsize = (1. + len(axs) / 10.) * current_fontsize
+            else:
+                new_fontsize = current_fontsize
+
             if direction == 'horizontal':
                 new_x_ax.invert_axis()
+                ax.xaxis.get_label().set_fontsize(int(new_fontsize))
+            else:
+                ax.yaxis.get_label().set_fontsize(int(new_fontsize))
 
             if len(axs) > 2:
                 ax.text(0.02,
                         0.96,
                         ax_label,
                         color='k',
+                        fontsize='medium',
                         verticalalignment='top',
                         transform=ax.transAxes)
 
         if direction == 'vertical':
             new_x_ax.invert_axis()
 
+        # for ax in axs:
+        #     current_fontsize = ax.yaxis.get_label().get_fontsize()
+        #     if len(axs) > 1:
+        #         new_fontsize = (1. + len(axs) / 10.) * current_fontsize
+        #     else:
+        #         new_fontsize = current_fontsize
+
+        #     ax.yaxis.get_label().set_fontsize(int(new_fontsize))
+
         return None
 
-    def save_figures(figs, file_paths):
-        for fig, file_path in zip(figs, file_paths):
-            save_figures(fig, file_path, embed=True)
-        return None
+    # def save_figures(figs, file_paths):
+    #     for fig, file_path in zip(figs, file_paths):
+    #         save_figures(fig, file_path, embed=True)
+    #     return None
 
 
 class MinorSymLogLocator(Locator):
