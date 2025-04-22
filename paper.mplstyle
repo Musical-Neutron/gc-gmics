@@ -1,15 +1,15 @@
 axes.edgecolor: 262626
 axes.labelcolor: 262626
-axes.labelsize: 18
+axes.labelsize: 20
 axes.labelweight: bold
 axes.linewidth: 2
-axes.titlesize: large
+axes.titlesize: 24
 
 figure.titlesize: large
 figure.autolayout: True
 
 font.family: serif
-font.size: 16
+font.size: 18
 font.serif: Times, Palatino, New Century Schoolbook, Bookman, Computer Modern Roman
 font.weight: bold
 
