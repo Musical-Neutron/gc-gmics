@@ -11,8 +11,13 @@ from process_data import EvolutionData, return_plot_format_lists
 from universal_settings import (
     arrow_length,
     axis_rescale,
+    baumgardt_2019_mw_cluster_file,
+    caldwell_2011_m31_mstar_feh_data_file,
     figure_handler,
+    gc_mass,
     mm_arrow_properties,
+    mstar_m31,
+    mstar_mw,
     plot_styles,
     sim_list,
     sim_names,
@@ -28,13 +33,26 @@ def main():
         plt.style.use('./paper.mplstyle')
     except OSError:
         pass
+    marker_size = 25
+
     # File location
     # fig4_out_file = 'fig4_pkstar_pkgc_mcstar_cfe.pdf'
-    fig4_out_file = 'fig05_pksfgas_pkgc_mcstar_cfe_newdata.pdf'
-    fig5_out_file = 'fig06_TN_SM.pdf'
+    fig4_out_file = 'fig06_pksfgas_pkgc_mcstar_cfe_newdata.pdf'
+    fig5_out_file = 'fig07_TN_SM.pdf'
     out_file_template = '{}_vs_tlb.pdf'
 
+    mw_cl_data = np.genfromtxt(baumgardt_2019_mw_cluster_file,
+                               skip_header=True)
+    m31_data = np.genfromtxt(caldwell_2011_m31_mstar_feh_data_file,
+                             skip_header=True)
+
     # Load data for figures
+    mw_cl_mass_data = mw_cl_data[:, 1]  # Msun
+    m31_mass_data = 10.**m31_data[:, 1]  # Msun
+    ngc_mw = np.nansum(mw_cl_mass_data >= gc_mass)
+    ngc_m31 = np.nansum(m31_mass_data >= gc_mass)
+    mgc_mw = np.nansum(mw_cl_mass_data[mw_cl_mass_data >= gc_mass])
+    mgc_m31 = np.nansum(m31_mass_data[m31_mass_data >= gc_mass])
     ev_data = [EvolutionData(sim) for sim in sim_list[:3]]
     # property_list = ['Pk_birth,star', 'Pk_birth,GC', 'Mc_star', 'CFE']
     property_list = ['Pk_SFgas', 'Pk_birth,GC', 'Mc_star', 'CFE']
@@ -58,13 +76,10 @@ def main():
     for a_i, (ax, indiv_ax,
               property_to_plot) in enumerate(zip(axs, indiv_axs,
                                                  property_list)):
-        print(property_to_plot)
         for (sim_data, sim, sim_name, tlb_mm,
              tlb_tm) in zip(ev_data, sim_list, sim_names, sim_tlb_major_merger,
                             sim_tlb_target_merger):
-            print(sim_data.z)
             med, spread = sim_data.med_spread(property_to_plot)
-            print(med)
 
             # Plot median
             line, = ax.plot(sim_data.t_lb,
@@ -191,6 +206,36 @@ def main():
     for a_i, (ax, indiv_ax,
               property_to_plot) in enumerate(zip(axs, indiv_axs,
                                                  property_list)):
+
+        # if property_list[a_i] == 'TN_model0':
+        #     ax.scatter(0.05,
+        #                ngc_mw * 1.e9 / mstar_mw,
+        #                marker='o',
+        #                s=marker_size,
+        #                color='k')
+        #     ax.scatter(0.05,
+        #                ngc_m31 * 1.e9 / mstar_m31,
+        #                marker='s',
+        #                s=marker_size,
+        #                color='k')
+        #     # ax.scatter([0.05], [3.75],
+        #     #            marker='o',
+        #     #            s=np.sqrt(marker_size),
+        #     #            color='r',
+        #     #            zorder=99)
+
+        # if property_list[a_i] == 'SM_model0':
+        #     ax.scatter(0.05,
+        #                mgc_mw * 1.e2 / mstar_mw,
+        #                marker='o',
+        #                s=marker_size,
+        #                color='k')
+        #     ax.scatter(0.05,
+        #                mgc_m31 * 1.e2 / mstar_m31,
+        #                marker='s',
+        #                s=marker_size,
+        #                color='k')
+
         for (sim_data, sim, sim_name, tlb_mm,
              tlb_tm) in zip(ev_data, sim_list, sim_names, sim_tlb_major_merger,
                             sim_tlb_target_merger):
@@ -280,8 +325,16 @@ def main():
     ]
     legend_labels = ['Without dynamical evolution', 'With dynamical evolution']
 
-    axs[1].legend(legend_markers, legend_labels, loc='upper center')
-    axs[1].add_artist(orig_legend)
+    new_leg = axs[1].legend(legend_markers,
+                            legend_labels,
+                            loc='upper right',
+                            alignment='right')
+    axs[0].add_artist(orig_legend)
+
+    # for tick in axs[0].xaxis.get_majorticklabels():
+    #     tick.set_horizontalalignment('left')
+    # for tick in axs[1].xaxis.get_majorticklabels():
+    #     tick.set_horizontalalignment('left')
 
     # Save figures
     save_figures(fig, fig5_out_file)

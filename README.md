@@ -1,4 +1,4 @@
-# Plotting scripts for the E-MOSAICS GC destruction paper
+# Plotting scripts for the E-MOSAICS GM globular cluster paper
 
 **Last reviewed:** v0.1
 
@@ -13,25 +13,25 @@ All plotting scripts should be executed from this directory.
 
 There are seven scripts that can be executed independently:
 
-* Fig. 1: [fig_01_plot_key_galaxy_properties.py](/fig_01_plot_key_galaxy_properties.py)
+* Fig. 2: [fig_02_key_galaxy_properties.py](/fig_02_key_galaxy_properties.py)
   * Plots the halo mass, <i>M</i><sub>200</sub>,
   stellar mass, <i>M</i><sub>*</sub>, and mass in GCs, <i>M</i><sub>GC</sub>,
   vs. lookback time.
-* Fig. 2: [fig_02_plot_z0_mass_function.py](/fig_02_plot_z0_mass_function.py)
+* Fig. 3: [fig_03_gas_bh_properties.py](/fig_03_gas_bh_properties.py)
+  * Plots the mass of star-forming gas and the central black hole mass vs.
+  lookback time.
+* Fig. 4: [fig_04_z0_mass_function.py](/fig_04_z0_mass_function.py)
   * Plots the $z=0$ and birth mass functions of all clusters that survive to
   $z=0$.
-* Fig. 3: [fig_03_plot_rates_of_change.py](/fig_03_plot_rates_of_change.py)
+* Fig. 5: [fig_05_rates_of_change.py](/fig_05_rates_of_change.py)
   * Plots the star formation rate, GC formation rate, GC destruction rate, and
   net change in GC mass vs. lookback time.
-* Figs 4 & 5: [fig_04_05_plot_gc_properties.py](/fig_04_05_plot_gc_properties.py)
+* Figs 6 & 7: [fig_06_07_gc_properties.py](/fig_06_07_gc_properties.py)
   * Plots the stellar and GC birth pressures, M<sub>c,*</sub>, and cluster
   formation efficiency vs. lookback time.
   * Plots the specific frequency, <i>T</i><sub>N</sub> and <i>S</i><sub>M</sub>
   vs. lookback time.
-* Fig. 6: [fig_06_plot_gas_bh_properties.py](/fig_06_plot_gas_bh_properties.py)
-  * Plots the mass of star-forming gas and the central black hole mass vs.
-  lookback time.
-* Fig. 7: [fig_07_plot_fhalo.py](/fig_07_plot_fhalo.py)
+* Fig. 8: [fig_08_fhalo.py](/fig_08_fhalo.py)
   * Plots the fraction of mass in halo stars contributed by the destruction of
   star clusters.
 * [print_paper_results.py](/print_paper_results.py)
@@ -42,6 +42,7 @@ that will run all of the above scripts when executed. This produces .svg
 and .pdf versions of each figure in the paper.
 
 ### Supplementary scripts
+
 * [common_functions.py](/common_functions.py)
   * A set of functions common to more than one of the main scripts.
 * [process_data.py](/process_data.py)
@@ -69,7 +70,7 @@ This code and the accompanying data are freely available.
 
 ### If you use this code or derivative work
 
-* [O. Newton et al. (2023)](DOI)
+* [O. Newton et al. (2025)](DOI)
 * [O. Newton (2021)](https://doi.org/10.5281/zenodo.4708338)
 
 ### If you use these data, a derivative work, or results thereof

@@ -398,6 +398,9 @@ class EvolutionData(object):
         self.gc_mass = gc_mass
         self.process_data()
         self.make_specific_gas_dmgc_sfr()
+        self.ngc_ap_vs_r200_ratio()
+        self.constant_tn()
+        self.make_eta()
 
         return None
 
@@ -422,6 +425,36 @@ class EvolutionData(object):
         setattr(self, 'SFR_MgasSF', sfr_mgas_sf)
         setattr(self, 'dMgc_dt_MgasSF', dmgc_mgas_sf)
 
+        return None
+
+    def make_eta(self):
+        m_gc = getattr(self, 'M_GC')
+        m_gc_200 = getattr(self, 'M_GC_r200')
+        m_halo = getattr(self, 'M_200')
+
+        eta = m_gc / m_halo
+        eta_200 = m_gc_200 / m_halo
+        setattr(self, 'eta', eta)
+        setattr(self, 'eta_r200', eta_200)
+
+        return None
+
+    def constant_tn(self, tn_list=[20, 40, 60, 80, 100]):
+        m_star_1e9 = getattr(self, 'M_star') / 1.e9
+
+        for target_tn in tn_list:
+            target_n_gc = target_tn * m_star_1e9
+            setattr(self, 'ngc_fixed_tn_{:.0f}'.format(target_tn), target_n_gc)
+        return None
+
+    def ngc_ap_vs_r200_ratio(self):
+        ngc_ap = getattr(self, 'NGC_model0')
+        ngc_r200 = getattr(self, 'NGC_model0_r200')
+
+        ngc_ratio = ngc_ap / ngc_r200
+        ngc_ratio[np.isinf(ngc_ratio)] = np.nan
+
+        setattr(self, 'NGC_ap_r200_ratio', ngc_ratio)
         return None
 
     def med_spread(self, attr_name, confidence=[16., 84.]):

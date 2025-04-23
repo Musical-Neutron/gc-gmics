@@ -9,12 +9,18 @@ import numpy as np
 from common_functions import plot_merger_arrow, save_figures
 from process_data import EvolutionData, return_plot_format_lists
 from universal_settings import (
+    aperture,
     arrow_length,
     axis_rescale,
+    baumgardt_2019_mw_cluster_file,
     caldwell_2011_m31_mstar_feh_data_file,
     figure_handler,
     gc_mass,
     mm_arrow_properties,
+    mstar_m31,
+    mstar_m31_1sig_err,
+    mstar_mw,
+    mstar_mw_1sig_err,
     plot_styles,
     sim_list,
     sim_names,
@@ -30,14 +36,24 @@ def main():
         plt.style.use('./paper.mplstyle')
     except OSError:
         pass
-        # File location
-    out_file = 'fig1_m200_mgc_mstar.pdf'
+    marker_size = 25
+
+    # File location
+    out_file = 'fig02_m200_mgc_mstar.pdf'
     out_file_template = '{}_vs_tlb.pdf'
+    mw_cl_data = np.genfromtxt(baumgardt_2019_mw_cluster_file,
+                               skip_header=True)
     m31_data = np.genfromtxt(caldwell_2011_m31_mstar_feh_data_file,
                              skip_header=True)
 
     # Load data for figures
-    m31_mass_data = 10.**m31_data[:, 1]  # Msun
+    mw_cl_mass_data = mw_cl_data[:, 1]  # Msun
+    mw_cl_1sig_data = mw_cl_data[:, 2]  # Msun
+    m31_cl_mass_data = 10.**m31_data[:, 1]  # Msun
+    mgc_mw = np.nansum(mw_cl_mass_data[mw_cl_mass_data >= gc_mass])
+    mgc_mw_1sig = np.sqrt(
+        np.nansum(mw_cl_1sig_data[mw_cl_mass_data >= gc_mass]**2))
+    mgc_m31 = np.nansum(m31_cl_mass_data[m31_cl_mass_data >= gc_mass])
     property_list = ['M_200', 'M_star', 'M_GC']
     ev_data = [EvolutionData(sim) for sim in sim_list[:3]]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
@@ -74,6 +90,35 @@ def main():
     # Iterate over each axis and plot data
     for a_i, (ax, norm_ax, indiv_ax, property_to_plot) in enumerate(
             zip(axs, norm_axs, indiv_axs, property_list)):
+
+        # if property_list[a_i] == 'M_star':
+        #     ax.errorbar(np.asarray([0.1]),
+        #                 mstar_mw,
+        #                 yerr=np.abs(mstar_mw_1sig_err).reshape(-1, 1),
+        #                 color='k',
+        #                 marker='o',
+        #                 ms=np.sqrt(marker_size))
+        #     ax.errorbar(np.asarray([0.1]),
+        #                 mstar_m31,
+        #                 yerr=np.abs(mstar_m31_1sig_err).reshape(-1, 1),
+        #                 color='k',
+        #                 marker='s',
+        #                 ms=np.sqrt(marker_size))
+
+        # if property_list[a_i] == 'M_GC':
+        #     ax.errorbar(0.1,
+        #                 mgc_mw,
+        #                 yerr=mgc_mw_1sig,
+        #                 color='k',
+        #                 marker='o',
+        #                 ms=np.sqrt(marker_size),
+        #                 label='MW (observed)')
+        #     ax.scatter(0.1,
+        #                mgc_m31,
+        #                color='k',
+        #                marker='s',
+        #                s=marker_size,
+        #                label='M31 (observed)')
 
         norm_ax.axhline(1., color='k', linestyle=':', zorder=0)
         for (sim_data, sim, sim_name, tlb_mm,
@@ -189,13 +234,6 @@ def main():
                                   arrow_properties=tm_arrow_properties,
                                   loc='lower')
 
-    mgc_m31 = np.nansum(m31_mass_data[m31_mass_data >= gc_mass])
-    axs[-1].scatter(0.15,
-                    mgc_m31,
-                    color='k',
-                    marker='s',
-                    label='M31 (observed)')
-
     # Set common properties of the plots using the figure handler
     figure_handler.set_stacked_figure_properties(axs,
                                                  ylabels,
@@ -212,7 +250,19 @@ def main():
                                          yscale=yscales,
                                          ylims=ylims)
 
-    plt.show()
+    # Legend
+    legend_markers = [
+        plt.Line2D([0, 1], [0, 0], color='k', linestyle='-'),
+        plt.Line2D([0, 1], [0, 0], color='k', linestyle=':')
+    ]
+    legend_labels = [
+        r'${:.0f}\, {{\rm ckpc}}$'.format(aperture),
+        r'$R_{200}$',
+    ]
+    axs[-1].legend(legend_markers,
+                   legend_labels,
+                   loc='lower right',
+                   title='Aperture')
 
     # Save figures
     save_figures(fig, out_file)

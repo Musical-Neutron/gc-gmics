@@ -28,7 +28,7 @@ def main():
     except OSError:
         pass
         # File location
-    out_file = 'fig02_mgassf_mbh.pdf'
+    out_file = 'fig03_sfr_mgassf_mbh.pdf'
     out_file_template = '{}_vs_tlb.pdf'
 
     # Load data for figures
@@ -69,7 +69,7 @@ def main():
                                         med,
                                         label=sim_name,
                                         **plot_styles[sim])
-            if property_list[a_i] == 'M_gas,SF':
+            if property_list[a_i] in ['SFR', 'M_gas,SF']:
                 # msfgas_r200_med, _ = sim_data.med_spread('M_gas,SF_r200')
                 msfgas_r200_med, _ = sim_data_nobh.med_spread(property_to_plot)
                 print(msfgas_r200_med)
