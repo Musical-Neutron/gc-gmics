@@ -101,8 +101,16 @@ def save_figures(fig, location, embed=False):
         pdf_file = location + '.pdf'
         svg_file = location + '.svg'
 
-    fig.savefig(pdf_file, dpi=600, format='pdf', transparent=False)
-    fig.savefig(svg_file, dpi=600, format='svg', transparent=False)
+    common_settings = {
+        'dpi': 600,
+        'transparent': False,
+        'bbox_inches': 'tight',
+        'pad_inches': 0.,
+        'facecolor': (1, 1, 1, 0)
+    }
+
+    fig.savefig(pdf_file, format='pdf', **common_settings)
+    fig.savefig(svg_file, format='svg', **common_settings)
 
     if embed:
         embed_symbols(pdf_file)
