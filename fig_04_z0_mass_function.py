@@ -296,6 +296,7 @@ def main():
         # Plot scatter
         ax.fill_between(mid_logmbins,
                         *spread_dNlogM_current,
+                        lw=0,
                         color=line.get_color(),
                         alpha=0.3)
 
@@ -318,6 +319,8 @@ def main():
         ax.errorbar(mid_logmbins,
                     med_dallNlogM_birth,
                     yerr=np.abs(spread_dallNlogM_birth - med_dallNlogM_birth),
+                    elinewidth=2,
+                    capsize=3,
                     **err_line_dict)
         ################################################################
 
