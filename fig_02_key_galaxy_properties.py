@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 # Place import files below
 import matplotlib.pyplot as plt
 
