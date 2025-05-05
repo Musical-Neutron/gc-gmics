@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 # Place import files below
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,8 +12,6 @@ from process_data import EvolutionData, return_plot_format_lists
 from universal_settings import (
     arrow_length,
     axis_rescale,
-    baumgardt_2019_mw_cluster_file,
-    caldwell_2011_m31_mstar_feh_data_file,
     figure_handler,
     mm_arrow_properties,
     plot_styles,
@@ -38,14 +35,7 @@ def main():
     fig7_out_file = 'fig07_TN_SM.pdf'
     out_file_template = '{}_vs_tlb.pdf'
 
-    mw_cl_data = np.genfromtxt(baumgardt_2019_mw_cluster_file,
-                               skip_header=True)
-    m31_data = np.genfromtxt(caldwell_2011_m31_mstar_feh_data_file,
-                             skip_header=True)
-
     # Load data for figures
-    mw_cl_mass_data = mw_cl_data[:, 1]  # Msun
-    m31_mass_data = 10.**m31_data[:, 1]  # Msun
     ev_data = [EvolutionData(sim) for sim in sim_list[:3]]
     property_list = ['Pk_SFgas', 'Pk_birth,GC', 'Mc_star', 'CFE']
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
