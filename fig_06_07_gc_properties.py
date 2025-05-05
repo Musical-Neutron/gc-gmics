@@ -34,8 +34,8 @@ def main():
         pass
 
     # File location
-    fig4_out_file = 'fig06_pksfgas_pkgc_mcstar_cfe_newdata.pdf'
-    fig5_out_file = 'fig07_TN_SM.pdf'
+    fig6_out_file = 'fig06_pksfgas_pkgc_mcstar_cfe_newdata.pdf'
+    fig7_out_file = 'fig07_TN_SM.pdf'
     out_file_template = '{}_vs_tlb.pdf'
 
     mw_cl_data = np.genfromtxt(baumgardt_2019_mw_cluster_file,
@@ -151,7 +151,7 @@ def main():
 
     ####################################################################
     # Save figures
-    save_figures(fig, fig4_out_file)
+    save_figures(fig, fig6_out_file)
 
     for prop_name, fig in zip(property_list, indiv_figs):
         save_figures(fig, out_file_template.format(prop_name))
@@ -159,7 +159,7 @@ def main():
     ####################################################################
     # Plot TN and SM
     ####################################################################
-    new_arrow_length = 0.07
+    # new_arrow_length = 0.07
     property_list = ['TN_model0', 'SM_model0']
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
     birth_map = {'SM_model0': 'SM_birth_model0'}
@@ -226,13 +226,13 @@ def main():
             mm_props = {**mm_arrow_properties, 'fc': line.get_color()}
             (new_arrow_length, mm_props) = get_scaled_arrow_properties(
                 arrow_length, mm_props,
-                ax.get_gridspec()._row_height_ratios[a_i])
+                ax.get_gridspec()._col_width_ratios[a_i])
 
             # Target major merger
             tm_props = {**tm_arrow_properties, 'fc': line.get_color()}
             _, tm_props = get_scaled_arrow_properties(
                 arrow_length, tm_props,
-                ax.get_gridspec()._row_height_ratios[a_i])
+                ax.get_gridspec()._col_width_ratios[a_i])
             if tlb_tm is not None:
                 tm_x = 1. - (tlb_tm / axis_rescale)
 
@@ -275,7 +275,7 @@ def main():
 
     ####################################################################
     # Save figures
-    save_figures(fig, fig5_out_file)
+    save_figures(fig, fig7_out_file)
 
     for prop_name, fig in zip(property_list, indiv_figs):
         save_figures(fig, out_file_template.format(prop_name))
