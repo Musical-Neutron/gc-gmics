@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 # Place import files below
-import copy
-
 import matplotlib.pyplot as plt
 
-from common_functions import plot_merger_arrow, save_figures
+from common_functions import (
+    get_scaled_arrow_properties,
+    plot_merger_arrow,
+    save_figures,
+)
 from process_data import EvolutionData, return_plot_format_lists
 from universal_settings import (
     arrow_length,
@@ -36,7 +38,10 @@ def main():
     ev_data = [EvolutionData(sim) for sim in sim_list[:3]]
     ev_data_nobh = [EvolutionData(sim) for sim in sim_list[3:]]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
+    no_bh_props = ['SFR', 'M_gas,SF']
 
+    ####################################################################
+    # Create figures
     fig, axs = plt.subplots(
         len(property_list),
         1,
@@ -51,6 +56,7 @@ def main():
     indiv_figs = [plt.figure(figsize=(8, 8)) for _ in property_list]
     indiv_axs = [fig.add_subplot(111) for fig in indiv_figs]
 
+    ####################################################################
     # Iterate over each axes object and plot data
     for a_i, (ax, indiv_ax,
               property_to_plot) in enumerate(zip(axs, indiv_axs,
@@ -60,89 +66,81 @@ def main():
                                    sim_tlb_major_merger, sim_tlb_target_merger,
                                    ev_data_nobh):
             med, spread = sim_data.med_spread(property_to_plot)
-            # Plot median
+
+            ############################################################
+            # Plot lines and fills
             line, = ax.plot(sim_data.t_lb,
                             med,
                             label=sim_name,
                             **plot_styles[sim])
+            ax.fill_between(sim_data.t_lb,
+                            *spread,
+                            lw=0,
+                            color=line.get_color(),
+                            alpha=0.3)
+
             indiv_line, = indiv_ax.plot(sim_data.t_lb,
                                         med,
                                         label=sim_name,
                                         **plot_styles[sim])
-            if property_list[a_i] in ['SFR', 'M_gas,SF']:
-                # msfgas_r200_med, _ = sim_data.med_spread('M_gas,SF_r200')
-                msfgas_r200_med, _ = sim_data_nobh.med_spread(property_to_plot)
-                print(msfgas_r200_med)
-                temp_style = copy.deepcopy(plot_styles[sim])
-                temp_style.update({'ls': ':'})
-                ax.plot(sim_data.t_lb, msfgas_r200_med, **temp_style)
-                indiv_ax.plot(sim_data.t_lb, msfgas_r200_med, **temp_style)
-            # Plot scatter
-            ax.fill_between(sim_data.t_lb,
-                            *spread,
-                            color=line.get_color(),
-                            alpha=0.3)
             indiv_ax.fill_between(sim_data.t_lb,
                                   *spread,
+                                  lw=0,
                                   color=indiv_line.get_color(),
                                   alpha=0.3)
 
+            ############################################################
+            # No BH lines
+            if property_to_plot in no_bh_props:
+                nobh_med, _ = sim_data_nobh.med_spread(property_to_plot)
+                nobh_style = {**plot_styles[sim], 'ls': ':'}
+                ax.plot(sim_data.t_lb, nobh_med, **nobh_style)
+                indiv_ax.plot(sim_data.t_lb, nobh_med, **nobh_style)
+
+            ############################################################
             # Plot merger arrows on first and last panels
             # First major merger
             mm_x = 1. - (tlb_mm / axis_rescale)
-            mm_arrow_properties.update({'fc': line.get_color()})
+            mm_props = {**mm_arrow_properties, 'fc': line.get_color()}
+            (new_arrow_length, mm_props) = get_scaled_arrow_properties(
+                arrow_length, mm_props,
+                ax.get_gridspec()._row_height_ratios[a_i])
+
             # Target major merger
-            tm_arrow_properties.update({'fc': line.get_color()})
+            tm_props = {**tm_arrow_properties, 'fc': line.get_color()}
+            _, tm_props = get_scaled_arrow_properties(
+                arrow_length, tm_props,
+                ax.get_gridspec()._row_height_ratios[a_i])
             if tlb_tm is not None:
                 tm_x = 1. - (tlb_tm / axis_rescale)
+
+            # Main axis arrows
             if a_i == 0:
-                plot_merger_arrow(ax,
-                                  mm_x,
-                                  arrow_length,
-                                  arrow_properties=mm_arrow_properties,
-                                  loc='upper')
+                plot_merger_arrow(ax, mm_x, new_arrow_length, mm_props,
+                                  'upper')
                 if tlb_tm is not None:
-                    plot_merger_arrow(ax,
+                    plot_merger_arrow(ax, tm_x, new_arrow_length, tm_props,
+                                      'upper')
+            elif a_i == len(axs) - 1:
+                plot_merger_arrow(ax, mm_x, new_arrow_length, mm_props,
+                                  'lower')
+                if tlb_tm is not None:
+                    plot_merger_arrow(ax, tm_x, new_arrow_length, tm_props,
+                                      'lower')
+
+            # Individual axes and arrows
+            for loc in ['upper', 'lower']:
+                plot_merger_arrow(indiv_ax, mm_x, new_arrow_length, mm_props,
+                                  loc)
+                if tlb_tm is not None:
+                    plot_merger_arrow(indiv_ax,
                                       tm_x,
-                                      arrow_length,
-                                      arrow_properties=tm_arrow_properties,
+                                      new_arrow_length,
+                                      tm_props,
                                       loc='upper')
-            if a_i == len(axs) - 1:
-                plot_merger_arrow(ax,
-                                  mm_x,
-                                  arrow_length,
-                                  arrow_properties=mm_arrow_properties,
-                                  loc='lower')
-                if tlb_tm is not None:
-                    plot_merger_arrow(ax,
-                                      tm_x,
-                                      arrow_length,
-                                      arrow_properties=tm_arrow_properties,
-                                      loc='lower')
+            ############################################################
 
-            plot_merger_arrow(indiv_ax,
-                              mm_x,
-                              arrow_length,
-                              arrow_properties=mm_arrow_properties,
-                              loc='upper')
-            if tlb_tm is not None:
-                plot_merger_arrow(indiv_ax,
-                                  tm_x,
-                                  arrow_length,
-                                  arrow_properties=tm_arrow_properties,
-                                  loc='upper')
-            plot_merger_arrow(indiv_ax,
-                              mm_x,
-                              arrow_length,
-                              arrow_properties=mm_arrow_properties,
-                              loc='lower')
-            if tlb_tm is not None:
-                plot_merger_arrow(indiv_ax,
-                                  tm_x,
-                                  arrow_length,
-                                  arrow_properties=tm_arrow_properties,
-                                  loc='lower')
-
+    ####################################################################
     # Set common properties of the plots using the figure handler
     figure_handler.set_stacked_figure_properties(axs,
                                                  ylabels,
@@ -153,6 +151,7 @@ def main():
                                          yscale=yscales,
                                          ylims=ylims)
 
+    ####################################################################
     # Save figures
     save_figures(fig, out_file)
 
