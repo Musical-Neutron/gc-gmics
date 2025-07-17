@@ -4,16 +4,12 @@
 import h5py
 import numpy as np
 
-from universal_settings import (
-    data_file_template,
-    evo_property_dict,
-    gc_mass,
-    z0_data_file,
-)
+from settings import Analysis, get
 
 
-def return_plot_format_lists(properties_to_plot,
-                             property_dict=evo_property_dict):
+def return_plot_format_lists(
+    properties_to_plot, property_dict=get("Property dictionary")
+):
     """Returns plotting properties associated with a given attribute.
 
     Args:
@@ -39,8 +35,9 @@ def return_plot_format_lists(properties_to_plot,
     return ylabels, yscales, ylims
 
 
-def return_print_format_lists(properties_to_print,
-                              property_dict=evo_property_dict):
+def return_print_format_lists(
+    properties_to_print, property_dict=get("Property dictionary")
+):
     """Returns stdout print properties associated with a given attribute
 
     Args:
@@ -395,7 +392,7 @@ class EvolutionData(object):
 
     def __init__(self, sim) -> None:
         self.sim = sim
-        self.gc_mass = gc_mass
+        self.gc_mass = Analysis["gc_mass"]
         self.process_data()
         self.make_specific_gas_dmgc_sfr()
         self.ngc_ap_vs_r200_ratio()
@@ -472,6 +469,18 @@ class EvolutionData(object):
         """
         # print(np.all(~np.isnan(getattr(self, attr_name)), axis=0).sum())
         print(np.sum(~np.isnan(getattr(self, attr_name)), axis=1))
-        med = np.nanmedian(getattr(self, attr_name), axis=1)
-        spread = np.nanpercentile(getattr(self, attr_name), confidence, axis=1)
+        # med = np.nanmedian(getattr(self, attr_name), axis=1)
+        # spread = np.nanpercentile(getattr(self, attr_name), confidence, axis=1)
+        med, spread = median_and_spread(getattr(self, attr_name), confidence, axis=1)
         return (med, spread)
+
+
+def median_and_spread(data, confidence=np.asarray([16.0, 84.0]), axis=None):
+    if axis is not None:
+        axis_value = axis
+    else:
+        axis_value = len(data.shape) - 1
+
+    med = np.nanmedian(data, axis=axis_value)
+    percentiles = np.nanpercentile(data, confidence, axis=axis_value)
+    return med, percentiles

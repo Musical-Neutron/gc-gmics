@@ -1,13 +1,23 @@
 # Plotting scripts for the E-MOSAICS GM globular cluster paper
 
-**Last reviewed:** v0.1
+**Last reviewed:** 0.2.0
 
 A set of scripts and a repository of reduced data to reproduce the plots in the
 genetically modified initial condition E-MOSAICS Globular Cluster (GC)
-destruction paper.
+paper.
 
 This README file is located in the main repository of the plotting scripts.
 All plotting scripts should be executed from this directory.
+
+## Installation
+
+The package can be installed by cloning the github repository:
+
+```
+    git clone git@github.com:Musical-Neutron/gc-gmics.git
+    cd gc-gmics
+    pip install .
+```
 
 ## 1.0 Scripts
 
