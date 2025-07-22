@@ -8,11 +8,10 @@ from types import SimpleNamespace
 import numpy as np
 import yaml
 
-from gcgmics.common_functions import Cosmology, FigureHandler
+from .common_functions import Cosmology, FigureHandler
 
 # Constants
-# _CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config", "default_config.yaml")
-_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "universal_settings.yaml")
+_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "settings.yaml")
 
 
 def find_placeholders_with_path(data):
