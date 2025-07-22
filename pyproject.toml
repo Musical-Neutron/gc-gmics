@@ -54,7 +54,7 @@
     include-package-data=true
 
 [tool.setuptools.package-data]
-    "cactus"=["*.json", "*.md", "*.txt"]
+    gcgmics=["*.json", "*.md", "*.txt", "settings.yaml"]
 
 [tool.pytest.ini_options]
     addopts     ="-ra -q --cov=gcgmics --cov-report=term-missing"
