@@ -3,6 +3,7 @@ import functools
 import os
 import re
 from collections import defaultdict
+from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
@@ -10,8 +11,16 @@ import yaml
 
 from .common_functions import Cosmology, FigureHandler
 
-# Constants
-_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "settings.yaml")
+_CONFIG_PATHS = [
+    Path(__file__).parent.parent / "settings.yaml",  # Original location
+    Path(__file__).parent / "settings.yaml",  # Package-included
+    Path(os.getenv("GCGMICS_CONFIG", "settings.yaml")),  # Env-specified
+]
+
+for path in _CONFIG_PATHS:
+    if path and path.exists():
+        _CONFIG_PATH = path
+        break
 
 
 def find_placeholders_with_path(data):
