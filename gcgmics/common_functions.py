@@ -5,6 +5,7 @@ import string
 
 import numpy as np
 import scipy.integrate as integrate
+from matplotlib import transforms
 from matplotlib.ticker import Locator
 
 panel_labels = [it + ")" for it in list(string.ascii_lowercase)]
@@ -101,8 +102,16 @@ def save_figures(fig, location, embed=False):
         pdf_file = location + '.pdf'
         svg_file = location + '.svg'
 
-    fig.savefig(pdf_file, dpi=600, format='pdf', transparent=False)
-    fig.savefig(svg_file, dpi=600, format='svg', transparent=False)
+    common_settings = {
+        'dpi': 600,
+        'transparent': False,
+        'bbox_inches': 'tight',
+        'pad_inches': 0.,
+        'facecolor': (1, 1, 1, 0)
+    }
+
+    fig.savefig(pdf_file, format='pdf', **common_settings)
+    fig.savefig(svg_file, format='svg', **common_settings)
 
     if embed:
         embed_symbols(pdf_file)
@@ -116,15 +125,16 @@ def tick_function(redshifts, cos_obj):
 
 class Cosmology(object):
 
-    def __init__(self, args={}) -> None:
+    def __init__(self, args=None) -> None:
         self.omega_M = 0.25
         self.omega_lambda = 0.75
         self.omega_k = 0.0
         self.omega_r = 0.0
         self.h = 0.72
 
-        for key in args:
-            setattr(self, key, args[key])
+        if args is not None:
+            for key in args:
+                setattr(self, key, args[key])
 
         return None
 
@@ -497,6 +507,47 @@ class FigureHandler(object):
                         verticalalignment='top',
                         transform=ax.transAxes)
 
+        # Moving x- and lower y-tick labels to minimise overlaps
+        if (direction == 'horizontal'):
+            label_axs = axs
+        else:
+            label_axs = [axs[-1]]
+        for ax in label_axs:
+            y_close = np.isclose(ax.get_yticks(), ax.get_ylim()[0])
+            if y_close.any():
+                ax.tick_params(axis='x', which='major', pad=7)
+                y_label = np.asarray(
+                    ax.yaxis.get_majorticklabels())[y_close][0]
+                y_label.set_transform(y_label.get_transform() +
+                                      transforms.ScaledTranslation(
+                                          0, 5 / 72,
+                                          ax.get_figure().dpi_scale_trans))
+
+        # Hiding tick labels of overlapping figures
+        if (direction == 'horizontal'):
+            target_axis = 'x'
+            subplot_space = 'hspace'
+        else:
+            target_axis = 'y'
+            subplot_space = 'wspace'
+        get_ticks = f'get_{target_axis}ticks'
+        get_lim = f'get_{target_axis}lim'
+        get_axis = f'{target_axis}axis'
+
+        for i, (prev_ax, cur_ax) in enumerate(zip(axs[:-1], axs[1:])):
+            prev_close = np.isclose(
+                getattr(prev_ax, get_ticks)(),
+                getattr(prev_ax, get_lim)()[0])
+            cur_close = np.isclose(
+                getattr(cur_ax, get_ticks)(),
+                getattr(cur_ax, get_lim)()[1])
+            space = getattr(cur_ax.get_gridspec(), subplot_space)
+
+            if prev_close.any() and cur_close.any() and (space == 0):
+                labels = np.asarray(
+                    getattr(cur_ax, get_axis).get_major_ticks())
+                labels[cur_close][0].label1.set_visible(False)
+
         if direction == 'vertical':
             new_x_ax.invert_axis()
 
@@ -692,3 +743,11 @@ class SecondXAxis(object):
         """
         self.ax2.set(xlabel=label)
         return None
+
+
+def get_scaled_arrow_properties(base_arrow_length, arrow_dict, aspect_ratio):
+    """Scale arrow properties based on plot aspect ratio"""
+    scaled_length = base_arrow_length / aspect_ratio
+    new_dict = {**arrow_dict}
+    new_dict.update({'head_length': arrow_dict['head_length'] / aspect_ratio})
+    return scaled_length, new_dict

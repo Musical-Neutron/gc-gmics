@@ -1,0 +1,306 @@
+########################################################################
+# File locations
+data_dir: data
+data_file_template: '{data_dir}/{}_gcmass_{:g}_paper_data_new.hdf5'
+z0_data_file: '{data_dir}/{}_paper_z0_gc_properties.hdf5'
+
+########################################################################
+# Analysis settings
+Analysis:
+  aperture: 30.0 # ckpc
+  outer_radius: 50.0 # kpc
+  gc_mass: 1.0e+5 # Msun
+  Cosmology: # Planck 2015
+    omega_M: 0.3156
+    omega_lambda: 0.6844
+    h: 0.6727
+  cluster_mass_limit: 5.0e+3 # Msun
+
+########################################################################
+# Observations
+Observations:
+  caldwell_2011_m31_mstar_feh_data_file: '{data_dir}/caldwell_2011_logMstar_FeH.csv'
+  johnson_2017_m31_dNdlogM_data_file: '{data_dir}/johnson_2017_dNdlogM_M.csv'
+  hunt_2024_mw_NlogM_data_file: '{data_dir}/hunt_2024_N_M_bins.csv'
+  fall_2009_antennae_NlogM_data_file: '{data_dir}/fall_2009_NdlogM_M.csv'
+  caldwell_2009_m31_old_data_file: '{data_dir}/caldwell_2009_old_clusters.csv'
+  caldwell_2009_m31_int_data_file: '{data_dir}/caldwell_2009_intermediate_clusters.csv'
+  caldwell_2009_m31_young_data_file: '{data_dir}/caldwell_2009_young_clusters.csv'
+  baumgardt_2019_mw_cluster_file: '{data_dir}/baumgardt_2019_mw_gcs.csv'
+  horta_2021_zetagc_file: '{data_dir}/horta_2021_fGC.csv'
+  mstar_mw: 6.08e+10 # Mstar (Licquia & Newman 2015)[doi:10.1088/0004-637X/806/1/96]
+  mstar_mw_1sig_err: [-1.14e10, 1.14e10] # Mstar 1sig err (Licquia & Newman 2015)[doi:10.1088/0004-637X/806/1/96]
+  mstar_m31: 1.03e+11 # Mstar (Sick et al. 2015)[doi:10.1017/S1743921315003440]
+  mstar_m31_1sig_err: [-1.7e+10, 2.3e+10] # Mstar 1sig err (Sick et al. 2015)[doi:10.1017/S1743921315003440]
+  bastian_2020_sm_mstar_data_file: '{data_dir}/bastian2020_SM_Mstar_z0.csv'
+  bastian_2020_sminit_mstar_data_file: '{data_dir}/bastian2020_SMinit_Mstar_z0.csv'
+
+########################################################################
+# Simulations
+Simulations:
+  sim_list:
+    [
+      'z2_od_1p000_mz1p7_1p100_HiRes',
+      'z2_od_1p000_HiRes',
+      'z2_od_1p000_mz1p7_0p800_HiRes',
+      'z2_od_1p000_mz1p7_1p100_HiRes_noBH',
+      'z2_od_1p000_HiRes_noBH',
+      'z2_od_1p000_mz1p7_0p800_HiRes_noBH',
+    ]
+  # Onset of merger
+  sim_z_major_merger: [1.63, 1.7, 1.68, 1.63, 1.7, 1.68]
+  sim_tlb_major_merger: [9.85, 10.00, 9.95, 9.85, 10.00, 9.95] # Gyr
+  sim_dtlb_mm: [0.325, 0.259, 0.129, 0.325, 0.259, 0.129] # Gyr
+  sim_z_target_merger: [0.89, 0.77, ~, 0.89, 0.77, ~]
+  sim_tlb_target_merger: [7.49, 6.89, ~, 7.49, 6.89, ~] # Gyr
+  sim_dtlb_tm: [0.486, 0.107, ~, 0.486, 0.107, ~] # Gyr
+  sim_names:
+    [
+      "$\\textsc{enhanced}$",
+      "$\\textsc{organic}$",
+      "$\\textsc{suppressed}$",
+      "$\\textsc{enhanced -- noAGN}$",
+      "$\\textsc{organic -- noAGN}$",
+      "$\\textsc{suppressed -- noAGN}$",
+    ]
+
+########################################################################
+# Plotting settings
+Plotting:
+  tlb_lim: [0, 12.0]
+  z_lim: [0.0, 8.0]
+  fine_spacing: 0.2
+  z_cut: 6.5
+  coarse_spacing: 1.0
+  # all_redshifts: np.arange(*z_lim, fine_spacing)
+  # major_redshifts: all_redshifts[~(all_redshifts % 1).astype(bool)]
+  # minor_redshifts: all_redshifts[(all_redshifts % 1).astype(bool)]
+  # minor_redshifts: np.concatenate(
+  #     (
+  #         minor_redshifts[minor_redshifts < z_cut],
+  #         np.arange(z_cut, z_lim[-1], coarse_spacing),
+  #     )
+  # )
+  arrow_length: 0.0266667 # 0.08 / 3.0
+  # axis_rescale: np.abs(np.diff(tlb_lim)[0])
+  common_arrow_properties: &common_arrow_properties
+    head_width: 0.02 # 3.0 * arrow_length * 0.25,
+    head_length: 0.01 # arrow_length * 0.375,
+    width: 0.0075 # 3.0 * arrow_length * 0.09375,
+    shape: full
+    length_includes_head: True
+    zorder: 99
+  mm_arrow_properties:
+    <<: *common_arrow_properties
+    ls: ':'
+    hatch: '/////'
+  tm_arrow_properties:
+    <<: *common_arrow_properties
+    ls: '-'
+
+  # figure_handler: FigureHandler(
+  #     major_redshifts=major_redshifts,
+  #     minor_redshifts=minor_redshifts,
+  #     tlb_lim=tlb_lim,
+  #     cos_obj=cosmology_object,
+  # )
+  plot_styles:
+    z2_od_1p000_mz1p7_1p100_HiRes:
+      color: '#7E317B'
+    z2_od_1p000_HiRes:
+      color: '#34B83B'
+    z2_od_1p000_mz1p7_0p800_HiRes:
+      color: '#2F3BD6'
+    z2_od_1p000_mz1p7_1p100_HiRes_noBH:
+      color: '#7E317B'
+      marker: .
+      ls: --
+    z2_od_1p000_HiRes_noBH:
+      color: '#34B83B'
+      marker: .
+      ls: --
+    z2_od_1p000_mz1p7_0p800_HiRes_noBH:
+      color: '#2F3BD6'
+      marker: .
+      ls: --
+Property dictionary:
+  CFE:
+    ylim: [0.0, 0.8]
+    yscale: linear
+    ylabel: "$\\Gamma$"
+    printlabel: CFE(r < {Analysis.aperture} ckpc)
+  GCDR:
+    ylim: [-1.45, 0.2]
+    yscale: linear
+    ylabel: "${\\rm GCDR\\, \\left[M_\\odot\\, yr^{-1}\\right]}$"
+    printlabel: GCDR(r < {Analysis.aperture} ckpc) [Msun / yr]
+  GCFR:
+    ylim: [-0.2, 4.6]
+    yscale: linear
+    ylabel: "${\\rm GCFR\\, \\left[M_\\odot\\, yr^{-1}\\right]}$"
+    printlabel: GCFR(r < {Analysis.aperture} ckpc) [Msun / yr]
+  M_200:
+    ylim: [1.0e+11, ~]
+    yscale: log
+    ylabel: "$M_{200}\\, \\left[{\\rm M_\\odot}\\right]$"
+    printlabel: M_200 [Msun]
+  M_BH:
+    ylim: [1.0e+5, 2.0e+8]
+    yscale: log
+    ylabel: "$M_{\\rm SMBH}\\, \\left[{\\rm M_\\odot}\\right]$"
+    printlabel: M_AGN [Msun]
+  M_GC:
+    ylim: [3.0e+7, ~]
+    yscale: log
+    ylabel: "$M_{\\rm GC}\\, \\left[{\\rm M_\\odot}\\right]$"
+    printlabel: M_GC(r < {Analysis.aperture} ckpc) [Msun]
+  M_GC_r200:
+    ylim: [5.0e+7, ~]
+    yscale: log
+    ylabel: "$M_{\\rm GC}\\!\\left(r < R_{200}\\right)\\, \\left[{\\rm M_\\odot}\\right]$"
+    printlabel: M_GC(r < R_200) [Msun]
+  M_gas,SF:
+    ylim: [8.0e+8, ~]
+    yscale: log
+    ylabel: "$M_{\\rm gas,\\, SF}\\, \\left[{\\rm M_\\odot}\\right]$"
+    printlabel: M_gas,SF(r < {Analysis.aperture} ckpc) [Msun]
+  M_gas,SF_r200:
+    ylim: [8.0e+8, ~]
+    yscale: log
+    ylabel: "$M_{\\rm gas,\\, SF}\\, \\left[{\\rm M_\\odot}\\right]$"
+    printlabel: M_gas,SF(r < R_200) [Msun]
+  M_star:
+    ylim: [1.01e+9, 1.0e+11]
+    yscale: log
+    ylabel: "$M_\\ast\\, \\left[{\\rm M_\\odot}\\right]$"
+    printlabel: M_star(r < {Analysis.aperture} ckpc) [Msun]
+  M_star_r200:
+    ylim: [5.0e+9, 1.0e+11]
+    yscale: log
+    ylabel: "$M_\\ast\\!\\left(r < R_{200}\\right)\\, \\left[{\\rm M_\\odot}\\right]$"
+    printlabel: M_star(r < R_200) [Msun]
+  Mc_star:
+    ylim: ~
+    yscale: log
+    ylabel: "$M_{\\rm c,\\, \\ast} \\left[{\\rm M_\\odot}\\right]$"
+    printlabel: M_c,star [Msun]
+  Net_dM_GCdt:
+    ylim: [-1.0, 3.5]
+    yscale: linear
+    ylabel: "$dM_{\\rm GC}\\, /\\, dt\\, \\left[{\\rm M_\\odot\\, yr^{-1}}\\right]$"
+    printlabel: Net dM_GC/dt [Msun / yr]
+  Pk_birth,GC:
+    ylim: [1.1e+3, 8.0e+8]
+    yscale: log
+    ylabel: "$\\left(P\\, /\\, k_{\\rm B}\\right)_{\\rm birth,\\, GC}\\!\\left[{\\rm K\\, cm^{-3}}\\right]$"
+    printlabel: P_k,birth,GC [K cm^-3]
+  Pk_birth,star:
+    ylim: [1.1e+3, 8.0e+8]
+    yscale: log
+    ylabel: "$\\left(P\\, /\\, k_{\\rm B}\\right)_{\\rm birth,\\, \\ast}\\!\\left[{\\rm K\\, cm^{-3}}\\right]$"
+    printlabel: P_k,birth,star [K cm^-3]
+  Pk_SFgas:
+    ylim: [1.1e+3, 8.0e+8]
+    yscale: log
+    ylabel: "$\\left(P\\, /\\, k_{\\rm B}\\right)_{\\rm SF\\, gas}\\!\\left[{\\rm K\\, cm^{-3}}\\right]$"
+    printlabel: P_k,SFgas [K cm^-3]
+  SFR:
+    ylim: [-1.4, ~]
+    yscale: linear
+    ylabel: "${\\rm SFR}\\, \\left[{\\rm M_\\odot\\, yr^{-1}}\\right]$"
+    printlabel: SFR(r < {Analysis.aperture} ckpc) [Msun / yr]
+  SM_model0:
+    ylim: [0.0, 12.5]
+    yscale: linear
+    ylabel: "$S_{\\rm M} = 100\\, M_{\\rm GC}\\, /\\, M_\\ast$"
+    printlabel: S_M,0(r < {Analysis.aperture} ckpc)
+  SM_model0_r200:
+    ylim: [0.0, 12.5]
+    yscale: linear
+    ylabel: "$S_{\\rm M} = 100\\, M_{\\rm GC}\\, /\\, M_\\ast$"
+    printlabel: S_M,0(r < R_200)
+  SM_model3:
+    ylim: [0.0, 12.5]
+    yscale: linear
+    ylabel: "$S_{\\rm M}_{\\rm no\\, phys} = 100\\, M_{\\rm GC}\\, /\\, M_\\ast$"
+    printlabel: S_M,3(r < {Analysis.aperture} ckpc)
+  SM_birth_model0:
+    ylim: [0.0, 13.0]
+    yscale: linear
+    ylabel: "$S_{\\rm M,\\, birth} = 100\\, M_{\\rm GC,\\, birth}\\, /\\, M_\\ast$"
+    printlabel: S_M_birth,0(r < {Analysis.aperture} ckpc)
+  TN_model0:
+    ylim: [0.0, 2.25e+2]
+    yscale: linear
+    ylabel: "$T_{\\rm N} = N_{\\rm GC}\\, /\\, M_\\ast\\, \\left[\\left({\\rm 10^9\\, M_\\odot}\\right)^{-1}\\right]$"
+    printlabel: T_N,0(r < {Analysis.aperture} ckpc) [10^-9 Msun^-1]
+  TN_model0_r200:
+    ylim: [0.0, 2.25e+2]
+    yscale: linear
+    ylabel: "$T_{\\rm N} = N_{\\rm GC}\\, /\\, M_\\ast\\, \\left[\\left({\\rm 10^9\\, M_\\odot}\\right)^{-1}\\right]$"
+    printlabel: T_N,0(r < R_200) [10^-9 Msun^-1]
+  NGC_model0:
+    ylim: [0.0, 3500]
+    yscale: linear
+    ylabel: "$N_{{\\rm GC}}\\!\\left(<{Analysis.aperture} {{\\rm ckpc}}\\right)$"
+    printlabel: N_GC(r < {Analysis.aperture} ckpc)
+  NGC_model0_r200:
+    ylim: [0.0, 4.e+3]
+    yscale: linear
+    ylabel: "$N_{\\rm GC}\\!\\left(<R_{200}\\right)$"
+    printlabel: N_GC(r < R_200)
+  NGC_ap_r200_ratio:
+    ylim: [0.0, 1.05]
+    yscale: linear
+    ylabel: "$N_{{\\rm GC}}\\!\\left(<{Analysis.aperture} {{\\rm ckpc}}\\right)\\, /\\, N_{{\\rm GC}}\\!\\left(<R_{200}\\right)$"
+    printlabel: N_GC(r < {Analysis.aperture} ckpc)/ N_GC(r < R200)
+  ngc_fixed_tn_20:
+    ylim: [0.0, 4.e+3]
+    yscale: linear
+    ylabel: "$T_{{\\rm N}}=20\\!\\left({Analysis.aperture}\\right)$"
+    printlabel: N_GC(r < Aperture)
+  ngc_fixed_tn_40:
+    ylim: [0.0, 4.e+3]
+    yscale: linear
+    ylabel: "$T_{{\\rm N}}=40\\!\\left({Analysis.aperture}\\right)$"
+    printlabel: N_GC(r < Aperture)
+  ngc_fixed_tn_60:
+    ylim: [0.0, 4.e+3]
+    yscale: linear
+    ylabel: "$T_{{\\rm N}}=60\\!\\left({Analysis.aperture}\\right)$"
+    printlabel: N_GC(r < Aperture)
+  ngc_fixed_tn_80:
+    ylim: [0.0, 4.e+3]
+    yscale: linear
+    ylabel: "$T_{{\\rm N}}=80\\!\\left({Analysis.aperture}\\right)$"
+    printlabel: N_GC(r < Aperture)
+  ngc_fixed_tn_100:
+    ylim: [0.0, 4.e+3]
+    yscale: linear
+    ylabel: "$T_{{\\rm N}}=100\\!\\left({Analysis.aperture}\\right)$"
+    printlabel: N_GC(r < Aperture)
+  TN_model3:
+    ylim: [0.0, 2.25e+2]
+    yscale: linear
+    ylabel: "$T_{\\rm N\\, no\\, phys} = N_{\\rm GC}\\, /\\, M_\\ast\\, \\left[\\left({\\rm 10^9\\, M_\\odot}\\right)^{-1}\\right]$"
+    printlabel: T_N,3(r < {Analysis.aperture} ckpc) [10^-9 Msun^-1]
+  SFR_MgasSF:
+    ylim: [0.3e-9, 3.e+9]
+    yscale: log
+    ylabel: "${\\rm SFR}\\, /\\, M_{\\rm gas,\\, SF}\\, \\left[{\\rm yr^{-1}}\\right]$"
+    printlabel: SFR/MgasSF(r < {Analysis.aperture} ckpc) [yr^-1]
+  dMgc_dt_MgasSF:
+    ylim: [-2.5e-10, 5.e-10]
+    yscale: linear
+    ylabel: "$dM_{\\rm GC}\\, /\\, dt\\, /\\, M_{\\rm gas,\\, SF}\\,\\left[{\\rm yr^{-1}}\\right]$"
+    printlabel: dMgc_dt/MgasSF(r < {Analysis.aperture} ckpc) [yr^-1]
+  eta:
+    ylim: [1.0e-5, 1.0e-3]
+    yscale: log
+    ylabel: "$\\eta = M_{\\rm GC}\\, /\\, M_{200}$"
+    printlabel: eta = Mgc(r < {Analysis.aperture} ckpc)/M200
+  eta_r200:
+    ylim: [1.0e-5, 1.0e-3]
+    yscale: log
+    ylabel: "$\\eta = M_{\\rm GC}\\!\\left(r < R_{200}\\right)\\, /\\, M_{200}$"
+    printlabel: eta = Mgc(r < R200)/M200

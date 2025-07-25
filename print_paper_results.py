@@ -3,14 +3,14 @@
 # Place import files below
 import numpy as np
 
-from process_data import EvolutionData, return_print_format_lists
-from universal_settings import sim_list, sim_names
+from gcgmics.process_data import EvolutionData, return_print_format_lists
+from settings import Simulations
 
 
 def main():
     # Load relevant data
-    property_list = ['M_200', 'M_star', 'M_GC', 'M_BH', 'Pk_SFgas']
-    ev_data = [EvolutionData(sim) for sim in sim_list[:3]]
+    property_list = ["M_200", "M_star", "M_GC", "M_BH", "Pk_SFgas"]
+    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"][:3]]
     print_labels = return_print_format_lists(property_list)
 
     ####################################################################
@@ -40,7 +40,7 @@ def main():
     ####################################################################
 
     # Iterate over simulation data
-    for i, (sim_data, sim_name) in enumerate(zip(ev_data, sim_names)):
+    for i, (sim_data, sim_name) in enumerate(zip(ev_data, Simulations["sim_names"])):
         # print()
         z0_value = []
         z0_value_spread = []
@@ -84,7 +84,7 @@ def main():
           property_fields.format(*print_labels))
 
     # Iterate over simulation data
-    for i, (sim_data, sim_name) in enumerate(zip(ev_data, sim_names)):
+    for i, (sim_data, sim_name) in enumerate(zip(ev_data, Simulations["sim_names"])):
         # print()
         t_max_value = []
         z_max_value = []
