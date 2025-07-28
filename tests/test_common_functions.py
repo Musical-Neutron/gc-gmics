@@ -21,6 +21,29 @@ from gcgmics.common_functions import (
 )
 
 
+# Test Utility Functions ------------------------------------------------------
+def test_embed_symbols():
+    with patch("os.system") as mock_system:
+        embed_symbols("test.pdf")
+        expected_cmd = (
+            "gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress "
+            "-dEmbedAllFonts=true -sOutputFile=test_embedded.pdf -f test.pdf"
+        )
+        mock_system.assert_called_once_with(expected_cmd)
+
+
+def test_get_scaled_arrow_properties():
+    base_length = 0.1
+    arrow_dict = {"head_length": 0.05, "color": "red"}
+    aspect_ratio = 2.0
+    scaled_len, new_dict = get_scaled_arrow_properties(
+        base_length, arrow_dict, aspect_ratio
+    )
+    assert scaled_len == 0.05  # 0.1 / 2
+    assert new_dict["head_length"] == 0.025  # 0.05 / 2
+    assert new_dict["color"] == "red"
+
+
 class TestCosmology:
 
     def test_default_initialisation(self):
