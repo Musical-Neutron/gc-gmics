@@ -420,22 +420,28 @@ class FigureHandler(object):
         Returns:
             None
         """
+        # Normalize yscale to list format
         if yscale is None:
-            yscale_prop_list = [None for _ in axs]
+            yscale_prop_list = [None] * len(axs)
         else:
             yscale_prop_list = yscale
         # if yscale == 'symlog':
         #     yscale_prop = None
+
+        # Normalize ylims to list format
         if ylims is None:
             ylim_list = [[None, None] for _ in axs]
         else:
             ylim_list = ylims
+
+        # Normalize text_labels to list format
         if text_labels is None:
-            text_label_list = [None for _ in axs]
+            text_label_list = [None] * len(axs)
         else:
             text_label_list = text_labels
+
         if text_label_args is None:
-            text_label_arg_list = [None for _ in axs]
+            text_label_arg_list = [None] * len(axs)
         else:
             text_label_arg_list = text_label_args
 
@@ -487,7 +493,6 @@ class FigureHandler(object):
             if ((direction == "vertical") and (i == 0)) or (
                 (direction == "horizontal") and (i == 0)
             ):
-                # or ((direction == 'horizontal') and (i == len(axs) - 1))):
                 self.legend = ax.legend(
                     markerfirst=False,
                     fontsize="medium",
@@ -573,21 +578,7 @@ class FigureHandler(object):
         if direction == "vertical":
             new_x_ax.invert_axis()
 
-        # for ax in axs:
-        #     current_fontsize = ax.yaxis.get_label().get_fontsize()
-        #     if len(axs) > 1:
-        #         new_fontsize = (1. + len(axs) / 10.) * current_fontsize
-        #     else:
-        #         new_fontsize = current_fontsize
-
-        #     ax.yaxis.get_label().set_fontsize(int(new_fontsize))
-
         return None
-
-    # def save_figures(figs, file_paths):
-    #     for fig, file_path in zip(figs, file_paths):
-    #         save_figures(fig, file_path, embed=True)
-    #     return None
 
 
 class MinorSymLogLocator(Locator):
@@ -760,7 +751,7 @@ class SecondXAxis(object):
         Returns:
             None
         """
-        self.ax2.set(xlabel=label)
+        self.ax2.set_xlabel(label)
         return None
 
 
