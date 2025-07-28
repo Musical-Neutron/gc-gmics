@@ -526,3 +526,125 @@ class TestSecondXAxis:
         second_axis.set_xlabel("Test Label")
 
         second_axis.ax2.set_xlabel.assert_called_once_with("Test Label")
+
+
+class TestMinorSymLogLocator:
+    @pytest.fixture
+    def mock_axis(self):
+        axis = MagicMock(spec=Axis)
+        return axis
+
+    def test_initialization(self):
+        locator = MinorSymLogLocator(linthresh=0.1, nints=5)
+        assert locator.linthresh == 0.1
+        assert locator.nintervals == 5
+
+    @pytest.mark.parametrize(
+        "majorlocs, linthresh, nints, expected_ranges",
+        [
+            # Linear region
+            ([-0.5, 0, 0.5], 1.0, 10, [(-1.5, -0.5), (-0.5, 0), (0, 0.5), (0.5, 1.5)]),
+            # Logarithmic region
+            ([10, 100], 1.0, 5, [(1, 10), (10, 100), (100, 1000)]),
+            # Crossing linear threshold
+            (
+                [-10, -1, 0, 1, 10],
+                1.0,
+                5,
+                [(-100, -10), (-10, -1), (-1, 0), (0, 1), (1, 10), (10, 100)],
+            ),
+        ],
+    )
+    def test_minor_tick_distribution(
+        self, mock_axis, majorlocs, linthresh, nints, expected_ranges
+    ):
+        mock_axis.get_majorticklocs.return_value = np.array(majorlocs)
+        locator = MinorSymLogLocator(linthresh=linthresh, nints=nints)
+        locator.axis = mock_axis
+
+        minor_locs = locator()
+
+        # Verify ordering
+        if len(minor_locs) > 0:
+            diffs = np.diff(minor_locs)
+            assert np.all(diffs > 0), "Minor ticks not in ascending order"
+
+        # Check distribution in expected ranges
+        range_counts = [0] * len(expected_ranges)
+        for tick in minor_locs:
+            for i, (low, high) in enumerate(expected_ranges):
+                if low <= tick < high:
+                    range_counts[i] += 1
+                    break
+
+        # Verify each range has expected number of ticks
+        for count in range_counts:
+            assert count > 0, f"Expected ticks in range {expected_ranges[i]}"
+
+    def test_symlog_behavior_around_zero(self, mock_axis):
+        mock_axis.get_majorticklocs.return_value = np.array([-1, 0, 1])
+        locator = MinorSymLogLocator(linthresh=0.5)
+        locator.axis = mock_axis
+
+        minor_locs = locator()
+
+        # Should have linear minor ticks between -1 and 1
+        assert len(minor_locs) > 0
+        assert all(np.abs(loc) < 1 for loc in minor_locs if -0.5 < loc < 0.5)
+
+    def test_ordering_and_uniqueness(self, mock_axis):
+        mock_axis.get_majorticklocs.return_value = np.array([-10, -1, 0, 1, 10])
+        locator = MinorSymLogLocator(linthresh=1.0)
+        locator.axis = mock_axis
+
+        minor_locs = locator()
+
+        # Check for duplicates
+        unique_locs = np.unique(minor_locs)
+        assert len(unique_locs) == len(minor_locs), "Duplicate minor ticks found"
+
+        # Verify ordering
+        diffs = np.diff(unique_locs)
+        assert np.all(diffs > 0), "Minor ticks not in ascending order"
+
+    def test_linear_region_coverage(self, mock_axis):
+        mock_axis.get_majorticklocs.return_value = np.array([-0.5, 0, 0.5])
+        locator = MinorSymLogLocator(linthresh=1.0, nints=5)
+        locator.axis = mock_axis
+
+        minor_locs = locator()
+        linear_ticks = [t for t in minor_locs if -1.0 < t < 1.0]
+
+        # Should have ticks between major ticks
+        assert any(-0.5 < t < 0 for t in linear_ticks), "No ticks in (-0.5, 0)"
+        assert any(0 < t < 0.5 for t in linear_ticks), "No ticks in (0, 0.5)"
+
+    def test_logarithmic_region_coverage(self, mock_axis):
+        mock_axis.get_majorticklocs.return_value = np.array([10, 100])
+        locator = MinorSymLogLocator(linthresh=1.0, nints=5)
+        locator.axis = mock_axis
+
+        minor_locs = locator()
+        log_ticks = [t for t in minor_locs if 10 < t < 100]
+
+        assert len(log_ticks) > 0, "No ticks in logarithmic region"
+
+    def test_zero_handling(self, mock_axis):
+        mock_axis.get_majorticklocs.return_value = np.array([-1, 0, 1])
+        locator = MinorSymLogLocator(linthresh=0.5)
+        locator.axis = mock_axis
+
+        minor_locs = locator()
+
+        # Verify no minor ticks at exact zero
+        assert 0.0 not in minor_locs, "Minor tick at zero"
+
+        # Verify symmetric distribution
+        neg_ticks = [t for t in minor_locs if t < 0]
+        pos_ticks = [t for t in minor_locs if t > 0]
+        assert len(neg_ticks) == len(pos_ticks), "Asymmetric ticks around zero"
+
+    def test_tick_values_exception(self):
+        locator = MinorSymLogLocator(linthresh=1.0)
+        with pytest.raises(NotImplementedError):
+            locator.tick_values(0, 10)

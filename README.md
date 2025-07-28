@@ -1,6 +1,6 @@
 # Plotting scripts for the E-MOSAICS GM globular cluster paper
 
-**Last reviewed:** 0.2.3
+**Last reviewed:** 0.2.4
 
 A set of scripts and a repository of reduced data to reproduce the plots in the
 genetically modified initial condition E-MOSAICS Globular Cluster (GC)
