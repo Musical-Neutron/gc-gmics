@@ -1,5 +1,6 @@
 # Plotting scripts for the E-MOSAICS GM globular cluster paper
 
+
 **Last reviewed:** 0.2.5
 
 A set of scripts and a repository of reduced data to reproduce the plots in the
