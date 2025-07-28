@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, call, patch
 import h5py
 import numpy as np
 import pytest
+from matplotlib.axis import Axis
 
 from gcgmics.common_functions import (
     Cosmology,
@@ -462,3 +463,66 @@ class TestFigureHandler:
 
         # Verify symlog specific settings
         mock_ax2.set_yscale.assert_called_once_with("symlog", linthresh=0.001)
+
+
+# Test SecondXAxis Class ------------------------------------------------------
+class TestSecondXAxis:
+    @patch("matplotlib.axes.Axes")
+    def test_second_x_axis_init(self, mock_ax):
+        mock_conversion = MagicMock()
+        second_axis = SecondXAxis(mock_ax, mock_conversion)
+        assert second_axis.ax1 == mock_ax
+        assert second_axis.ax2 == mock_ax.twiny.return_value
+        assert second_axis.conversion_func == mock_conversion
+
+    @patch("matplotlib.axes.Axes")
+    def test_set_axis_limits(self, mock_ax):
+        second_axis = SecondXAxis(mock_ax, MagicMock())
+        limits = (0, 10)
+
+        second_axis.set_axis_limits(limits)
+
+        mock_ax.set_xlim.assert_called_once_with(limits)
+        second_axis.ax2.set_xlim.assert_called_once_with(limits)
+
+    @patch("matplotlib.axes.Axes")
+    def test_invert_axis(self, mock_ax):
+        second_axis = SecondXAxis(mock_ax, MagicMock())
+
+        second_axis.invert_axis()
+
+        mock_ax.invert_xaxis.assert_called_once()
+        second_axis.ax2.invert_xaxis.assert_called_once()
+
+    @patch("matplotlib.axes.Axes")
+    def test_set_major_x_ticks(self, mock_ax):
+        mock_conversion = MagicMock(return_value=[5, 3, 1])
+        second_axis = SecondXAxis(mock_ax, mock_conversion)
+        redshifts = [0, 1, 2]
+        cosmo = MagicMock()
+
+        second_axis.set_major_x_ticks(redshifts, cosmo, label_override=["A", "B", "C"])
+
+        mock_conversion.assert_called_once_with(redshifts, cosmo)
+        second_axis.ax2.set_xticks.assert_called_once_with([5, 3, 1])
+        second_axis.ax2.set_xticklabels.assert_called_once_with(["A", "B", "C"])
+
+    @patch("matplotlib.axes.Axes")
+    def test_set_minor_x_ticks(self, mock_ax):
+        mock_conversion = MagicMock(return_value=[4, 2])
+        second_axis = SecondXAxis(mock_ax, mock_conversion)
+        redshifts = [0.5, 1.5]
+        cosmo = MagicMock()
+
+        second_axis.set_minor_x_ticks(redshifts, cosmo)
+
+        mock_conversion.assert_called_once_with(redshifts, cosmo)
+        second_axis.ax2.set_xticks.assert_called_once_with([4, 2], minor=True)
+
+    @patch("matplotlib.axes.Axes")
+    def test_set_xlabel(self, mock_ax):
+        second_axis = SecondXAxis(mock_ax, MagicMock())
+
+        second_axis.set_xlabel("Test Label")
+
+        second_axis.ax2.set_xlabel.assert_called_once_with("Test Label")
