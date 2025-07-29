@@ -37,6 +37,23 @@ preferred-citation:
     - family-names: Newton
       given-names: Oliver
       orcid: 'https://orcid.org/0000-0002-2769-9507'
+    - family-names: Davies
+      given-names: Jonathan J.
+      orcid: 'https://orcid.org/0000-0002-8337-3659'
+    - family-names: Pfeffer
+      given-names: Joel
+      orcid: 'https://orcid.org/0000-0003-3786-8818'
+    - family-names: Crain
+      given-names: Robert A.
+      orcid: 'https://orcid.org/0000-0001-6258-0344'
+    - family-names: Kruĳssen
+      given-names: J. M. Diederik
+      orcid: 'https://orcid.org/0000-0002-8804-0212'
+    - family-names: Pontzen
+      given-names: Andrew
+      orcid: 'https://orcid.org/0000-0001-9546-3849'
+    - family-names: Bastian
+      given-names: Nate
   identifiers:
   - type: doi
     value: 10.1093/mnras/staf1226
