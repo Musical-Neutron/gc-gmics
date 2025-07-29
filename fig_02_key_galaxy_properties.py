@@ -8,7 +8,7 @@ from gcgmics.common_functions import (
     save_figures,
 )
 from gcgmics.process_data import EvolutionData, return_plot_format_lists
-from settings import Analysis, Plotting, Simulations
+from gcgmics.settings import Analysis, Plotting, Simulations
 
 
 def main():

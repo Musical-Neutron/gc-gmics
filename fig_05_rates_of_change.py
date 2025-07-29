@@ -9,7 +9,7 @@ from gcgmics.common_functions import (
     save_figures,
 )
 from gcgmics.process_data import EvolutionData, return_plot_format_lists
-from settings import Plotting, Simulations
+from gcgmics.settings import Plotting, Simulations
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
     except OSError:
         pass
 
-    # File location
+    # File locations
     out_file = "fig05_gcfr_gcdr_netdmgc.pdf"
     out_file_template = "{}_vs_tlb.pdf"
 

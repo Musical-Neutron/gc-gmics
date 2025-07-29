@@ -4,165 +4,119 @@
 import numpy as np
 
 from gcgmics.process_data import EvolutionData, return_print_format_lists
-from settings import Simulations
+from gcgmics.settings import Printing, Simulations
 
 
 def main():
     # Load relevant data
-    property_list = ["M_200", "M_star", "M_GC", "M_BH", "Pk_SFgas"]
+    property_list = Printing["print_property_list"]
     ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"][:3]]
     print_labels = return_print_format_lists(property_list)
+    col_sep = " " * 4
 
     ####################################################################
-    # Print z=0 properties of the galaxies, listed in property_list
+    # Print z=0 properties
     ####################################################################
-    l_label_pad = 23
-    property_pad = 33
-    property_scale_factors = (
-        " " * l_label_pad +
-        "(10^{})".ljust(property_pad - 2) * len(property_list))
-    # print_fields = "{:.1f}^+{:.1f}_{:.1f} x 10^{:<9.0f}" * len(property_list)
-    print_fields = "{:.2f}^+{:.2f}_{:.2f}".ljust(property_pad +
-                                                 5) * len(property_list)
-    print_time = "{:.3f}".ljust(property_pad + 1) * len(property_list)
-    property_fields = "{{:<{}}}".format(property_pad) * len(property_list)
-
     print("#" * 72)
     print("z = 0")
 
-    # Print first row of output
-    print("{0:<{1}}".format("Property", l_label_pad) +
-          property_fields.format(*print_labels))
+    # Collect all data and strings for z=0 table
+    z0_table = []
+    header_row = ["Property"] + print_labels
+    z0_table.append(header_row)
+
+    # Get exponents from first simulation
+    first_sim = ev_data[0]
+    z0_vals = [first_sim.med_spread(prop)[0][0] for prop in property_list]
+    exponents = np.floor(np.log10(z0_vals))
+    scale_row = [""] + [f"(10^{exp:.0f})" for exp in exponents]
+    z0_table.append(scale_row)
+
+    # Process each simulation
+    for sim, name in zip(ev_data, Simulations["sim_names"]):
+        row_data = [name]
+        for prop, exp in zip(property_list, exponents):
+            med, spread = sim.med_spread(prop)
+            val = med[0] / 10**exp
+            upper = (spread[1, 0] - med[0]) / 10**exp
+            lower = (spread[0, 0] - med[0]) / 10**exp
+            row_data.append(f"{val:.1f}^+{upper:.1f}_{lower:.1f}")
+        z0_table.append(row_data)
+
+    # Calculate column widths and print
+    col_widths = [
+        max(len(str(row[i])) for row in z0_table) for i in range(len(z0_table[0]))
+    ]
+    for row in z0_table:
+        formatted_row = []
+        for i, item in enumerate(row):
+            formatted_row.append(str(item).ljust(col_widths[i]))
+        print(col_sep.join(formatted_row))
 
     ####################################################################
-    # Remove when no longer needed
-    combined_prop_lists = [[] for _ in np.arange(len(property_list))]
-    ####################################################################
-
-    # Iterate over simulation data
-    for i, (sim_data, sim_name) in enumerate(zip(ev_data, Simulations["sim_names"])):
-        # print()
-        z0_value = []
-        z0_value_spread = []
-        max_value = []
-        max_value_spread = []
-        for p_i, property_to_plot in enumerate(property_list):
-            med, spread = sim_data.med_spread(property_to_plot)
-            z0_value.append(med[0])
-            z0_value_spread.append(spread[:, 0][::-1] - med[0])
-            ############################################################
-            # Remove when no longer needed
-            combined_prop_lists[p_i] = np.concatenate(
-                (combined_prop_lists[p_i], getattr(sim_data,
-                                                   property_to_plot)[0]))
-            ############################################################
-
-        # Determine index to which the median value is raised
-        if i == 0:
-            value_idx = np.floor(np.log10(z0_value))
-            print(property_scale_factors.format(*value_idx))
-
-        # Prepare data for printing
-        # print_data = np.column_stack(
-        #     (z0_value / 10**value_idx,
-        #      z0_value_spread / 10**value_idx[:, np.newaxis],
-        #      value_idx)).reshape(len(z0_value) * 4)
-        print_data = np.column_stack(
-            (z0_value / 10**value_idx, z0_value_spread /
-             10**value_idx[:, np.newaxis])).reshape(len(z0_value) * 3)
-
-        # Print data for this simulation
-        print("{0:<{1}}".format(sim_name, l_label_pad) +
-              print_fields.format(*print_data))
-
+    # Print peak values
     ####################################################################
     print("#" * 72)
     print("Peak values")
 
-    # Print first row of output
-    print("{0:<{1}}".format("Property", l_label_pad) +
-          property_fields.format(*print_labels))
+    # Collect all data for peak table
+    peak_table = []
+    header_row = ["Property"] + print_labels
+    peak_table.append(header_row)
 
-    # Iterate over simulation data
-    for i, (sim_data, sim_name) in enumerate(zip(ev_data, Simulations["sim_names"])):
-        # print()
-        t_max_value = []
-        z_max_value = []
-        max_value = []
-        max_value_spread = []
-        for p_i, property_to_plot in enumerate(property_list):
-            med, spread = sim_data.med_spread(property_to_plot)
-            max_idx = np.argwhere(med == np.nanmax(med))[0][0]
-            max_value.append(med[max_idx])
-            max_value_spread.append(spread[:, max_idx][::-1] - med[max_idx])
-            t_max_value.append(sim_data.t_lb[max_idx])
-            z_max_value.append(sim_data.z[max_idx])
+    # Get exponents from first simulation
+    first_peak_vals = []
+    for prop in property_list:
+        med, _ = first_sim.med_spread(prop)
+        max_idx = np.nanargmax(med)
+        first_peak_vals.append(med[max_idx])
+    peak_exponents = np.floor(np.log10(first_peak_vals))
+    scale_row = [""] + [f"(10^{exp:.0f})" for exp in peak_exponents]
+    peak_table.append(scale_row)
 
-        # Determine index to which the median value is raised
-        if i == 0:
-            value_idx = np.floor(np.log10(max_value))
-            print(property_scale_factors.format(*value_idx))
+    # Process each simulation
+    for sim, name in zip(ev_data, Simulations["sim_names"]):
+        # Main value row
+        main_row = [name]
+        time_row = ["t_lb_max [Gyr]"]
+        z_row = ["z_max"]
 
-        # Prepare data for printing
-        # print_data = np.column_stack(
-        #     (z0_value / 10**value_idx,
-        #      z0_value_spread / 10**value_idx[:, np.newaxis],
-        #      value_idx)).reshape(len(z0_value) * 4)
-        print_data = np.column_stack(
-            (max_value / 10**value_idx, max_value_spread /
-             10**value_idx[:, np.newaxis])).reshape(len(max_value) * 3)
+        for prop, exp in zip(property_list, peak_exponents):
+            med, spread = sim.med_spread(prop)
+            max_idx = np.nanargmax(med)
+            val = med[max_idx] / 10**exp
+            upper = (spread[1, max_idx] - med[max_idx]) / 10**exp
+            lower = (spread[0, max_idx] - med[max_idx]) / 10**exp
 
-        # Print data for this simulation
-        print("{0:<{1}}".format(sim_name, l_label_pad) +
-              print_fields.format(*print_data))
-        print("   {0:<{1}}".format("t_lb [Gyr]", l_label_pad - 3) +
-              print_time.format(*t_max_value))
-        print("   {0:<{1}}".format("z", l_label_pad - 3) +
-              print_time.format(*z_max_value))
+            # Format with consistent decimal places
+            main_row.append(f"{val:.1f}^+{upper:.1f}_{lower:.1f}")
+            time_row.append(f"{sim.t_lb[max_idx]:.3f}")
+            z_row.append(f"{sim.z[max_idx]:.3f}")
 
-    ####################################################################
-    # Remove when no longer needed
-    ####################################################################
-    # combined_prop_lists = [
-    #     np.concatenate(item) for item in combined_prop_lists
-    # ]
-    print("#" * 72)
-    combined_prop_med = np.nanmedian(combined_prop_lists, axis=1)
-    combined_prop_spread = (
-        np.nanpercentile(combined_prop_lists,
-                         (5., 95.), axis=1) - combined_prop_med)[::-1]
-    value_idx = np.floor(np.log10(combined_prop_med))
+        peak_table.extend([main_row, time_row, z_row])
 
-    print_data = np.column_stack(
-        (combined_prop_med / 10**value_idx,
-         combined_prop_spread.T / 10**value_idx[:, np.newaxis],
-         value_idx)).reshape(len(combined_prop_med) * 4)
-    print("{0:<{1}}".format('Combined', l_label_pad) +
-          print_fields.format(*print_data))
-    ####################################################################
-
-    print("#" * 72)
-
-    ####################################################################
-    # Remove when no longer needed
-    ####################################################################
-    tlb_one = 5  # Gyr
-    start_idx = find_nearest_idx(sim_data.t_lb, tlb_one)
-
-    m200_ev = np.nanmedian(getattr(sim_data, 'M_200'), axis=1)
-    max_m = np.nanmax(m200_ev)
-    end_idx = find_nearest_idx(m200_ev, max_m)
-
-    print("Ratio of halo masses: {}".format(max_m / m200_ev[start_idx]))
-
-    ####################################################################
+    # Calculate column widths
+    col_widths = [
+        max(len(str(row[i])) for row in peak_table) for i in range(len(peak_table[0]))
+    ]
+    # Print table with column separation
+    for row in peak_table:
+        formatted_row = []
+        for i, item in enumerate(row):
+            # Indent sub-rows
+            if row is peak_table[0] or row is peak_table[1]:
+                formatted_row.append(str(item).ljust(col_widths[i]))
+            else:
+                if i == 0 and row[0] in ["t_lb_max [Gyr]", "z_max"]:
+                    indent = "   "
+                    formatted_row.append(
+                        f"{indent}{str(item).ljust(col_widths[i] - len(indent))}"
+                    )
+                else:
+                    formatted_row.append(str(item).ljust(col_widths[i]))
+        print(col_sep.join(formatted_row))
 
     return None
-
-
-def find_nearest_idx(array, value):
-    idx = (np.abs(array - value)).argmin()
-    return idx
 
 
 if __name__ == "__main__":

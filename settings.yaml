@@ -17,6 +17,18 @@ Analysis:
   cluster_mass_limit: 5.0e+3 # Msun
 
 ########################################################################
+# Print information
+Printing:
+  print_property_list:
+    - M_200
+    - M_star
+    - M_GC
+    - M_BH
+    - Pk_SFgas
+    - NGC_model0
+    - NGC_model0_r200
+
+########################################################################
 # Observations
 Observations:
   caldwell_2011_m31_mstar_feh_data_file: '{data_dir}/caldwell_2011_logMstar_FeH.csv'
