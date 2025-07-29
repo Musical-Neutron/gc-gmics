@@ -11,7 +11,7 @@ from matplotlib.lines import Line2D
 
 from gcgmics.common_functions import save_figures
 from gcgmics.process_data import Z0Data, median_and_spread
-from settings import Analysis, Observations, Plotting, Simulations
+from gcgmics.settings import Analysis, Observations, Plotting, Simulations
 
 BASE_STYLE = {
     "markeredgecolor": "k",
@@ -45,7 +45,20 @@ def main():
         "hunt_mw": Observations["hunt_2024_mw_NlogM_data_file"],
     }
     obs_data = {name: load_obs_data(path) for name, path in obs_data_files.items()}
-    # Process and plot observational data
+
+    ####################################################################
+    # Analysis settings
+    cl = [16.0, 84.0]
+    n_bins = 30
+    m_bins = np.logspace(2, 8, n_bins)  # Msun / h
+    dlogm = np.log10(m_bins[1:]) - np.log10(m_bins[:-1])
+    mid_logmbins = 10.0 ** (np.log10(m_bins[:-1]) + dlogm / 2.0)
+    data_m_bins = np.logspace(2, 8, int(n_bins / 2))  # Msun
+    data_dlogm = np.log10(data_m_bins[1:]) - np.log10(data_m_bins[:-1])
+    mid_data_logmbins = 10.0 ** (np.log10(data_m_bins[:-1]) + data_dlogm / 2.0)
+
+    ####################################################################
+    # Prepare observational data
     baumgardt_2019_mw_data = obs_data["baumgardt_mw"]
     caldwell_2011_m31_data = obs_data["caldwell_2011_m31"]
     caldwell_2009_m31_old_data = obs_data["caldwell_m31_old"]
@@ -57,21 +70,7 @@ def main():
         - np.log10(hunt_2024_mw_data[::2, 0][:-1]),
         [3, *[2] * (len(hunt_2024_mw_data[::2, 0][1:]) - 2), 3],
     )
-    johnson_dlogm = 0.1
     caldwell_dlogm = 0.2
-
-    # Analysis settings
-    n_bins = 30
-    m_bins = np.logspace(2, 8, n_bins)  # Msun / h
-    dlogm = np.log10(m_bins[1:]) - np.log10(m_bins[:-1])
-    mid_logmbins = 10.0 ** (np.log10(m_bins[:-1]) + dlogm / 2.0)
-    data_m_bins = np.logspace(2, 8, int(n_bins / 2))  # Msun
-    data_dlogm = np.log10(data_m_bins[1:]) - np.log10(data_m_bins[:-1])
-    mid_data_logmbins = 10.0 ** (np.log10(data_m_bins[:-1]) + data_dlogm / 2.0)
-    cl = [16.0, 84.0]
-
-    ####################################################################
-    # Prepare observational data
     caldwell_2011_m31_mass_data = 10.0 ** caldwell_2011_m31_data[:, 1]  # Msun
     baumgardt_2019_mw_mass_data = baumgardt_2019_mw_data[:, 1]  # Msun
     caldwell_2011_dn_dlogm_m31 = (
@@ -145,26 +144,6 @@ def main():
                 MW_STYLE, markerfacecolor="none", ls="none", zorder=1
             ),
         },
-        # 'Hunt 2024 markers': {
-        #     'plot_type':
-        #     'errorbar',
-        #     'x':
-        #     (hunt_2024_mw_data[::2, 0][1:] + hunt_2024_mw_data[::2, 0][:-1]) /
-        #     2.,
-        #     'y':
-        #     hunt_2024_mw_data[1::2, 1][:-1] / hunt_dlogm[1::2][:-1],
-        #     'style':
-        #     create_style(MW_STYLE,
-        #                  markerfacecolor='none',
-        #                  ls='none',
-        #                  zorder=1,
-        #                  yerr=np.abs(hunt_2024_mw_data[1::2, 2:][:-1].T -
-        #                              hunt_2024_mw_data[1::2, 1][:-1]) /
-        #                  hunt_dlogm[1::2][:-1],
-        #                  ecolor='#FA200B',
-        #                  elinewidth=1,
-        #                  capsize=3),
-        # },
     }
 
     # Create combined Caldwell style for legend
@@ -188,80 +167,37 @@ def main():
     ax = fig.add_subplot(111)
 
     ####################################################################
-    # REMOVE WHEN DONE
-    current_med = []
-    birth_med = []
-    all_birth_med = []
-    ####################################################################
     for sim, sim_name, z0_data in zip(
         Simulations["sim_list"][:3], Simulations["sim_names"][:3], all_z0_data
     ):
-        ################################################################
-        # REMOVE WHEN DONE
-        temp_fig = plt.figure(figsize=(8, 8))
-        temp_ax = temp_fig.add_subplot(111)
-        ################################################################
-
         # Cluster masses
         mcl_current = z0_data.current_cluster_m_current  # Msun
         mcl_birth = z0_data.current_cluster_m_birth  # Msun
         all_mcl_birth = z0_data.all_cluster_m_birth  # Msun
 
         # Calculate distribtions
-        dN_dlogm_current = np.column_stack(
+        dn_dlogm_current = np.column_stack(
             [np.histogram(mass, m_bins)[0] / dlogm for mass in mcl_current.T]
         )
-        dN_dlogm_birth = np.column_stack(
+        dn_dlogm_birth = np.column_stack(
             [np.histogram(mass, m_bins)[0] / dlogm for mass in mcl_birth.T]
         )
-        dallN_dlogm_birth = np.column_stack(
+        dalln_dlogm_birth = np.column_stack(
             [np.histogram(mass, m_bins)[0] / dlogm for mass in all_mcl_birth.T]
         )
 
-        ################################################################
-        # REMOVE WHEN DONE
-        # Plot on temporary figure
-        for current_mass, birth_mass, selection in zip(
-            mcl_current.T, mcl_birth.T, (mcl_birth <= 2.0e4).T
-        ):
-            temp_ax.hist(
-                current_mass[selection] / birth_mass[selection],
-                np.logspace(start=np.log10(0.005), stop=0, num=15),
-                density=True,
-                histtype="step",
-            )
-
-        temp_ax.set(
-            xlabel=r"$M_{\rm cl,\, current}\, /\, M_{\rm cl,\, birth}$",
-            ylabel=r"PDF",
-            xscale="log",
-        )
-        temp_ax.tick_params(axis="x", which="major", pad=7)
-        temp_ax.minorticks_on()
-        temp_ax.set(title=sim_name + r" $(M_{\rm cl,\, birth} \leq 2\times10^4)$")
-
-        temp_fig.savefig("temp_fig_{}.pdf".format(sim))
-        ################################################################
-
         # Calculate medians and spreads
-        med_dNlogM_current, spread_dNlogM_current = median_and_spread(
-            dN_dlogm_current, confidence=cl
+        med_dnlogm_current, spread_dnlogm_current = median_and_spread(
+            dn_dlogm_current, confidence=cl
         )
-        med_dNlogM_birth, _ = median_and_spread(dN_dlogm_birth, confidence=cl)
-        med_dallNlogM_birth, spread_dallNlogM_birth = median_and_spread(
-            dallN_dlogm_birth, confidence=cl
+        med_dnlogm_birth, _ = median_and_spread(dn_dlogm_birth, confidence=cl)
+        med_dallnlogm_birth, spread_dallnlogm_birth = median_and_spread(
+            dalln_dlogm_birth, confidence=cl
         )
 
-        med_dNlogM_current[med_dNlogM_current == 0] = np.nan
-        med_dNlogM_birth[med_dNlogM_birth == 0] = np.nan
-        med_dallNlogM_birth[med_dallNlogM_birth == 0] = np.nan
-
-        ################################################################
-        # REMOVE WHEN DONE
-        current_med.append(med_dNlogM_current)
-        birth_med.append(med_dNlogM_birth)
-        all_birth_med.append(med_dallNlogM_birth)
-        ################################################################
+        med_dnlogm_current[med_dnlogm_current == 0] = np.nan
+        med_dnlogm_birth[med_dnlogm_birth == 0] = np.nan
+        med_dallnlogm_birth[med_dallnlogm_birth == 0] = np.nan
 
         ################################################################
         # Plot surviving cluster mass function at z=0
@@ -269,29 +205,18 @@ def main():
         # Plot median
         (line,) = ax.plot(
             mid_logmbins,
-            med_dNlogM_current,
+            med_dnlogm_current,
             label=sim_name,
             **Plotting["plot_styles"][sim],
         )
         # Plot scatter
         ax.fill_between(
             mid_logmbins,
-            *spread_dNlogM_current,
+            *spread_dnlogm_current,
             lw=0,
             color=line.get_color(),
             alpha=0.3,
         )
-
-        # ################################################################
-        # # Plot birth mass function of surviving clusters
-        # ################################################################
-        # err_line_dict = {'color': line.get_color(), 'ls': ':'}
-
-        # ax.errorbar(mid_logmbins,
-        #             med_dNlogM_birth,
-        #             yerr=np.abs(spread_dNlogM_birth - med_dNlogM_birth),
-        #             **err_line_dict)
-        # ################################################################
 
         ################################################################
         # Plot birth mass function of all clusters
@@ -300,8 +225,8 @@ def main():
 
         ax.errorbar(
             mid_logmbins,
-            med_dallNlogM_birth,
-            yerr=np.abs(spread_dallNlogM_birth - med_dallNlogM_birth),
+            med_dallnlogm_birth,
+            yerr=np.abs(spread_dallnlogm_birth - med_dallnlogm_birth),
             elinewidth=2,
             capsize=3,
             **err_line_dict,
@@ -311,18 +236,19 @@ def main():
         sim_colors.append(line.get_color())
         sim_line_styles.append(line.get_linestyle())
 
+    ####################################################################
     # Shade mass limit of GCs in simulations
     ax.axvspan(
         10.0 ** (3 * 0.95), Analysis["cluster_mass_limit"], alpha=0.2, color="grey"
     )
 
-    ################################################################
+    ####################################################################
     # Plot observed surviving cluster mass functions
-    ################################################################
+    ####################################################################
     # Plot median
     for _, cfg in obs_config.items():
-        func = getattr(ax, cfg["plot_type"])
-        func(cfg["x"], cfg["y"], **cfg["style"])
+        plot_func = getattr(ax, cfg["plot_type"])
+        plot_func(cfg["x"], cfg["y"], **cfg["style"])
 
     ####################################################################
     # Legend settings
@@ -383,7 +309,7 @@ def main():
         obs_config["Baumgardt 2019"]["style"]["label"],
         obs_config["Hunt 2024 stairs"]["style"]["label"],
     ]
-    mw_legend = ax.legend(
+    ax.legend(
         mw_legend_markers,
         mw_legend_labels,
         markerfirst=False,
@@ -411,33 +337,9 @@ def main():
     ax.tick_params(axis="x", which="major", pad=7)
     ax.minorticks_on()
 
+    ####################################################################
     # Save figures
     save_figures(fig, out_file)
-
-    ####################################################################
-    # DELETE WHEN DONE
-    ####################################################################
-    print("#" * 75)
-    print("Current cluster mass")
-    print("#" * 75)
-    print("Enhanced / Organic")
-    print(current_med[0] / current_med[1])
-    print("Suppressed / Organic")
-    print(current_med[2] / current_med[1])
-
-    print()
-    print("#" * 75)
-    print("Birth cluster mass")
-    print("#" * 75)
-    print("Enhanced / Organic")
-    print(all_birth_med[0] / all_birth_med[1])
-    print("Suppressed / Organic")
-    print(all_birth_med[2] / all_birth_med[1])
-    # print("Enhanced / Organic")
-    # print(birth_med[0] / birth_med[1])
-    # print("Suppressed / Organic")
-    # print(birth_med[2] / birth_med[1])
-    ####################################################################
 
     return None
 
@@ -463,17 +365,6 @@ def create_composite_style(line_style, marker_style):
 def load_obs_data(file_path):
     """Load observational data from text files"""
     return np.genfromtxt(file_path, skip_header=True)
-
-
-# def median_and_spread(data, confidence=np.asarray([16.0, 84.0]), axis=None):
-#     if axis is not None:
-#         axis_value = axis
-#     else:
-#         axis_value = len(data.shape) - 1
-
-#     med = np.nanmedian(data, axis=axis_value)
-#     percentiles = np.nanpercentile(data, confidence, axis=axis_value)
-#     return med, percentiles
 
 
 class HandlerDashedLines(HandlerLineCollection):

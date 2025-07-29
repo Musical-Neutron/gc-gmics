@@ -9,7 +9,7 @@ from gcgmics.common_functions import (
     save_figures,
 )
 from gcgmics.process_data import EvolutionData, return_plot_format_lists
-from settings import Plotting, Simulations
+from gcgmics.settings import Plotting, Simulations
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
     except OSError:
         pass
 
-    # File location
+    # File locations
     fig6_out_file = "fig06_pksfgas_pkgc_mcstar_cfe_newdata.pdf"
     fig7_out_file = "fig07_TN_SM.pdf"
     out_file_template = "{}_vs_tlb.pdf"
@@ -29,6 +29,8 @@ def main():
     property_list = ["Pk_SFgas", "Pk_birth,GC", "Mc_star", "CFE"]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
 
+    ####################################################################
+    # Plot Pk, Mc*, CFE
     ####################################################################
     # Create figures
     fig, axs = plt.subplots(
@@ -87,7 +89,7 @@ def main():
             (new_arrow_length, stack_mm_props) = get_scaled_arrow_properties(
                 Plotting["arrow_length"],
                 mm_props,
-                ax.get_gridspec()._row_height_ratios[a_i],
+                ax.get_gridspec()._row_height_ratios[a_i] * len(property_list) / 3.0,
             )
 
             # Target major merger
@@ -98,7 +100,7 @@ def main():
             _, stack_tm_props = get_scaled_arrow_properties(
                 Plotting["arrow_length"],
                 tm_props,
-                ax.get_gridspec()._row_height_ratios[a_i],
+                ax.get_gridspec()._row_height_ratios[a_i] * len(property_list) / 3.0,
             )
             if tlb_tm is not None:
                 tm_x = 1.0 - (tlb_tm / Plotting["axis_rescale"])
@@ -123,14 +125,14 @@ def main():
             (new_arrow_length, indiv_mm_props) = get_scaled_arrow_properties(
                 Plotting["arrow_length"],
                 mm_props,
-                indiv_ax.get_gridspec()._row_height_ratios[0] / 2.0,
+                indiv_ax.get_gridspec()._row_height_ratios[0] / 3.0,
             )
 
             # Target major merger
             _, indiv_tm_props = get_scaled_arrow_properties(
                 Plotting["arrow_length"],
                 tm_props,
-                indiv_ax.get_gridspec()._row_height_ratios[0] / 2.0,
+                indiv_ax.get_gridspec()._row_height_ratios[0] / 3.0,
             )
 
             # Individual axes and arrows
@@ -161,7 +163,6 @@ def main():
     ####################################################################
     # Plot TN and SM
     ####################################################################
-    # new_arrow_length = 0.07
     property_list = ["TN_model0", "SM_model0"]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
     birth_map = {"SM_model0": "SM_birth_model0"}
@@ -248,18 +249,11 @@ def main():
                 tm_x = 1.0 - (tlb_tm / Plotting["axis_rescale"])
 
             # Main axis arrows
-            if a_i == 0:
-                plot_merger_arrow(ax, mm_x, new_arrow_length, stack_mm_props, "upper")
-                if tlb_tm is not None:
-                    plot_merger_arrow(
-                        ax, tm_x, new_arrow_length, stack_tm_props, "upper"
-                    )
-            elif a_i == len(axs) - 1:
-                plot_merger_arrow(ax, mm_x, new_arrow_length, stack_mm_props, "lower")
-                if tlb_tm is not None:
-                    plot_merger_arrow(
-                        ax, tm_x, new_arrow_length, stack_tm_props, "lower"
-                    )
+            plot_merger_arrow(ax, mm_x, new_arrow_length, stack_mm_props, "upper")
+            plot_merger_arrow(ax, mm_x, new_arrow_length, stack_mm_props, "lower")
+            if tlb_tm is not None:
+                plot_merger_arrow(ax, tm_x, new_arrow_length, stack_tm_props, "upper")
+                plot_merger_arrow(ax, tm_x, new_arrow_length, stack_tm_props, "lower")
 
             ############################################################
             # Individual figures

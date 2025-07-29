@@ -9,7 +9,7 @@ from matplotlib import patches
 
 from gcgmics.common_functions import save_figures
 from gcgmics.process_data import Z0Data, median_and_spread
-from settings import Analysis, Observations, Plotting, Simulations
+from gcgmics.settings import Analysis, Observations, Plotting, Simulations
 
 
 def main():
@@ -18,8 +18,9 @@ def main():
         plt.style.use("./paper.mplstyle")
     except OSError:
         pass
-    # File location
-    fig7_out_file = "fig08_mcfield_mfield.pdf"
+
+    # File locations
+    fig8_out_file = "fig08_mcfield_mfield.pdf"
     out_file_template = "{}_vs_tlb.pdf"
     horta_mw_data = np.genfromtxt(
         Observations["horta_2021_zetagc_file"], skip_header=True
@@ -27,13 +28,20 @@ def main():
 
     # Analysis settings
     n_bins = 16
-    CL = [16.0, 84.0]
+    cl = [16.0, 84.0]
+    plt.rc("hatch", color="k", linewidth=0.5)
 
     # Load data for figures
     all_z0_data = [Z0Data(sim) for sim in Simulations["sim_list"][:3]]
-
     property_list = ["fhalo_cl", "fhalo_gc"]
 
+    # Select only Enhanced and Suppressed simulations for plotting
+    selected_sim_list = np.asarray(Simulations["sim_list"])[[0, 2]]
+    selected_sim_names = np.asarray(Simulations["sim_names"])[[0, 2]]
+    selected_z0_data = np.asarray(all_z0_data)[[0, 2]]
+
+    ####################################################################
+    # Create figures
     fig, axs = plt.subplots(
         len(property_list),
         1,
@@ -50,22 +58,13 @@ def main():
     indiv_figs = [plt.figure(figsize=(8, 8)) for _ in property_list]
     indiv_axs = [fig.add_subplot(111) for fig in indiv_figs]
 
-    plt.rc("hatch", color="k", linewidth=0.5)
-
-    # Select only Enhanced and Suppressed simulations for plotting
-    selected_sim_list = np.asarray(Simulations["sim_list"])[[0, 2]]
-    selected_sim_names = np.asarray(Simulations["sim_names"])[[0, 2]]
-    selected_z0_data = np.asarray(all_z0_data)[[0, 2]]
-    # selected_sim_list = np.asarray(Simulations["sim_list"])[[0, 1, 2]]
-    # selected_sim_names = np.asarray(Simulations["sim_names"])[[0, 1, 2]]
-    # selected_z0_data = np.asarray(all_z0_data)[[0, 1, 2]]
-
-    # for sim, sim_name, z0_data in zip(Simulations["sim_list"], Simulations["sim_names"], all_z0_data):
+    ####################################################################
+    # Iterate over each simulation and plot data
     for sim, sim_name, z0_data in zip(
         selected_sim_list, selected_sim_names, selected_z0_data
     ):
         # Reina-Campos definition
-        rc_cl, rc_gcs, rc_init_cl, rc_init_gcs = z0_data.reina_campos_f_halo(
+        rc_cl, rc_gcs, _, _ = z0_data.reina_campos_f_halo(
             outer_radius=Analysis["outer_radius"], m_gc=Analysis["gc_mass"]
         )
 
@@ -77,34 +76,29 @@ def main():
                 m_gc=Analysis["gc_mass"],
             )
         )
-        max_rhalf = z0_data.max_rhalf
+        # max_rhalf = z0_data.max_rhalf
 
         # FHalo in radial bins
-        med_fcl, spread_fcl = median_and_spread(f_halo_cl, confidence=CL)
-        med_fgc, spread_fgc = median_and_spread(f_halo_gcs, confidence=CL)
-        (med_fcl_init, spread_fcl_init) = median_and_spread(
-            f_halo_init_cl, confidence=CL
-        )
-        (med_fgc_init, spread_fgc_init) = median_and_spread(
-            f_halo_init_gcs, confidence=CL
-        )
+        med_fcl, spread_fcl = median_and_spread(f_halo_cl, confidence=cl)
+        med_fgc, spread_fgc = median_and_spread(f_halo_gcs, confidence=cl)
+        (med_fcl_init, _) = median_and_spread(f_halo_init_cl, confidence=cl)
+        (med_fgc_init, _) = median_and_spread(f_halo_init_gcs, confidence=cl)
 
         # FHalo (Reina-Campos definition) data
         # Radius at which to plot Reina-Campos-style data
-        rc_x = (max_rhalf + Analysis["outer_radius"]) / 2.0
+        # rc_x = (max_rhalf + Analysis["outer_radius"]) / 2.0
         # y-values
-        med_rc_cl, spread_rc_cl = median_and_spread(rc_cl, confidence=CL)
-        med_rc_gc, spread_rc_gc = median_and_spread(rc_gcs, confidence=CL)
-        med_rc_init_cl, spread_rc_init_cl = median_and_spread(rc_init_cl, confidence=CL)
-        med_rc_init_gc, spread_rc_init_gc = median_and_spread(
-            rc_init_gcs, confidence=CL
-        )
+        med_rc_cl, spread_rc_cl = median_and_spread(rc_cl, confidence=cl)
+        med_rc_gc, spread_rc_gc = median_and_spread(rc_gcs, confidence=cl)
+        # med_rc_init_cl, spread_rc_init_cl = median_and_spread(rc_init_cl, confidence=cl)
+        # med_rc_init_gc, spread_rc_init_gc = median_and_spread(
+        #     rc_init_gcs, confidence=cl
+        # )
 
+        ################################################################
+        # Plot lines and fills
         # Plot median
         (line,) = axs[0].plot(
-            radius_mid_bins, med_fcl, label=sim_name, **Plotting["plot_styles"][sim]
-        )
-        (indiv_line,) = indiv_axs[0].plot(
             radius_mid_bins, med_fcl, label=sim_name, **Plotting["plot_styles"][sim]
         )
         # Plot scatter
@@ -114,26 +108,16 @@ def main():
             "linewidth": 0.5,
             "alpha": 0.3,
         }
-        new_rgba = [*matplotlib.colors.to_rgba(indiv_line.get_color())]
+        new_rgba = [*matplotlib.colors.to_rgba(line.get_color())]
         # new_rgba[-1] = common_fill_style['alpha']
         common_fill_style.update({"edgecolor": new_rgba})
         axs[0].fill_between(radius_mid_bins, *spread_fcl, **common_fill_style)
-        indiv_axs[0].fill_between(radius_mid_bins, *spread_fcl, **common_fill_style)
 
         # Plot evolved initial mass
         # Median
         axs[0].plot(radius_mid_bins, med_fcl_init, ls="--", color=line.get_color())
-        indiv_axs[0].plot(
-            radius_mid_bins, med_fcl_init, ls="--", color=indiv_line.get_color()
-        )
-        # # Scatter
-        # axs[0].fill_between(radius_mid_bins,
-        #                     *spread_fcl_init,
-        #                     color=line.get_color(),
-        #                     alpha=0.3)
 
         # Plot FHalo (Reina-Campos definition)
-
         print(sim)
         print("   Clusters")
         print("   ", med_rc_cl)
@@ -141,51 +125,55 @@ def main():
         axs[0].axhspan(
             *spread_rc_cl, color=line.get_color(), zorder=0, ec=None, alpha=0.2
         )
-        indiv_axs[0].axhline(med_rc_cl, ls=":", color=indiv_line.get_color(), zorder=1)
-        indiv_axs[0].axhspan(
-            *spread_rc_cl, color=indiv_line.get_color(), zorder=0, ec=None, alpha=0.2
-        )
-        # axs[0].errorbar(
-        #     rc_x,
-        #     med_rc_init_cl,
-        #     yerr=[[err] for err in np.abs(spread_rc_init_cl - med_rc_init_cl)],
-        #     marker='.',
-        #     color=line.get_color(),
-        #     markersize=5,
-        #     lw=None,
-        #     elinewidth=1,
-        #     capsize=3,
-        #     capthick=1,
-        #     label=r'$F^{\rm halo}$',
-        #     zorder=0)
-        # axs[0].errorbar(rc_x,
-        #                 med_rc_cl,
-        #                 yerr=[[err]
-        #                       for err in np.abs(spread_rc_cl - med_rc_cl)],
-        #                 marker='.',
-        #                 color=line.get_color(),
-        #                 markersize=5,
-        #                 lw=None,
-        #                 elinewidth=1,
-        #                 capsize=3,
-        #                 capthick=1,
-        #                 label=r'$F^{\rm halo}$',
-        #                 zorder=0)
-
         # Plot median
         (line,) = axs[1].plot(
             radius_mid_bins, med_fgc, label=sim_name, **Plotting["plot_styles"][sim]
         )
-        (indiv_line,) = indiv_axs[1].plot(
-            radius_mid_bins, med_fgc, label=sim_name, **Plotting["plot_styles"][sim]
-        )
-        common_fill_style.pop("edgecolor")
+        fill_style_dict = {**common_fill_style}
+        fill_style_dict.update({"edgecolor": line.get_color()})
         # Plot scatter
         axs[1].fill_between(
             radius_mid_bins,
             *spread_fgc,
-            edgecolor=indiv_line.get_color(),
             **common_fill_style,
+        )
+
+        # Plot evolved initial mass
+        # Median
+        axs[1].plot(radius_mid_bins, med_fgc_init, ls="--", color=line.get_color())
+
+        # Plot FHalo (Reina-Campos definition)
+        print("   Globular Clusters")
+        print("   ", med_rc_gc)
+        axs[1].axhline(med_rc_gc, ls=":", color=line.get_color(), zorder=1)
+        axs[1].axhspan(
+            *spread_rc_gc, color=line.get_color(), zorder=0, ec=None, alpha=0.2
+        )
+
+        ################################################################
+        # Individual figures
+        # Plot median
+        (indiv_line,) = indiv_axs[0].plot(
+            radius_mid_bins, med_fcl, label=sim_name, **Plotting["plot_styles"][sim]
+        )
+        # Plot scatter
+        indiv_axs[0].fill_between(radius_mid_bins, *spread_fcl, **common_fill_style)
+
+        # Plot evolved initial mass
+        # Median
+        indiv_axs[0].plot(
+            radius_mid_bins, med_fcl_init, ls="--", color=indiv_line.get_color()
+        )
+
+        # Plot FHalo (Reina-Campos definition)
+        indiv_axs[0].axhline(med_rc_cl, ls=":", color=indiv_line.get_color(), zorder=1)
+        indiv_axs[0].axhspan(
+            *spread_rc_cl, color=indiv_line.get_color(), zorder=0, ec=None, alpha=0.2
+        )
+
+        # Plot median
+        (indiv_line,) = indiv_axs[1].plot(
+            radius_mid_bins, med_fgc, label=sim_name, **Plotting["plot_styles"][sim]
         )
         indiv_axs[1].fill_between(
             radius_mid_bins,
@@ -199,57 +187,18 @@ def main():
 
         # Plot evolved initial mass
         # Median
-        axs[1].plot(radius_mid_bins, med_fgc_init, ls="--", color=line.get_color())
         indiv_axs[1].plot(
             radius_mid_bins, med_fgc_init, ls="--", color=indiv_line.get_color()
         )
-        # # Scatter
-        # axs[1].fill_between(radius_mid_bins,
-        #                     *spread_fgc_init,
-        #                     color=line.get_color(),
-        #                     alpha=0.3)
 
         # Plot FHalo (Reina-Campos definition)
-        print("   Globular Clusters")
-        print("   ", med_rc_gc)
-        axs[1].axhline(med_rc_gc, ls=":", color=line.get_color(), zorder=1)
-        axs[1].axhspan(
-            *spread_rc_gc, color=line.get_color(), zorder=0, ec=None, alpha=0.2
-        )
         indiv_axs[1].axhline(med_rc_gc, ls=":", color=indiv_line.get_color(), zorder=1)
         indiv_axs[1].axhspan(
             *spread_rc_gc, color=indiv_line.get_color(), zorder=0, ec=None, alpha=0.2
         )
-        # axs[1].errorbar(
-        #     rc_x,
-        #     med_rc_init_gc,
-        #     yerr=[[err] for err in np.abs(spread_rc_init_gc - med_rc_init_gc)],
-        #     marker='.',
-        #     color=line.get_color(),
-        #     markersize=5,
-        #     lw=None,
-        #     elinewidth=1,
-        #     capsize=3,
-        #     capthick=1,
-        #     label=r'$F^{\rm halo}$',
-        #     zorder=0)
-        # axs[1].errorbar(rc_x,
-        #                 med_rc_gc,
-        #                 yerr=[[err]
-        #                       for err in np.abs(spread_rc_gc - med_rc_gc)],
-        #                 marker='.',
-        #                 color=line.get_color(),
-        #                 markersize=5,
-        #                 lw=None,
-        #                 elinewidth=1,
-        #                 capsize=3,
-        #                 capthick=1,
-        #                 label=r'$F^{\rm halo}$',
-        #                 zorder=0)
 
     ####################################################################
     # Plot Horta+2021 MW data
-    ####################################################################
     for ax, indiv_ax in zip(axs, indiv_axs):
         # Plot median
         (line,) = ax.plot(
@@ -288,7 +237,7 @@ def main():
             alpha=0.3,
         )
     ####################################################################
-
+    # Legend
     legend_markers = [
         plt.Line2D([0, 1], [0, 0], color="k", linestyle="--"),
         plt.Line2D([0, 1], [0, 0], color="k", linestyle="-"),
@@ -312,6 +261,25 @@ def main():
         r"$F^{\rm halo}$",
         "Horta+(2021b)",
     ]
+    orig_legend_settings = {
+        "markerfirst": False,
+        "loc": "upper right",
+        "handlelength": 0.0,
+        "handletextpad": 0.0,
+        "labelspacing": 0.0,
+    }
+    new_legend_settings = {
+        "handles": legend_markers,
+        "labels": legend_labels,
+        "bbox_to_anchor": (0.0, 1.02, 1.0, 0.102),
+        "loc": "lower left",
+        "ncols": 2,
+        "mode": "expand",
+        "borderaxespad": 0.0,
+        "frameon": True,
+        "fancybox": True,
+        "framealpha": 0.75,
+    }
 
     for ax in axs:
         ax.minorticks_on()
@@ -326,56 +294,22 @@ def main():
         ylabel=r"$\zeta_{\rm GC} = M^{\rm halo}_{\rm GC}\, /\, M^{\rm halo}_{\rm tot}$",
         ylim=[None, 8.0e-2],
     )
-    orig_legend = axs[0].legend(
-        markerfirst=False,
-        loc="upper right",
-        handlelength=0.0,
-        handletextpad=0.0,
-        labelspacing=0.0,
-    )
+    orig_legend = axs[0].legend(**orig_legend_settings)
     for t_item, line in zip(orig_legend.get_texts(), orig_legend.get_lines()):
         t_item.set_color(line.get_color())
-    axs[0].legend(
-        legend_markers,
-        legend_labels,
-        bbox_to_anchor=(0.0, 1.02, 1.0, 0.102),
-        loc="lower left",
-        ncols=2,
-        mode="expand",
-        borderaxespad=0.0,
-        frameon=True,
-        fancybox=True,
-        framealpha=0.75,
-    )
-    # .legend(legend_markers, legend_labels, loc='upper right', markerfirst=False)
+    axs[0].legend(**new_legend_settings)
     axs[0].add_artist(orig_legend)
 
+    ####################################################################
+    # Individual figures
     for indiv_ax in indiv_axs:
         indiv_ax.minorticks_on()
-        ax0_orig_legend = indiv_ax.legend(
-            markerfirst=True,
-            loc="upper right",
-            handlelength=0.0,
-            handletextpad=0.0,
-            labelspacing=0.0,
-        )
+        ax0_orig_legend = indiv_ax.legend(**orig_legend_settings)
         for t_item, line in zip(
             ax0_orig_legend.get_texts(), ax0_orig_legend.get_lines()
         ):
             t_item.set_color(line.get_color())
-        indiv_ax.legend(
-            legend_markers,
-            legend_labels,
-            bbox_to_anchor=(0.0, 1.02, 1.0, 0.102),
-            loc="lower left",
-            ncols=2,
-            mode="expand",
-            borderaxespad=0.0,
-            frameon=True,
-            fancybox=True,
-            framealpha=0.75,
-        )
-        # .legend(legend_markers,legend_labels,loc='upper right',markerfirst=False)
+        indiv_ax.legend(**new_legend_settings)
         indiv_ax.add_artist(ax0_orig_legend)
         indiv_ax.set(
             xlabel=r"$r\, \left[{\rm kpc}\right]$", xlim=[0.0, None], yscale="log"
@@ -389,26 +323,14 @@ def main():
         ylim=[None, 2.0e-1],
     )
 
-    # plt.show()
-
+    ####################################################################
     # Save figures
-    save_figures(fig, fig7_out_file)
+    save_figures(fig, fig8_out_file)
 
     for prop_name, fig in zip(property_list, indiv_figs):
         save_figures(fig, out_file_template.format(prop_name))
 
     return None
-
-
-# def median_and_spread(data, confidence=np.asarray([16.0, 84.0]), axis=None):
-#     if axis is not None:
-#         axis_value = axis
-#     else:
-#         axis_value = len(data.shape) - 1
-
-#     med = np.nanmedian(data, axis=axis_value)
-#     percentiles = np.nanpercentile(data, confidence, axis=axis_value)
-#     return med, percentiles
 
 
 if __name__ == "__main__":

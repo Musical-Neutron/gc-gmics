@@ -17,6 +17,18 @@ Analysis:
   cluster_mass_limit: 5.0e+3 # Msun
 
 ########################################################################
+# Print information
+Printing:
+  print_property_list:
+    - M_200
+    - M_star
+    - M_GC
+    - M_BH
+    - Pk_SFgas
+    - NGC_model0
+    - NGC_model0_r200
+
+########################################################################
 # Observations
 Observations:
   caldwell_2011_m31_mstar_feh_data_file: '{data_dir}/caldwell_2011_logMstar_FeH.csv'
@@ -72,17 +84,7 @@ Plotting:
   fine_spacing: 0.2
   z_cut: 6.5
   coarse_spacing: 1.0
-  # all_redshifts: np.arange(*z_lim, fine_spacing)
-  # major_redshifts: all_redshifts[~(all_redshifts % 1).astype(bool)]
-  # minor_redshifts: all_redshifts[(all_redshifts % 1).astype(bool)]
-  # minor_redshifts: np.concatenate(
-  #     (
-  #         minor_redshifts[minor_redshifts < z_cut],
-  #         np.arange(z_cut, z_lim[-1], coarse_spacing),
-  #     )
-  # )
   arrow_length: 0.0266667 # 0.08 / 3.0
-  # axis_rescale: np.abs(np.diff(tlb_lim)[0])
   common_arrow_properties: &common_arrow_properties
     head_width: 0.02 # 3.0 * arrow_length * 0.25,
     head_length: 0.01 # arrow_length * 0.375,
@@ -98,12 +100,6 @@ Plotting:
     <<: *common_arrow_properties
     ls: '-'
 
-  # figure_handler: FigureHandler(
-  #     major_redshifts=major_redshifts,
-  #     minor_redshifts=minor_redshifts,
-  #     tlb_lim=tlb_lim,
-  #     cos_obj=cosmology_object,
-  # )
   plot_styles:
     z2_od_1p000_mz1p7_1p100_HiRes:
       color: '#7E317B'
@@ -164,11 +160,6 @@ Property dictionary:
     yscale: log
     ylabel: "$M_{\\rm gas,\\, SF}\\, \\left[{\\rm M_\\odot}\\right]$"
     printlabel: M_gas,SF(r < {Analysis.aperture} ckpc) [Msun]
-  M_gas,SF_r200:
-    ylim: [8.0e+8, ~]
-    yscale: log
-    ylabel: "$M_{\\rm gas,\\, SF}\\, \\left[{\\rm M_\\odot}\\right]$"
-    printlabel: M_gas,SF(r < R_200) [Msun]
   M_star:
     ylim: [1.01e+9, 1.0e+11]
     yscale: log
@@ -194,11 +185,6 @@ Property dictionary:
     yscale: log
     ylabel: "$\\left(P\\, /\\, k_{\\rm B}\\right)_{\\rm birth,\\, GC}\\!\\left[{\\rm K\\, cm^{-3}}\\right]$"
     printlabel: P_k,birth,GC [K cm^-3]
-  Pk_birth,star:
-    ylim: [1.1e+3, 8.0e+8]
-    yscale: log
-    ylabel: "$\\left(P\\, /\\, k_{\\rm B}\\right)_{\\rm birth,\\, \\ast}\\!\\left[{\\rm K\\, cm^{-3}}\\right]$"
-    printlabel: P_k,birth,star [K cm^-3]
   Pk_SFgas:
     ylim: [1.1e+3, 8.0e+8]
     yscale: log
@@ -214,16 +200,6 @@ Property dictionary:
     yscale: linear
     ylabel: "$S_{\\rm M} = 100\\, M_{\\rm GC}\\, /\\, M_\\ast$"
     printlabel: S_M,0(r < {Analysis.aperture} ckpc)
-  SM_model0_r200:
-    ylim: [0.0, 12.5]
-    yscale: linear
-    ylabel: "$S_{\\rm M} = 100\\, M_{\\rm GC}\\, /\\, M_\\ast$"
-    printlabel: S_M,0(r < R_200)
-  SM_model3:
-    ylim: [0.0, 12.5]
-    yscale: linear
-    ylabel: "$S_{\\rm M}_{\\rm no\\, phys} = 100\\, M_{\\rm GC}\\, /\\, M_\\ast$"
-    printlabel: S_M,3(r < {Analysis.aperture} ckpc)
   SM_birth_model0:
     ylim: [0.0, 13.0]
     yscale: linear
@@ -234,11 +210,6 @@ Property dictionary:
     yscale: linear
     ylabel: "$T_{\\rm N} = N_{\\rm GC}\\, /\\, M_\\ast\\, \\left[\\left({\\rm 10^9\\, M_\\odot}\\right)^{-1}\\right]$"
     printlabel: T_N,0(r < {Analysis.aperture} ckpc) [10^-9 Msun^-1]
-  TN_model0_r200:
-    ylim: [0.0, 2.25e+2]
-    yscale: linear
-    ylabel: "$T_{\\rm N} = N_{\\rm GC}\\, /\\, M_\\ast\\, \\left[\\left({\\rm 10^9\\, M_\\odot}\\right)^{-1}\\right]$"
-    printlabel: T_N,0(r < R_200) [10^-9 Msun^-1]
   NGC_model0:
     ylim: [0.0, 3500]
     yscale: linear
@@ -249,58 +220,8 @@ Property dictionary:
     yscale: linear
     ylabel: "$N_{\\rm GC}\\!\\left(<R_{200}\\right)$"
     printlabel: N_GC(r < R_200)
-  NGC_ap_r200_ratio:
-    ylim: [0.0, 1.05]
-    yscale: linear
-    ylabel: "$N_{{\\rm GC}}\\!\\left(<{Analysis.aperture} {{\\rm ckpc}}\\right)\\, /\\, N_{{\\rm GC}}\\!\\left(<R_{200}\\right)$"
-    printlabel: N_GC(r < {Analysis.aperture} ckpc)/ N_GC(r < R200)
-  ngc_fixed_tn_20:
-    ylim: [0.0, 4.e+3]
-    yscale: linear
-    ylabel: "$T_{{\\rm N}}=20\\!\\left({Analysis.aperture}\\right)$"
-    printlabel: N_GC(r < Aperture)
-  ngc_fixed_tn_40:
-    ylim: [0.0, 4.e+3]
-    yscale: linear
-    ylabel: "$T_{{\\rm N}}=40\\!\\left({Analysis.aperture}\\right)$"
-    printlabel: N_GC(r < Aperture)
-  ngc_fixed_tn_60:
-    ylim: [0.0, 4.e+3]
-    yscale: linear
-    ylabel: "$T_{{\\rm N}}=60\\!\\left({Analysis.aperture}\\right)$"
-    printlabel: N_GC(r < Aperture)
-  ngc_fixed_tn_80:
-    ylim: [0.0, 4.e+3]
-    yscale: linear
-    ylabel: "$T_{{\\rm N}}=80\\!\\left({Analysis.aperture}\\right)$"
-    printlabel: N_GC(r < Aperture)
-  ngc_fixed_tn_100:
-    ylim: [0.0, 4.e+3]
-    yscale: linear
-    ylabel: "$T_{{\\rm N}}=100\\!\\left({Analysis.aperture}\\right)$"
-    printlabel: N_GC(r < Aperture)
-  TN_model3:
-    ylim: [0.0, 2.25e+2]
-    yscale: linear
-    ylabel: "$T_{\\rm N\\, no\\, phys} = N_{\\rm GC}\\, /\\, M_\\ast\\, \\left[\\left({\\rm 10^9\\, M_\\odot}\\right)^{-1}\\right]$"
-    printlabel: T_N,3(r < {Analysis.aperture} ckpc) [10^-9 Msun^-1]
-  SFR_MgasSF:
-    ylim: [0.3e-9, 3.e+9]
-    yscale: log
-    ylabel: "${\\rm SFR}\\, /\\, M_{\\rm gas,\\, SF}\\, \\left[{\\rm yr^{-1}}\\right]$"
-    printlabel: SFR/MgasSF(r < {Analysis.aperture} ckpc) [yr^-1]
-  dMgc_dt_MgasSF:
-    ylim: [-2.5e-10, 5.e-10]
-    yscale: linear
-    ylabel: "$dM_{\\rm GC}\\, /\\, dt\\, /\\, M_{\\rm gas,\\, SF}\\,\\left[{\\rm yr^{-1}}\\right]$"
-    printlabel: dMgc_dt/MgasSF(r < {Analysis.aperture} ckpc) [yr^-1]
   eta:
     ylim: [1.0e-5, 1.0e-3]
     yscale: log
     ylabel: "$\\eta = M_{\\rm GC}\\, /\\, M_{200}$"
     printlabel: eta = Mgc(r < {Analysis.aperture} ckpc)/M200
-  eta_r200:
-    ylim: [1.0e-5, 1.0e-3]
-    yscale: log
-    ylabel: "$\\eta = M_{\\rm GC}\\!\\left(r < R_{200}\\right)\\, /\\, M_{200}$"
-    printlabel: eta = Mgc(r < R200)/M200
