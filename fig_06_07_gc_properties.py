@@ -20,7 +20,7 @@ def main():
         pass
 
     # File locations
-    fig6_out_file = "fig06_pksfgas_pkgc_mcstar_cfe_newdata.pdf"
+    fig6_out_file = "fig06_pksfgas_pkgc_mcstar_cfe.pdf"
     fig7_out_file = "fig07_TN_SM.pdf"
     out_file_template = "{}_vs_tlb.pdf"
 
