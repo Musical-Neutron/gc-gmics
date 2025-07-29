@@ -1,0 +1,48 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: gcgmics
+message: >-
+  If you use this code or data, please cite both the article
+  from preferred-citation and the code itself.
+type: software
+authors:
+  - given-names: Oliver
+    family-names: Newton
+    email: onewton@cft.edu.pl
+    orcid: 'https://orcid.org/0000-0002-2769-9507'
+    affiliation: >-
+      Center for Theoretical Physics, Polish Academy of
+      Sciences
+identifiers:
+  - type: doi
+    value: 10.1093/mnras/staf1226
+    description: Journal article
+  - type: url
+    value: 'https://arxiv.org/abs/2409.04516'
+    description: arXiv
+repository-code: 'https://github.com/Musical-Neutron/gc-gmics'
+abstract: >-
+  A repository of reduced data and scripts to reproduce the
+  figures in the paper referred to above.
+keywords:
+  - astronomy
+  - globular cluster
+license: GPL-3.0
+version: 1.0.0
+date-released: '2025-07-30'
+preferred-citation:
+  authors:
+    - family-names: Newton
+      given-names: Oliver
+      orcid: 'https://orcid.org/0000-0002-2769-9507'
+  identifiers:
+  - type: doi
+    value: 10.1093/mnras/staf1226
+    description: Journal article concerning this repository
+  title: "The formation and disruption of globular cluster populations in simulations of present-day  L∗
+  galaxies with controlled assembly histories"
+  journal: "Monthly Notices of the Royal Astronomical Society"
+  year: 2025
+  type: article

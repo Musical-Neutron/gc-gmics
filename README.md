@@ -1,7 +1,6 @@
 # Plotting scripts for the E-MOSAICS GM globular cluster paper
 
-
-**Last reviewed:** 0.4.0
+**Last reviewed:** 0.5.0
 
 A set of scripts and a repository of reduced data to reproduce the plots in the
 genetically modified initial conditions E-MOSAICS Globular Cluster (GC)
@@ -32,7 +31,7 @@ There are seven scripts that can be executed independently:
 
 * Fig. 2: [fig_02_key_galaxy_properties.py](/fig_02_key_galaxy_properties.py)
   * Plots the halo mass, *M*<sub>200</sub>,
-  stellar mass, *M*<sub>*</sub>, and mass in GCs, *M*<sub>GC</sub>,
+  stellar mass, *M*<sub>\*</sub>, and mass in GCs, *M*<sub>GC</sub>,
   vs. lookback time, *t*<sub>lb</sub>.
 * Fig. 3: [fig_03_gas_bh_properties.py](/fig_03_gas_bh_properties.py)
   * Plots the mass of star-forming gas, *M*<sub>SF</sub>, and the central black
@@ -43,7 +42,7 @@ There are seven scripts that can be executed independently:
   the initial cluster mass function.
 * Fig. 5: [fig_05_rates_of_change.py](/fig_05_rates_of_change.py)
   * Plots the star formation rate, GC formation rate, GCFR, GC destruction
-  rate, GCDR, and the net change in GC mass, $dM_{GC} / dt$ vs.
+  rate, GCDR, and the net change in GC mass, $dM_{\rm GC} / dt$ vs.
   *t*<sub>lb</sub>.
 * Figs 6 & 7: [fig_06_07_gc_properties.py](/fig_06_07_gc_properties.py)
   * Plots the stellar and GC birth pressures, M<sub>c,*</sub>, and cluster
@@ -62,43 +61,64 @@ and .pdf versions of each figure in the paper.
 
 ### Supplementary scripts
 
-* [common_functions.py](/common_functions.py)
+* [common_functions.py](/gcgmics/common_functions.py)
   * A set of functions common to more than one of the main scripts.
-* [process_data.py](/process_data.py)
+* [process_data.py](/gcgmics/process_data.py)
   * Contains classes and functions to handle basic processing of data.
+* [settings.py](/gcgmics/settings.py)
+  * Contains classes and functions to read in settings from
+  [settings.yaml](/settings.yaml).
 
 ## 2.0 Data
 
-The [data](/data) directory that contains all files necessary to reproduce the
+The [data](/data) directory contains all files necessary to reproduce the
 figures in the paper. There are XX files:
 
-* [file_one.hdf5](/data/file_one.hdf5)
-  * Required for all figures.
-<!-- * [17_11_z0_data.hdf5](/data/17_11_z0_data.hdf5)
-  * Required for Figs. 2&ndash;4, 6 and A1.
-* [ludlow2014_logc_vs_logm200h.csv](/data/ludlow2014_logc_vs_logm200h.csv)
-  * Required for Figs. 4 \& A1.
-* [halo_positions.hdf5](/data/halo_positions.hdf5)
-  * Only required for Fig. 5.
-* [gammaldi_2021_data.hdf5](/data/gammaldi_2021_data.hdf5)
-  * Only required for Fig. 6. -->
-data/bastian2020_SM_Mstar_z0.csv
-data/bastian2020_SMinit_Mstar_z0.csv
-data/baumgardt_2019_mw_gcs.csv
-data/caldwell_2009_intermediate_clusters.csv
-data/caldwell_2009_old_clusters.csv
-data/caldwell_2009_young_clusters.csv
-data/caldwell_2011_logMstar_FeH.csv
-data/fall_2009_NdlogM_M.csv
-data/horta_2021_fGC.csv
-data/hunt_2024_N_M_bins.csv
-data/johnson_2017_dNdlogM_M.csv
-<!-- data/z2_od_1p000_HiRes_gcmass_100000_paper_data.hdf5 -->
-data/z2_od_1p000_HiRes_paper_z0_gc_properties.hdf5
-<!-- data/z2_od_1p000_mz1p7_0p800_HiRes_gcmass_100000_paper_data.hdf5 -->
-data/z2_od_1p000_mz1p7_0p800_HiRes_paper_z0_gc_properties.hdf5
-<!-- data/z2_od_1p000_mz1p7_1p100_HiRes_gcmass_100000_paper_data.hdf5 -->
-data/z2_od_1p000_mz1p7_1p100_HiRes_paper_z0_gc_properties.hdf5
+### Simulation data
+
+* [z2_od_1p000_mz1p7_0p800_HiRes_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_mz1p7_0p800_HiRes_gcmass_100000_paper_data.hdf5)
+  * Data from simulations produced in this work. Required for all figures except Figs 4 & 8.
+* [z2_od_1p000_HiRes_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_HiRes_gcmass_100000_paper_data.hdf5)
+  * Data from simulations produced in this work. Required for all figures except Figs 4 & 8.
+* [z2_od_1p000_mz1p7_1p100_HiRes_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_mz1p7_1p100_HiRes_gcmass_100000_paper_data.hdf5)
+  * Data from simulations produced in this work. Required for all figures except Figs 4 & 8.
+* [z2_od_1p000_mz1p7_0p800_HiRes_noBH_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_mz1p7_0p800_HiRes_noBH_gcmass_100000_paper_data.hdf5)
+  * Data from simulations produced in this work. Required for Fig. 3.
+* [z2_od_1p000_HiRes_noBH_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_HiRes_noBH_gcmass_100000_paper_data.hdf5)
+  * Data from simulations produced in this work. Required for Fig. 3.
+* [z2_od_1p000_mz1p7_1p100_HiRes_noBH_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_mz1p7_1p100_HiRes_noBH_gcmass_100000_paper_data.hdf5)
+  * Data from simulations produced in this work. Required for Fig. 3.
+* [z2_od_1p000_mz1p7_0p800_HiRes_paper_z0_gc_properties.hdf5](/data/z2_od_1p000_mz1p7_0p800_HiRes_paper_z0_gc_properties.hdf5)
+  * Data from simulations produced in this work. Required for Figs 4 & 8.
+* [z2_od_1p000_HiRes_paper_z0_gc_properties.hdf5](/data/z2_od_1p000_HiRes_paper_z0_gc_properties.hdf5)
+  * Data from simulations produced in this work. Required for Figs 4 & 8.
+* [z2_od_1p000_mz1p7_1p100_HiRes_paper_z0_gc_properties.hdf5](/data/z2_od_1p000_mz1p7_1p100_HiRes_paper_z0_gc_properties.hdf5)
+  * Data from simulations produced in this work. Required for Figs 4 & 8.
+
+### Observational data
+
+* [caldwell_2009_old_clusters.csv](/data/caldwell_2009_old_clusters.csv)
+  * Data from [Caldwell et al. (2009)](https://doi.org/10.1088/0004-6256/137/1/94).
+  * Required for Fig. 4.
+* [caldwell_2009_intermediate_clusters.csv](/data/caldwell_2009_intermediate_clusters.csv)
+  * Data from [Caldwell et al. (2009)](https://doi.org/10.1088/0004-6256/137/1/94).
+  * Required for Fig. 4.
+* [caldwell_2009_young_clusters.csv](/data/caldwell_2009_young_clusters.csv)
+  * Data from [Caldwell et al. (2009)](https://doi.org/10.1088/0004-6256/137/1/94).
+  * Required for Fig. 4.
+* [caldwell_2011_logMstar_FeH.csv](/data/caldwell_2011_logMstar_FeH.csv)
+  * Data from [Caldwell et al. (2011)](https://doi.org/10.1088/0004-6256/141/2/61).
+  * Required for Fig. 4.
+* [baumgardt_2019_mw_gcs.csv](/data/baumgardt_2019_mw_gcs.csv)
+  * Data from [Baumgardt et al. (2019)](https://doi.org/10.1093/mnras/sty2997).
+  * Data retrieved from <https://people.smp.uq.edu.au/HolgerBaumgardt/globular/>
+  * Required for Fig. 4.
+* [hunt_2024_N_M_bins.csv](/data/hunt_2024_N_M_bins.csv)
+  * Data extracted from [Hunt et al. (2024, fig. 17)](https://doi.org/10.1051/0004-6361/202348662).
+  * Required for Fig. 4.
+* [horta_2021_fGC.csv](/data/horta_2021_fGC.csv)
+  * Data from [Horta et al. (2021)](https://doi.org/10.1093/mnras/staa3598).
+  * Required for Fig. 8.
 
 ## 3.0 Citations
 
@@ -106,12 +126,12 @@ This code and the accompanying data are freely available.
 
 ### If you use this code or derivative work
 
-* [O. Newton et al. (2025)](DOI)
-* [O. Newton (2021)](https://doi.org/10.5281/zenodo.4708338)
+* [O. Newton et al. (2025)](https://doi.org/10.1093/mnras/staf1226)
+* [O. Newton (2025)](https://doi.org/XX.XXXX/zenodo.XXXXXXX)
 
 ### If you use these data, a derivative work, or results thereof
 
-* [O. Newton et al. (2022)](https://doi.org/10.1093/mnras/stac1316)
+* [O. Newton et al. (2025)](https://doi.org/10.1093/mnras/staf1226)
 
 If you have any questions or would like help in using the scripts, please
 email:

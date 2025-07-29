@@ -1,7 +1,7 @@
 ########################################################################
 # File locations
 data_dir: data
-data_file_template: '{data_dir}/{}_gcmass_{:g}_paper_data_new.hdf5'
+data_file_template: '{data_dir}/{}_gcmass_{:g}_paper_data.hdf5'
 z0_data_file: '{data_dir}/{}_paper_z0_gc_properties.hdf5'
 
 ########################################################################
@@ -31,21 +31,17 @@ Printing:
 ########################################################################
 # Observations
 Observations:
-  caldwell_2011_m31_mstar_feh_data_file: '{data_dir}/caldwell_2011_logMstar_FeH.csv'
-  johnson_2017_m31_dNdlogM_data_file: '{data_dir}/johnson_2017_dNdlogM_M.csv'
-  hunt_2024_mw_NlogM_data_file: '{data_dir}/hunt_2024_N_M_bins.csv'
-  fall_2009_antennae_NlogM_data_file: '{data_dir}/fall_2009_NdlogM_M.csv'
   caldwell_2009_m31_old_data_file: '{data_dir}/caldwell_2009_old_clusters.csv'
   caldwell_2009_m31_int_data_file: '{data_dir}/caldwell_2009_intermediate_clusters.csv'
   caldwell_2009_m31_young_data_file: '{data_dir}/caldwell_2009_young_clusters.csv'
+  caldwell_2011_m31_mstar_feh_data_file: '{data_dir}/caldwell_2011_logMstar_FeH.csv'
   baumgardt_2019_mw_cluster_file: '{data_dir}/baumgardt_2019_mw_gcs.csv'
   horta_2021_zetagc_file: '{data_dir}/horta_2021_fGC.csv'
+  hunt_2024_mw_NlogM_data_file: '{data_dir}/hunt_2024_N_M_bins.csv'
   mstar_mw: 6.08e+10 # Mstar (Licquia & Newman 2015)[doi:10.1088/0004-637X/806/1/96]
   mstar_mw_1sig_err: [-1.14e10, 1.14e10] # Mstar 1sig err (Licquia & Newman 2015)[doi:10.1088/0004-637X/806/1/96]
   mstar_m31: 1.03e+11 # Mstar (Sick et al. 2015)[doi:10.1017/S1743921315003440]
   mstar_m31_1sig_err: [-1.7e+10, 2.3e+10] # Mstar 1sig err (Sick et al. 2015)[doi:10.1017/S1743921315003440]
-  bastian_2020_sm_mstar_data_file: '{data_dir}/bastian2020_SM_Mstar_z0.csv'
-  bastian_2020_sminit_mstar_data_file: '{data_dir}/bastian2020_SMinit_Mstar_z0.csv'
 
 ########################################################################
 # Simulations
