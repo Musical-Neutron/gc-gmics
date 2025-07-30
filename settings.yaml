@@ -76,6 +76,7 @@ Simulations:
 ########################################################################
 # Plotting settings
 Plotting:
+  individual_panels: False
   tlb_lim: [0, 12.0]
   z_lim: [0.0, 8.0]
   coarse_spacing: 1.0

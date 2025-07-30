@@ -1,6 +1,6 @@
 # Plotting scripts for the genetically modified merger history study of globular clusters
 
-**Last reviewed:** 0.6.4
+**Last reviewed:** 0.7.0
 
 A set of scripts and a repository of reduced data to reproduce the figures in
 the study of globular cluster (GC) formation, evolution, and destruction using
@@ -47,7 +47,7 @@ directory
 ## 2.0 Configuration (`settings.yaml`)
 
 Key settings in the repository are configured using the
-[settings.yaml](/settings.yaml) file.
+[settings.yaml](/settings.yaml) file. Some relevant settings are discussed below.
 
 ### 2.1 Core configuration
 
@@ -58,14 +58,21 @@ Key settings in the repository are configured using the
 
 - **Analysis settings**:
   - `gc_mass` sets the minimum globular cluster mass, in units of solar masses.
-  - `cluster_mass_limit` sets the lower mass below which clusters are not
-  tracked. This reflects the settings with which the simulations were run.
+  - `cluster_mass_limit` sets the mass (in solar masses) below which clusters
+  are not tracked. The default reflects the settings with which the simulations
+  were run.
 
 ### 2.2 Output control
 
-Under `Printing`, `print_property_list` specifies which properties will appear
-in terminal outputs when called by [print_paper_results.py](/print_paper_results.py).
-The full list of available properties is provided in `Property dictionary`
+- **Printing**
+  - `print_property_list` specifies which properties will appear
+  in terminal outputs when called by [print_paper_results.py](/print_paper_results.py).
+  The full list of available properties is provided in `Property dictionary`.
+
+- **Plotting**
+  - `individual_panels` specifies whether individual figure
+  panels will be created and saved as independent figures alongside the combined one.
+  Default: `False`.
 
 ### 2.3 Visualisation
 
@@ -143,17 +150,19 @@ File name | Figures needed for | Citation | Notes
 [hunt_2024_N_M_bins.csv](/data/hunt_2024_N_M_bins.csv) | Fig. 4 | [Hunt et al. (2024, fig. 17)](https://doi.org/10.1051/0004-6361/202348662)
 [horta_2021_fGC.csv](/data/horta_2021_fGC.csv) | Fig. 8 | [Horta et al. (2021)](https://doi.org/10.1093/mnras/staa3598)
 
-## 3.0 Citations
+## 5.0 Citations
 
 This code and the accompanying data are freely available.
 
-### If you use this code or derivative work
+### 5.1 If you use this code or derivative work
 
 - [O. Newton et al. (2025)](https://doi.org/10.1093/mnras/staf1226)
 
-### If you use these data, a derivative work, or results thereof
+### 5.2 If you use these data, a derivative work, or results thereof
 
 - [O. Newton et al. (2025)](https://doi.org/10.1093/mnras/staf1226)
+
+### 5.3 Contact
 
 If you have any questions or would like help in using the scripts, please
 email:
