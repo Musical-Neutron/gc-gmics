@@ -1,7 +1,7 @@
 ########################################################################
 # File locations
 data_dir: data
-data_file_template: '{data_dir}/{}_gcmass_{:g}_paper_data.hdf5'
+data_file_template: '{data_dir}/{}_mgc_{:g}_data.hdf5'
 z0_data_file: '{data_dir}/{}_paper_z0_gc_properties.hdf5'
 
 ########################################################################
@@ -46,18 +46,8 @@ Observations:
 ########################################################################
 # Simulations
 Simulations:
-  sim_list:
-    [
-      'z2_od_1p000_mz1p7_1p100_HiRes',
-      'z2_od_1p000_HiRes',
-      'z2_od_1p000_mz1p7_0p800_HiRes',
-    ]
-  nobh_sim_list:
-    [
-      'z2_od_1p000_mz1p7_1p100_HiRes_noBH',
-      'z2_od_1p000_HiRes_noBH',
-      'z2_od_1p000_mz1p7_0p800_HiRes_noBH',
-    ]
+  sim_list: ['enhanced', 'organic', 'suppressed']
+  nobh_sim_list: ['enhanced_noBH', 'organic_noBH', 'suppressed_noBH']
   # Onset of merger
   sim_z_major_merger: [1.63, 1.7, 1.68, 1.63, 1.7, 1.68]
   sim_tlb_major_merger: [9.85, 10.00, 9.95, 9.85, 10.00, 9.95] # Gyr
@@ -98,22 +88,22 @@ Plotting:
     <<: *common_arrow_properties
     ls: '-'
   plot_styles:
-    z2_od_1p000_mz1p7_1p100_HiRes: &1p100_plot_properties
+    enhanced: &enhanced_plot_properties
       color: '#7E317B'
-    z2_od_1p000_HiRes: &1p000_plot_properties
+    organic: &organic_plot_properties
       color: '#34B83B'
-    z2_od_1p000_mz1p7_0p800_HiRes: &0p800_plot_properties
+    suppressed: &suppressed_plot_properties
       color: '#2F3BD6'
-    z2_od_1p000_mz1p7_1p100_HiRes_noBH:
-      <<: *1p100_plot_properties
+    enhanced_noBH:
+      <<: *enhanced_plot_properties
       marker: .
       ls: --
-    z2_od_1p000_HiRes_noBH:
-      <<: *1p000_plot_properties
+    organic_noBH:
+      <<: *organic_plot_properties
       marker: .
       ls: --
-    z2_od_1p000_mz1p7_0p800_HiRes_noBH:
-      <<: *0p800_plot_properties
+    suppressed_noBH:
+      <<: *suppressed_plot_properties
       marker: .
       ls: --
 

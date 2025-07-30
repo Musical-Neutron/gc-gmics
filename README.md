@@ -1,6 +1,6 @@
 # Plotting scripts for the E-MOSAICS GM globular cluster paper
 
-**Last reviewed:** 0.6.0
+**Last reviewed:** 0.6.1
 
 A set of scripts and a repository of reduced data to reproduce the plots in the
 genetically modified initial conditions E-MOSAICS Globular Cluster (GC)
@@ -138,12 +138,12 @@ The following files contain data from simulations produced in this work.
 
 File name | Figures needed for
 :--- | :---
-[z2_od_1p000_mz1p7_0p800_HiRes_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_mz1p7_0p800_HiRes_gcmass_100000_paper_data.hdf5) | All except Figs 4 & 8
-[z2_od_1p000_HiRes_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_HiRes_gcmass_100000_paper_data.hdf5) | All except Figs 4 & 8
-[z2_od_1p000_mz1p7_1p100_HiRes_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_mz1p7_1p100_HiRes_gcmass_100000_paper_data.hdf5) | All except Figs 4 & 8
-[z2_od_1p000_mz1p7_0p800_HiRes_noBH_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_mz1p7_0p800_HiRes_noBH_gcmass_100000_paper_data.hdf5) | Fig. 3
-[z2_od_1p000_HiRes_noBH_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_HiRes_noBH_gcmass_100000_paper_data.hdf5) | Fig. 3
-[z2_od_1p000_mz1p7_1p100_HiRes_noBH_gcmass_100000_paper_data.hdf5](/data/z2_od_1p000_mz1p7_1p100_HiRes_noBH_gcmass_100000_paper_data.hdf5) | Fig. 3
+[suppressed_mgc_100000_data.hdf5](/data/suppressed_mgc_100000_data.hdf5) | All except Figs 4 & 8
+[organic_mgc_100000_data.hdf5](/data/organic_mgc_100000_data.hdf5) | All except Figs 4 & 8
+[enhanced_mgc_100000_data.hdf5](/data/enhanced_mgc_100000_data.hdf5) | All except Figs 4 & 8
+[suppressed_noBH_mgc_100000_data.hdf5](/data/suppressed_noBH_mgc_100000_data.hdf5) | Fig. 3
+[organic_noBH_mgc_100000_data.hdf5](/data/organic_noBH_mgc_100000_data.hdf5) | Fig. 3
+[enhanced_noBH_mgc_100000_data.hdf5](/data/enhanced_noBH_mgc_100000_data.hdf5) | Fig. 3
 [z2_od_1p000_mz1p7_0p800_HiRes_paper_z0_gc_properties.hdf5](/data/z2_od_1p000_mz1p7_0p800_HiRes_paper_z0_gc_properties.hdf5) | Figs 4 & 8
 [z2_od_1p000_HiRes_paper_z0_gc_properties.hdf5](/data/z2_od_1p000_HiRes_paper_z0_gc_properties.hdf5) | Figs 4 & 8
 [z2_od_1p000_mz1p7_1p100_HiRes_paper_z0_gc_properties.hdf5](/data/z2_od_1p000_mz1p7_1p100_HiRes_paper_z0_gc_properties.hdf5) | Figs 4 & 8
