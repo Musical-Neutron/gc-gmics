@@ -1,6 +1,6 @@
 # Plotting scripts for the genetically modified merger history study of globular clusters
 
-**Last reviewed:** 0.7.0
+**Last reviewed:** 1.0.0
 
 A set of scripts and a repository of reduced data to reproduce the figures in
 the study of globular cluster (GC) formation, evolution, and destruction using
@@ -94,11 +94,11 @@ There are seven scripts that can be executed independently:
 
 Script name | Figure | Description
 :--- | :---: | :---
-[fig_02_key_galaxy_properties.py](/fig_02_key_galaxy_properties.py) | Fig. 2 | Plots the halo mass, *M*<sub>200</sub>, stellar mass, *M*<sub>\*</sub>, and mass in GCs, *M*<sub>GC</sub>, vs. lookback time, *t*<sub>lb</sub>
-[fig_03_gas_bh_properties.py](/fig_03_gas_bh_properties.py) | Fig. 3 | Plots the mass of star-forming gas, *M*<sub>SF</sub>, and the central black hole mass, *M*<sub>SMBH</sub> vs. *t*<sub>lb</sub>.
+[fig_02_key_galaxy_properties.py](/fig_02_key_galaxy_properties.py) | Fig. 2 | Plots the halo mass, *M*<sub>200</sub>; stellar mass, $M_\ast$; and mass in GCs, *M*<sub>GC</sub> vs. lookback time, *t*<sub>lb</sub>
+[fig_03_gas_bh_properties.py](/fig_03_gas_bh_properties.py) | Fig. 3 | Plots the star formation rate, SFR; mass of star-forming gas, *M*<sub>SF</sub>; and the central black hole mass, *M*<sub>SMBH</sub> vs. *t*<sub>lb</sub>.
 [fig_04_z0_mass_function.py](/fig_04_z0_mass_function.py) | Fig. 4 | Plots the $z=0$ and birth mass functions of all clusters that survive to $z=0$. Note that the latter is averaged over time and is *not* equivalent to the initial cluster mass function.
-[fig_05_rates_of_change.py](/fig_05_rates_of_change.py) | Fig. 5 | Plots the star formation rate, GC formation rate, GCFR, GC destruction rate, GCDR, and the net change in GC mass, $dM_{\rm GC} / dt$ vs. *t*<sub>lb</sub>.
-[fig_06_07_gc_properties.py](/fig_06_07_gc_properties.py) | 6 & 7 | - Plots the stellar and GC birth pressures, M<sub>c,*</sub>, and cluster formation efficiency vs. *t*<sub>lb</sub>. Also plots the specific frequency, *T*<sub>N</sub>, and the specific mass, *S*<sub>M</sub> vs. *t*<sub>lb</sub>.
+[fig_05_rates_of_change.py](/fig_05_rates_of_change.py) | Fig. 5 | Plots the  GC formation rate, GCFR; GC destruction rate, GCDR; and the net change in GC mass, ${\rm d}M_{\rm GC} / {\rm d}t$ vs. *t*<sub>lb</sub>.
+[fig_06_07_gc_properties.py](/fig_06_07_gc_properties.py) | 6 & 7 | Plots the stellar and GC birth pressures; $M_{\rm c,\, \ast}$; and the cluster formation efficiency, $\Gamma$ vs. *t*<sub>lb</sub>. Also plots the specific frequency, *T*<sub>N</sub>; and the specific mass, *S*<sub>M</sub> vs. *t*<sub>lb</sub>.
 [fig_08_fhalo.py](/fig_08_fhalo.py) | Fig. 8 | Plots the fraction of mass in halo stars contributed by the destruction of star clusters.
 [print_paper_results.py](/print_paper_results.py) | | Prints information relevant to the paper to stdout.
 
