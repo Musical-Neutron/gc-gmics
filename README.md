@@ -1,6 +1,9 @@
 # Plotting scripts for the genetically modified merger history study of globular clusters
 
-**Last reviewed:** 1.0.0
+[![DOI](https://zenodo.org/badge/618982533.svg)](https://doi.org/10.5281/zenodo.16614763)
+[![Build and test](https://github.com/Musical-Neutron/gc-gmics/actions/workflows/test_repo.yml/badge.svg?branch=main)](https://github.com/Musical-Neutron/gc-gmics/actions/workflows/test_repo.yml)
+
+**Last reviewed:** v1.0.0
 
 A set of scripts and a repository of reduced data to reproduce the figures in
 the study of globular cluster (GC) formation, evolution, and destruction using
@@ -157,6 +160,7 @@ This code and the accompanying data are freely available.
 ### 5.1 If you use this code or derivative work
 
 - [O. Newton et al. (2025)](https://doi.org/10.1093/mnras/staf1226)
+- [O. Newton (2025)](https://doi.org/10.5281/zenodo.16614763)
 
 ### 5.2 If you use these data, a derivative work, or results thereof
 
