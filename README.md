@@ -1,6 +1,6 @@
 # Plotting scripts for the E-MOSAICS GM globular cluster paper
 
-**Last reviewed:** 0.6.1
+**Last reviewed:** 0.6.2
 
 A set of scripts and a repository of reduced data to reproduce the plots in the
 genetically modified initial conditions E-MOSAICS Globular Cluster (GC)
@@ -144,9 +144,9 @@ File name | Figures needed for
 [suppressed_noBH_mgc_100000_data.hdf5](/data/suppressed_noBH_mgc_100000_data.hdf5) | Fig. 3
 [organic_noBH_mgc_100000_data.hdf5](/data/organic_noBH_mgc_100000_data.hdf5) | Fig. 3
 [enhanced_noBH_mgc_100000_data.hdf5](/data/enhanced_noBH_mgc_100000_data.hdf5) | Fig. 3
-[z2_od_1p000_mz1p7_0p800_HiRes_paper_z0_gc_properties.hdf5](/data/z2_od_1p000_mz1p7_0p800_HiRes_paper_z0_gc_properties.hdf5) | Figs 4 & 8
-[z2_od_1p000_HiRes_paper_z0_gc_properties.hdf5](/data/z2_od_1p000_HiRes_paper_z0_gc_properties.hdf5) | Figs 4 & 8
-[z2_od_1p000_mz1p7_1p100_HiRes_paper_z0_gc_properties.hdf5](/data/z2_od_1p000_mz1p7_1p100_HiRes_paper_z0_gc_properties.hdf5) | Figs 4 & 8
+[suppressed_paper_z0_gc_properties.hdf5](/data/suppressed_paper_z0_gc_properties.hdf5) | Figs 4 & 8
+[organic_z0_gc_properties.hdf5](/data/organic_z0_gc_properties.hdf5) | Figs 4 & 8
+[enhanced_z0_gc_properties.hdf5](/data/enhanced_z0_gc_properties.hdf5) | Figs 4 & 8
 
 ### 4.2 Observational data
 

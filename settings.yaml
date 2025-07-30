@@ -2,7 +2,7 @@
 # File locations
 data_dir: data
 data_file_template: '{data_dir}/{}_mgc_{:g}_data.hdf5'
-z0_data_file: '{data_dir}/{}_paper_z0_gc_properties.hdf5'
+z0_data_file: '{data_dir}/{}_z0_gc_properties.hdf5'
 
 ########################################################################
 # Analysis settings
