@@ -32,12 +32,12 @@ def main():
     plt.rc("hatch", color="k", linewidth=0.5)
 
     # Load data for figures
-    all_z0_data = [Z0Data(sim) for sim in Simulations["sim_list"]]
+    all_z0_data = [Z0Data(sim) for sim in Simulations.get("Standard")["sim_list"]]
     property_list = ["fhalo_cl", "fhalo_gc"]
 
     # Select only Enhanced and Suppressed simulations for plotting
-    selected_sim_list = np.asarray(Simulations["sim_list"])[[0, 2]]
-    selected_sim_names = np.asarray(Simulations["sim_names"])[[0, 2]]
+    selected_sim_list = np.asarray(Simulations.get("Standard")["sim_list"])[[0, 2]]
+    selected_sim_names = np.asarray(Simulations.get("Standard")["sim_names"])[[0, 2]]
     selected_z0_data = np.asarray(all_z0_data)[[0, 2]]
 
     ####################################################################
@@ -140,8 +140,6 @@ def main():
         axs[1].plot(radius_mid_bins, med_fgc_init, ls="--", color=line.get_color())
 
         # Plot FHalo (Reina-Campos definition)
-        print("   Globular Clusters")
-        print("   ", med_rc_gc)
         axs[1].axhline(med_rc_gc, ls=":", color=line.get_color(), zorder=1)
         axs[1].axhspan(
             *spread_rc_gc, color=line.get_color(), zorder=0, ec=None, alpha=0.2

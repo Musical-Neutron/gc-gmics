@@ -25,7 +25,7 @@ def main():
 
     # Load data for figures
     property_list = ["GCFR", "GCDR", "Net_dM_GCdt"]
-    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"]]
+    ev_data = [EvolutionData(sim) for sim in Simulations.get("Standard")["sim_list"]]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
 
     ####################################################################
@@ -52,10 +52,10 @@ def main():
     ):
         for sim_data, sim, sim_name, tlb_mm, tlb_tm in zip(
             ev_data,
-            Simulations["sim_list"],
-            Simulations["sim_names"],
-            Simulations["sim_tlb_major_merger"],
-            Simulations["sim_tlb_target_merger"],
+            Simulations.get("Standard")["sim_list"],
+            Simulations.get("Standard")["sim_names"],
+            Simulations.get("Standard")["tlb_major_merger"],
+            Simulations.get("Standard")["tlb_target_merger"],
         ):
             med, spread = sim_data.med_spread(property_to_plot)
 

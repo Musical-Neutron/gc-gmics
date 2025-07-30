@@ -1,13 +1,13 @@
-# Plotting scripts for the E-MOSAICS GM globular cluster paper
+# Plotting scripts for the genetically modified merger history study of globular clusters
 
-**Last reviewed:** 0.6.3
+**Last reviewed:** 0.6.4
 
-A set of scripts and a repository of reduced data to reproduce the plots in the
-genetically modified initial conditions E-MOSAICS Globular Cluster (GC)
-paper.
+A set of scripts and a repository of reduced data to reproduce the figures in
+the study of globular cluster (GC) formation, evolution, and destruction using
+genetically modified initial conditions.
 
-This README file is located in the main repository of the plotting scripts.
-All plotting scripts should be executed from this directory.
+This README file is located in the root directory of the plotting scripts
+package. All plotting scripts should be executed from here.
 
 ## 1.0 Installation
 

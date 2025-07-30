@@ -25,8 +25,8 @@ def main():
 
     # Load data for figures
     property_list = ["SFR", "M_gas,SF", "M_BH"]
-    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"]]
-    ev_data_nobh = [EvolutionData(sim) for sim in Simulations["nobh_sim_list"]]
+    ev_data = [EvolutionData(sim) for sim in Simulations.get("Standard")["sim_list"]]
+    ev_data_nobh = [EvolutionData(sim) for sim in Simulations.get("noBH")["sim_list"]]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
     no_bh_props = ["SFR", "M_gas,SF"]
 
@@ -54,10 +54,10 @@ def main():
     ):
         for sim_data, sim, sim_name, tlb_mm, tlb_tm, sim_data_nobh in zip(
             ev_data,
-            Simulations["sim_list"],
-            Simulations["sim_names"],
-            Simulations["sim_tlb_major_merger"],
-            Simulations["sim_tlb_target_merger"],
+            Simulations.get("Standard")["sim_list"],
+            Simulations.get("Standard")["sim_names"],
+            Simulations.get("Standard")["tlb_major_merger"],
+            Simulations.get("Standard")["tlb_target_merger"],
             ev_data_nobh,
         ):
             med, spread = sim_data.med_spread(property_to_plot)
