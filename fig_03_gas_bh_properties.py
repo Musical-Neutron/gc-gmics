@@ -25,8 +25,8 @@ def main():
 
     # Load data for figures
     property_list = ["SFR", "M_gas,SF", "M_BH"]
-    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"][:3]]
-    ev_data_nobh = [EvolutionData(sim) for sim in Simulations["sim_list"][3:]]
+    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"]]
+    ev_data_nobh = [EvolutionData(sim) for sim in Simulations["nobh_sim_list"]]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
     no_bh_props = ["SFR", "M_gas,SF"]
 

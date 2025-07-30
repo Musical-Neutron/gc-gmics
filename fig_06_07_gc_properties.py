@@ -25,7 +25,7 @@ def main():
     out_file_template = "{}_vs_tlb.pdf"
 
     # Load data for figures
-    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"][:3]]
+    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"]]
     property_list = ["Pk_SFgas", "Pk_birth,GC", "Mc_star", "CFE"]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
 

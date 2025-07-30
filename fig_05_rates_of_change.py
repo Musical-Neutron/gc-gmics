@@ -25,7 +25,7 @@ def main():
 
     # Load data for figures
     property_list = ["GCFR", "GCDR", "Net_dM_GCdt"]
-    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"][:3]]
+    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"]]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
 
     ####################################################################

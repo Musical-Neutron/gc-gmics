@@ -41,7 +41,7 @@ preferred-citation:
       given-names: Jonathan J.
       orcid: 'https://orcid.org/0000-0002-8337-3659'
     - family-names: Pfeffer
-      given-names: Joel
+      given-names: Joel L.
       orcid: 'https://orcid.org/0000-0003-3786-8818'
     - family-names: Crain
       given-names: Robert A.
@@ -55,11 +55,10 @@ preferred-citation:
     - family-names: Bastian
       given-names: Nate
   identifiers:
-  - type: doi
-    value: 10.1093/mnras/staf1226
-    description: Journal article concerning this repository
-  title: "The formation and disruption of globular cluster populations in simulations of present-day  L∗
-  galaxies with controlled assembly histories"
-  journal: "Monthly Notices of the Royal Astronomical Society"
+    - type: doi
+      value: 10.1093/mnras/staf1226
+      description: Journal article concerning this repository
+  title: 'The formation and disruption of globular cluster populations in simulations of present-day L* galaxies with controlled assembly histories'
+  journal: 'Monthly Notices of the Royal Astronomical Society'
   year: 2025
   type: article

@@ -24,7 +24,7 @@ def main():
 
     # Load data and initialise
     property_list = ["M_200", "M_star", "M_GC"]
-    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"][:3]]
+    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"]]
     ylabels, yscales, ylims = return_plot_format_lists(property_list)
     r200_map = {"M_star": "M_star_r200", "M_GC": "M_GC_r200"}
 
