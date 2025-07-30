@@ -57,6 +57,6 @@
     gcgmics=["*.json", "*.md", "*.txt", "settings.yaml"]
 
 [tool.pytest.ini_options]
-    addopts     ="-ra -q --cov=gcgmics --cov-report=term-missing"
+    addopts     ="-v -ra -q --cov=gcgmics --cov-report=xml:cov.xml"
     python_files="test_*.py"
     testpaths   =["tests"]

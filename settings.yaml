@@ -51,6 +51,9 @@ Simulations:
       'z2_od_1p000_mz1p7_1p100_HiRes',
       'z2_od_1p000_HiRes',
       'z2_od_1p000_mz1p7_0p800_HiRes',
+    ]
+  nobh_sim_list:
+    [
       'z2_od_1p000_mz1p7_1p100_HiRes_noBH',
       'z2_od_1p000_HiRes_noBH',
       'z2_od_1p000_mz1p7_0p800_HiRes_noBH',
@@ -63,13 +66,12 @@ Simulations:
   sim_tlb_target_merger: [7.49, 6.89, ~, 7.49, 6.89, ~] # Gyr
   sim_dtlb_tm: [0.486, 0.107, ~, 0.486, 0.107, ~] # Gyr
   sim_names:
+    ["$\\textsc{enhanced}$", "$\\textsc{organic}$", "$\\textsc{suppressed}$"]
+  nobh_sim_names:
     [
-      "$\\textsc{enhanced}$",
-      "$\\textsc{organic}$",
-      "$\\textsc{suppressed}$",
-      "$\\textsc{enhanced -- noAGN}$",
-      "$\\textsc{organic -- noAGN}$",
-      "$\\textsc{suppressed -- noAGN}$",
+      "$\\textsc{enhanced -- noBH}$",
+      "$\\textsc{organic -- noBH}$",
+      "$\\textsc{suppressed -- noBH}$",
     ]
 
 ########################################################################
@@ -77,9 +79,9 @@ Simulations:
 Plotting:
   tlb_lim: [0, 12.0]
   z_lim: [0.0, 8.0]
+  coarse_spacing: 1.0
   fine_spacing: 0.2
   z_cut: 6.5
-  coarse_spacing: 1.0
   arrow_length: 0.0266667 # 0.08 / 3.0
   common_arrow_properties: &common_arrow_properties
     head_width: 0.02 # 3.0 * arrow_length * 0.25,
@@ -95,26 +97,28 @@ Plotting:
   tm_arrow_properties:
     <<: *common_arrow_properties
     ls: '-'
-
   plot_styles:
-    z2_od_1p000_mz1p7_1p100_HiRes:
+    z2_od_1p000_mz1p7_1p100_HiRes: &1p100_plot_properties
       color: '#7E317B'
-    z2_od_1p000_HiRes:
+    z2_od_1p000_HiRes: &1p000_plot_properties
       color: '#34B83B'
-    z2_od_1p000_mz1p7_0p800_HiRes:
+    z2_od_1p000_mz1p7_0p800_HiRes: &0p800_plot_properties
       color: '#2F3BD6'
     z2_od_1p000_mz1p7_1p100_HiRes_noBH:
-      color: '#7E317B'
+      <<: *1p100_plot_properties
       marker: .
       ls: --
     z2_od_1p000_HiRes_noBH:
-      color: '#34B83B'
+      <<: *1p000_plot_properties
       marker: .
       ls: --
     z2_od_1p000_mz1p7_0p800_HiRes_noBH:
-      color: '#2F3BD6'
+      <<: *0p800_plot_properties
       marker: .
       ls: --
+
+########################################################################
+# Visualisation configuration
 Property dictionary:
   CFE:
     ylim: [0.0, 0.8]
@@ -140,7 +144,7 @@ Property dictionary:
     ylim: [1.0e+5, 2.0e+8]
     yscale: log
     ylabel: "$M_{\\rm SMBH}\\, \\left[{\\rm M_\\odot}\\right]$"
-    printlabel: M_AGN [Msun]
+    printlabel: M_SMBH [Msun]
   M_GC:
     ylim: [3.0e+7, ~]
     yscale: log

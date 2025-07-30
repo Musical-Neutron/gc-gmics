@@ -32,7 +32,7 @@ def main():
     plt.rc("hatch", color="k", linewidth=0.5)
 
     # Load data for figures
-    all_z0_data = [Z0Data(sim) for sim in Simulations["sim_list"][:3]]
+    all_z0_data = [Z0Data(sim) for sim in Simulations["sim_list"]]
     property_list = ["fhalo_cl", "fhalo_gc"]
 
     # Select only Enhanced and Suppressed simulations for plotting
@@ -118,9 +118,6 @@ def main():
         axs[0].plot(radius_mid_bins, med_fcl_init, ls="--", color=line.get_color())
 
         # Plot FHalo (Reina-Campos definition)
-        print(sim)
-        print("   Clusters")
-        print("   ", med_rc_cl)
         axs[0].axhline(med_rc_cl, ls=":", color=line.get_color(), zorder=1)
         axs[0].axhspan(
             *spread_rc_cl, color=line.get_color(), zorder=0, ec=None, alpha=0.2

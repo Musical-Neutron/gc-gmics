@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 # Place import files below
+import warnings
+
 import fig_02_key_galaxy_properties
 import fig_03_gas_bh_properties
 import fig_04_z0_mass_function
@@ -11,6 +13,13 @@ import print_paper_results
 
 
 def main():
+    # Warning suppression
+    # RuntimeWarnings will still appear when scripts are run separately
+    warnings.filterwarnings("ignore", category=RuntimeWarning)
+
+    print("Running all plotting scripts")
+    print("#" * 72)
+
     # Plot Fig. 1
     print("1. Plotting Fig. 2")
     fig_02_key_galaxy_properties.main()
@@ -37,6 +46,7 @@ def main():
 
     # Print paper results
     print("7. Printing relevant data to screen")
+    print()
     print_paper_results.main()
 
     return None
