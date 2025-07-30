@@ -160,7 +160,7 @@ def main():
 
     ####################################################################
     # Load simulation data
-    all_z0_data = [Z0Data(sim) for sim in Simulations["sim_list"]]
+    all_z0_data = [Z0Data(sim) for sim in Simulations.get("Standard")["sim_list"]]
     sim_colors, sim_line_styles = [], []
 
     fig = plt.figure(figsize=(8, 8))
@@ -168,7 +168,9 @@ def main():
 
     ####################################################################
     for sim, sim_name, z0_data in zip(
-        Simulations["sim_list"], Simulations["sim_names"], all_z0_data
+        Simulations.get("Standard")["sim_list"],
+        Simulations.get("Standard")["sim_names"],
+        all_z0_data,
     ):
         # Cluster masses
         mcl_current = z0_data.current_cluster_m_current  # Msun
@@ -258,7 +260,7 @@ def main():
     sim_legend_markers = []
     sim_legend_labels = []
     for sim_name, sim_color, sim_style in zip(
-        Simulations["sim_names"], sim_colors, sim_line_styles
+        Simulations.get("Standard")["sim_names"], sim_colors, sim_line_styles
     ):
         line_styles = [BIRTH_STYLE["ls"], sim_style]
         lc = mcol.LineCollection(

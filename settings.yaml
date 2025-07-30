@@ -46,27 +46,37 @@ Observations:
 ########################################################################
 # Simulations
 Simulations:
-  sim_list: ['enhanced', 'organic', 'suppressed']
-  nobh_sim_list: ['enhanced_noBH', 'organic_noBH', 'suppressed_noBH']
-  # Onset of merger
-  sim_z_major_merger: [1.63, 1.7, 1.68, 1.63, 1.7, 1.68]
-  sim_tlb_major_merger: [9.85, 10.00, 9.95, 9.85, 10.00, 9.95] # Gyr
-  sim_dtlb_mm: [0.325, 0.259, 0.129, 0.325, 0.259, 0.129] # Gyr
-  sim_z_target_merger: [0.89, 0.77, ~, 0.89, 0.77, ~]
-  sim_tlb_target_merger: [7.49, 6.89, ~, 7.49, 6.89, ~] # Gyr
-  sim_dtlb_tm: [0.486, 0.107, ~, 0.486, 0.107, ~] # Gyr
-  sim_names:
-    ["$\\textsc{enhanced}$", "$\\textsc{organic}$", "$\\textsc{suppressed}$"]
-  nobh_sim_names:
-    [
-      "$\\textsc{enhanced -- noBH}$",
-      "$\\textsc{organic -- noBH}$",
-      "$\\textsc{suppressed -- noBH}$",
-    ]
+  Standard:
+    sim_list: ['enhanced', 'organic', 'suppressed']
+    sim_names:
+      ["$\\textsc{enhanced}$", "$\\textsc{organic}$", "$\\textsc{suppressed}$"]
+    # Merger completion
+    z_major_merger: [1.63, 1.7, 1.68]
+    tlb_major_merger: [9.85, 10.00, 9.95] # Gyr
+    dtlb_mm: [0.325, 0.259, 0.129] # Gyr
+    z_target_merger: [0.89, 0.77, ~]
+    tlb_target_merger: [7.49, 6.89, ~] # Gyr
+    dtlb_tm: [0.486, 0.107, ~] # Gyr
+  noBH:
+    sim_list: ['enhanced_noBH', 'organic_noBH', 'suppressed_noBH']
+    sim_names:
+      [
+        "$\\textsc{enhanced -- noBH}$",
+        "$\\textsc{organic -- noBH}$",
+        "$\\textsc{suppressed -- noBH}$",
+      ]
+    # Merger completion
+    z_major_merger: [1.63, 1.7, 1.68]
+    tlb_major_merger: [9.85, 10.00, 9.95] # Gyr
+    dtlb_mm: [0.325, 0.259, 0.129] # Gyr
+    z_target_merger: [0.89, 0.77, ~]
+    tlb_target_merger: [7.49, 6.89, ~] # Gyr
+    dtlb_tm: [0.486, 0.107, ~] # Gyr
 
 ########################################################################
 # Plotting settings
 Plotting:
+  individual_panels: False
   tlb_lim: [0, 12.0]
   z_lim: [0.0, 8.0]
   coarse_spacing: 1.0

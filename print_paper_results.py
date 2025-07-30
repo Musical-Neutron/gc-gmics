@@ -10,7 +10,7 @@ from gcgmics.settings import Printing, Simulations
 def main():
     # Load relevant data
     property_list = Printing["print_property_list"]
-    ev_data = [EvolutionData(sim) for sim in Simulations["sim_list"][:3]]
+    ev_data = [EvolutionData(sim) for sim in Simulations.get("Standard")["sim_list"]]
     print_labels = return_print_format_lists(property_list)
     col_sep = " " * 4
 
@@ -33,7 +33,7 @@ def main():
     z0_table.append(scale_row)
 
     # Process each simulation
-    for sim, name in zip(ev_data, Simulations["sim_names"]):
+    for sim, name in zip(ev_data, Simulations.get("Standard")["sim_names"]):
         row_data = [name]
         for prop, exp in zip(property_list, exponents):
             med, spread = sim.med_spread(prop)
@@ -75,7 +75,7 @@ def main():
     peak_table.append(scale_row)
 
     # Process each simulation
-    for sim, name in zip(ev_data, Simulations["sim_names"]):
+    for sim, name in zip(ev_data, Simulations.get("Standard")["sim_names"]):
         # Main value row
         main_row = [name]
         time_row = ["t_lb_max [Gyr]"]
