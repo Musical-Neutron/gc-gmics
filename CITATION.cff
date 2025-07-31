@@ -17,6 +17,9 @@ authors:
       Sciences
 identifiers:
   - type: doi
+    value: 10.5281/zenodo.16614763
+    description: Data and code repository
+  - type: doi
     value: 10.1093/mnras/staf1226
     description: Journal article
   - type: url

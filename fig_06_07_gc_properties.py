@@ -232,7 +232,9 @@ def main():
                 birth_med, _ = sim_data.med_spread(birth_map[property_to_plot])
                 style = {**Plotting["plot_styles"][sim], "ls": "--"}
                 ax.plot(sim_data.t_lb, birth_med, **style)
-                indiv_ax.plot(sim_data.t_lb, birth_med, **style)
+
+                if indiv_ax is not None:
+                    indiv_ax.plot(sim_data.t_lb, birth_med, **style)
 
             ############################################################
             # Plot merger arrows on first and last panels
@@ -245,7 +247,7 @@ def main():
             (new_arrow_length, stack_mm_props) = get_scaled_arrow_properties(
                 Plotting["arrow_length"],
                 mm_props,
-                ax.get_gridspec()._col_width_ratios[a_i] * len(property_list) / 3.0,
+                ax.get_gridspec()._col_width_ratios[a_i],
             )
 
             # Target major merger
@@ -256,7 +258,7 @@ def main():
             _, stack_tm_props = get_scaled_arrow_properties(
                 Plotting["arrow_length"],
                 tm_props,
-                ax.get_gridspec()._col_width_ratios[a_i] * len(property_list) / 3.0,
+                ax.get_gridspec()._col_width_ratios[a_i],
             )
             if tlb_tm is not None:
                 tm_x = 1.0 - (tlb_tm / Plotting["axis_rescale"])
@@ -275,14 +277,14 @@ def main():
                 (new_arrow_length, indiv_mm_props) = get_scaled_arrow_properties(
                     Plotting["arrow_length"],
                     mm_props,
-                    indiv_ax.get_gridspec()._row_height_ratios[0] / 2.0,
+                    indiv_ax.get_gridspec()._col_width_ratios[0] / 2.0,
                 )
 
                 # Target major merger
                 _, indiv_tm_props = get_scaled_arrow_properties(
                     Plotting["arrow_length"],
                     tm_props,
-                    indiv_ax.get_gridspec()._row_height_ratios[0] / 2.0,
+                    indiv_ax.get_gridspec()._col_width_ratios[0] / 2.0,
                 )
 
                 # Individual axes and arrows

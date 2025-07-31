@@ -1,10 +1,13 @@
 # Plotting scripts for the genetically modified merger history study of globular clusters
 
-**Last reviewed:** 1.0.0
+[![DOI](https://zenodo.org/badge/618982533.svg)](https://doi.org/10.5281/zenodo.16614763)
+[![Build and test](https://github.com/Musical-Neutron/gc-gmics/actions/workflows/test_repo.yml/badge.svg?branch=main)](https://github.com/Musical-Neutron/gc-gmics/actions/workflows/test_repo.yml)
+
+**Last reviewed:** v1.0.0
 
 A set of scripts and a repository of reduced data to reproduce the figures in
 the study of globular cluster (GC) formation, evolution, and destruction using
-genetically modified initial conditions.
+genetically modified initial conditions [(O. Newton et al., 2025)](https://doi.org/10.1093/mnras/staf1226).
 
 This README file is located in the root directory of the plotting scripts
 package. All plotting scripts should be executed from here.
@@ -20,13 +23,13 @@ In particular, as of this release it requires
   cairo >= 1.15.10
 ```
 
-For relevant information about the current cairo dependencies please
+For relevant information about the current `cairo` dependencies please
 review the [Pycairo package documentation](https://pycairo.readthedocs.io/en/latest/).
 
 ### 1.2 Package installation
 
-Once you have installed cairo, this package can be installed by cloning it
-from the github repository:
+Once you have installed `cairo`, this plotting package can be installed by
+cloning it from the github repository:
 
 ```bash
     git clone git@github.com:Musical-Neutron/gc-gmics.git
@@ -70,8 +73,8 @@ Key settings in the repository are configured using the
   The full list of available properties is provided in `Property dictionary`.
 
 - **Plotting**
-  - `individual_panels` specifies whether individual figure
-  panels will be created and saved as independent figures alongside the combined one.
+  - `individual_panels` specifies whether figure panels will also be created
+  and saved as independent figures alongside the main ones.
   Default: `False`.
 
 ### 2.3 Visualisation
@@ -134,7 +137,7 @@ File name | Figures needed for
 [suppressed_noBH_mgc_100000_data.hdf5](/data/suppressed_noBH_mgc_100000_data.hdf5) | Fig. 3
 [organic_noBH_mgc_100000_data.hdf5](/data/organic_noBH_mgc_100000_data.hdf5) | Fig. 3
 [enhanced_noBH_mgc_100000_data.hdf5](/data/enhanced_noBH_mgc_100000_data.hdf5) | Fig. 3
-[suppressed_paper_z0_gc_properties.hdf5](/data/suppressed_paper_z0_gc_properties.hdf5) | Figs 4 & 8
+[suppressed_z0_gc_properties.hdf5](/data/suppressed_z0_gc_properties.hdf5) | Figs 4 & 8
 [organic_z0_gc_properties.hdf5](/data/organic_z0_gc_properties.hdf5) | Figs 4 & 8
 [enhanced_z0_gc_properties.hdf5](/data/enhanced_z0_gc_properties.hdf5) | Figs 4 & 8
 
@@ -157,6 +160,7 @@ This code and the accompanying data are freely available.
 ### 5.1 If you use this code or derivative work
 
 - [O. Newton et al. (2025)](https://doi.org/10.1093/mnras/staf1226)
+- [O. Newton (2025)](https://doi.org/10.5281/zenodo.16614763)
 
 ### 5.2 If you use these data, a derivative work, or results thereof
 

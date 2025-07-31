@@ -2,7 +2,6 @@
 
 from unittest.mock import MagicMock, call, patch
 
-import h5py
 import numpy as np
 import pytest
 from matplotlib.axis import Axis
@@ -10,14 +9,10 @@ from matplotlib.axis import Axis
 from gcgmics.common_functions import (
     Cosmology,
     FigureHandler,
-    MergerArrow,
     MinorSymLogLocator,
     SecondXAxis,
     embed_symbols,
     get_scaled_arrow_properties,
-    plot_merger_arrow,
-    save_figures,
-    tick_function,
 )
 
 
@@ -402,7 +397,7 @@ class TestFigureHandler:
         mock_ax1.text.assert_any_call(
             0.02,
             0.96,
-            "a)",  # First element of global panel_labels
+            "(a)",  # First element of global panel_labels
             color="k",
             fontsize="medium",
             verticalalignment="top",
@@ -411,7 +406,7 @@ class TestFigureHandler:
         mock_ax2.text.assert_any_call(
             0.02,
             0.96,
-            "b)",  # Second element of global panel_labels
+            "(b)",  # Second element of global panel_labels
             color="k",
             fontsize="medium",
             verticalalignment="top",
@@ -420,7 +415,7 @@ class TestFigureHandler:
         mock_ax3.text.assert_any_call(
             0.02,
             0.96,
-            "c)",  # Third element of global panel_labels
+            "(c)",  # Third element of global panel_labels
             color="k",
             fontsize="medium",
             verticalalignment="top",
