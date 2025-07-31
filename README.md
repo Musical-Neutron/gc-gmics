@@ -73,8 +73,8 @@ Key settings in the repository are configured using the
   The full list of available properties is provided in `Property dictionary`.
 
 - **Plotting**
-  - `individual_panels` specifies whether individual figure
-  panels will be created and saved as independent figures alongside the combined one.
+  - `individual_panels` specifies whether figure panels will also be created
+  and saved as independent figures alongside the main ones.
   Default: `False`.
 
 ### 2.3 Visualisation
