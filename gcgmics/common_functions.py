@@ -8,7 +8,7 @@ import scipy.integrate as integrate
 from matplotlib import transforms
 from matplotlib.ticker import Locator
 
-panel_labels = [it + ")" for it in list(string.ascii_lowercase)]
+panel_labels = ["(" + it + ")" for it in list(string.ascii_lowercase)]
 
 
 def embed_symbols(pdf_file):

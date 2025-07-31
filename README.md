@@ -7,7 +7,7 @@
 
 A set of scripts and a repository of reduced data to reproduce the figures in
 the study of globular cluster (GC) formation, evolution, and destruction using
-genetically modified initial conditions.
+genetically modified initial conditions [(O. Newton et al., 2025)](https://doi.org/10.1093/mnras/staf1226).
 
 This README file is located in the root directory of the plotting scripts
 package. All plotting scripts should be executed from here.
@@ -23,13 +23,13 @@ In particular, as of this release it requires
   cairo >= 1.15.10
 ```
 
-For relevant information about the current cairo dependencies please
+For relevant information about the current `cairo` dependencies please
 review the [Pycairo package documentation](https://pycairo.readthedocs.io/en/latest/).
 
 ### 1.2 Package installation
 
-Once you have installed cairo, this package can be installed by cloning it
-from the github repository:
+Once you have installed `cairo`, this plotting package can be installed by
+cloning it from the github repository:
 
 ```bash
     git clone git@github.com:Musical-Neutron/gc-gmics.git
@@ -137,7 +137,7 @@ File name | Figures needed for
 [suppressed_noBH_mgc_100000_data.hdf5](/data/suppressed_noBH_mgc_100000_data.hdf5) | Fig. 3
 [organic_noBH_mgc_100000_data.hdf5](/data/organic_noBH_mgc_100000_data.hdf5) | Fig. 3
 [enhanced_noBH_mgc_100000_data.hdf5](/data/enhanced_noBH_mgc_100000_data.hdf5) | Fig. 3
-[suppressed_paper_z0_gc_properties.hdf5](/data/suppressed_paper_z0_gc_properties.hdf5) | Figs 4 & 8
+[suppressed_z0_gc_properties.hdf5](/data/suppressed_z0_gc_properties.hdf5) | Figs 4 & 8
 [organic_z0_gc_properties.hdf5](/data/organic_z0_gc_properties.hdf5) | Figs 4 & 8
 [enhanced_z0_gc_properties.hdf5](/data/enhanced_z0_gc_properties.hdf5) | Figs 4 & 8
 
