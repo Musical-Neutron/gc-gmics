@@ -26,21 +26,34 @@ In particular, as of this release it requires
 For relevant information about the current `cairo` dependencies please
 review the [Pycairo package documentation](https://pycairo.readthedocs.io/en/latest/).
 
+In most cases `cairo` can be installed using:
+
+**Ubuntu**
+```bash
+  (sudo) apt-get update
+  (sudo) apt-get install libcairo2-dev pkg-config
+```
+
+**macOS**
+```bash
+  brew install cairo pkg-config
+```
+
 ### 1.2 Package installation
 
 Once you have installed `cairo`, this plotting package can be installed by
 cloning it from the github repository:
 
 ```bash
-    git clone git@github.com:Musical-Neutron/gc-gmics.git
+  git clone git@github.com:Musical-Neutron/gc-gmics.git
 ```
 
 It is recommended to create a clean virtual environment prior to installation.
 Once that is done the github repository can be installed by running the
 following:
 ```bash
-    cd gc-gmics
-    pip install .
+  cd gc-gmics
+  pip install .
 ```
 
 ### 1.3 Tests
@@ -49,8 +62,8 @@ If you plan to review the package test suite, run the following from the root
 directory:
 
 ```bash
-    pip install .[test]
-    pytest
+  pip install .[test]
+  pytest
 ```
 
 ## 2.0 Configuration (`settings.yaml`)
@@ -172,7 +185,7 @@ This code and the accompanying data are freely available.
 
 - [O. Newton et al. (2025)](https://doi.org/10.1093/mnras/staf1226)
 
-### 5.3 Contact
+## 6.0 Contact
 
 If you have any questions or would like help in using the scripts, please
 email:
