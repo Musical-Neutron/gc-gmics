@@ -35,19 +35,14 @@
     Repository   ="https://github.com/Musical-Neutron/gc-gmics"
 
 [project.optional-dependencies]
-    dev=["black", "flake8", "ipython"]
-    # docs=["numpydoc", "sphinx", "sphinx-rtd-theme"]
-    test=[
-        "nose",        # Keep if you still need it for legacy tests
-        "pytest-cov",
-        "pytest>=6.0",
-    ]
+    dev =["black", "flake8", "ipython"]
+    test=["pytest-cov", "pytest>=6.0"]
 
 [tool.setuptools.dynamic]
     version={file=["VERSION"]}
 
 [tool.setuptools.packages.find]
-    exclude=["build", "docs", "scripts", "tests", "tutorials"]
+    exclude=["tests"]
     where  =["."]
 
 [tool.setuptools]
