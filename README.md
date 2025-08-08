@@ -33,6 +33,12 @@ cloning it from the github repository:
 
 ```bash
     git clone git@github.com:Musical-Neutron/gc-gmics.git
+```
+
+It is recommended to create a clean virtual environment prior to installation.
+Once that is done the github repository can be installed by running the
+following:
+```bash
     cd gc-gmics
     pip install .
 ```
@@ -40,7 +46,7 @@ cloning it from the github repository:
 ### 1.3 Tests
 
 If you plan to review the package test suite, run the following from the root
-directory
+directory:
 
 ```bash
     pip install .[test]
