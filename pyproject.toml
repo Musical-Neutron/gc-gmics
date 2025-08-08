@@ -27,7 +27,7 @@
     maintainers=[{name="Oliver Newton", email="onewton@cft.edu.pl"}]
     name="gcgmics"
     readme="README.md"
-    requires-python=">=3.7"
+    requires-python=">=3.8"
 
 [project.urls]
     "Bug Tracker"="https://github.com/Musical-Neutron/gc-gmics/issues"
