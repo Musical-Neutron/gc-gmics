@@ -3,7 +3,7 @@
 [![DOI](https://zenodo.org/badge/618982533.svg)](https://doi.org/10.5281/zenodo.16614763)
 [![Build and test](https://github.com/Musical-Neutron/gc-gmics/actions/workflows/test_repo.yml/badge.svg?branch=main)](https://github.com/Musical-Neutron/gc-gmics/actions/workflows/test_repo.yml)
 
-**Last reviewed:** v1.0.0
+**Last reviewed:** v1.0.1
 
 A set of scripts and a repository of reduced data to reproduce the figures in
 the study of globular cluster (GC) formation, evolution, and destruction using
@@ -19,12 +19,27 @@ package. All plotting scripts should be executed from here.
 This package uses the [cairo graphics library](https://cairographics.org/).
 In particular, as of this release it requires
 
-```
+```bash
   cairo >= 1.15.10
 ```
 
 For relevant information about the current `cairo` dependencies please
 review the [Pycairo package documentation](https://pycairo.readthedocs.io/en/latest/).
+
+In most cases `cairo` can be installed using:
+
+#### Ubuntu
+
+```bash
+  (sudo) apt-get update
+  (sudo) apt-get install libcairo2-dev pkg-config
+```
+
+#### macOS
+
+```bash
+  brew install cairo pkg-config
+```
 
 ### 1.2 Package installation
 
@@ -32,19 +47,26 @@ Once you have installed `cairo`, this plotting package can be installed by
 cloning it from the github repository:
 
 ```bash
-    git clone git@github.com:Musical-Neutron/gc-gmics.git
-    cd gc-gmics
-    pip install .
+  git clone git@github.com:Musical-Neutron/gc-gmics.git
+```
+
+It is recommended to create a clean virtual environment prior to installation.
+Once that is done the github repository can be installed by running the
+following:
+
+```bash
+  cd gc-gmics
+  pip install .
 ```
 
 ### 1.3 Tests
 
-If you plan to review the package test suite, run the following from the root
-directory
+If you plan to review the package test suite, run the following from the package
+root directory:
 
 ```bash
-    pip install .[test]
-    pytest
+  pip install .[test]
+  pytest
 ```
 
 ## 2.0 Configuration (`settings.yaml`)
@@ -97,17 +119,17 @@ There are seven scripts that can be executed independently:
 
 Script name | Figure | Description
 :--- | :---: | :---
-[fig_02_key_galaxy_properties.py](/fig_02_key_galaxy_properties.py) | Fig. 2 | Plots the halo mass, *M*<sub>200</sub>; stellar mass, $M_\ast$; and mass in GCs, *M*<sub>GC</sub> vs. lookback time, *t*<sub>lb</sub>
+[fig_02_key_galaxy_properties.py](/fig_02_key_galaxy_properties.py) | Fig. 2 | Plots the halo mass, *M*<sub>200</sub>; stellar mass, *M*<sub>*</sub>; and mass in GCs, *M*<sub>GC</sub> vs. lookback time, *t*<sub>lb</sub>
 [fig_03_gas_bh_properties.py](/fig_03_gas_bh_properties.py) | Fig. 3 | Plots the star formation rate, SFR; mass of star-forming gas, *M*<sub>SF</sub>; and the central black hole mass, *M*<sub>SMBH</sub> vs. *t*<sub>lb</sub>.
-[fig_04_z0_mass_function.py](/fig_04_z0_mass_function.py) | Fig. 4 | Plots the $z=0$ and birth mass functions of all clusters that survive to $z=0$. Note that the latter is averaged over time and is *not* equivalent to the initial cluster mass function.
-[fig_05_rates_of_change.py](/fig_05_rates_of_change.py) | Fig. 5 | Plots the  GC formation rate, GCFR; GC destruction rate, GCDR; and the net change in GC mass, ${\rm d}M_{\rm GC} / {\rm d}t$ vs. *t*<sub>lb</sub>.
-[fig_06_07_gc_properties.py](/fig_06_07_gc_properties.py) | 6 & 7 | Plots the stellar and GC birth pressures; $M_{\rm c,\, \ast}$; and the cluster formation efficiency, $\Gamma$ vs. *t*<sub>lb</sub>. Also plots the specific frequency, *T*<sub>N</sub>; and the specific mass, *S*<sub>M</sub> vs. *t*<sub>lb</sub>.
+[fig_04_z0_mass_function.py](/fig_04_z0_mass_function.py) | Fig. 4 | Plots the *z=0* and birth mass functions of all clusters that survive to *z=0*. Note that the latter is averaged over time and is *not* equivalent to the initial cluster mass function.
+[fig_05_rates_of_change.py](/fig_05_rates_of_change.py) | Fig. 5 | Plots the  GC formation rate, GCFR; GC destruction rate, GCDR; and the net change in GC mass, d*M*<sub>GC</sub>/d*t* vs. *t*<sub>lb</sub>.
+[fig_06_07_gc_properties.py](/fig_06_07_gc_properties.py) | 6 & 7 | Plots the stellar and GC birth pressures; *M*<sub>c,\*</sub>; and the cluster formation efficiency, $\Gamma$ vs. *t*<sub>lb</sub>. Also plots the specific frequency, *T*<sub>N</sub>; and the specific mass, *S*<sub>M</sub> vs. *t*<sub>lb</sub>.
 [fig_08_fhalo.py](/fig_08_fhalo.py) | Fig. 8 | Plots the fraction of mass in halo stars contributed by the destruction of star clusters.
 [print_paper_results.py](/print_paper_results.py) | | Prints information relevant to the paper to stdout.
 
 There is also a master script, [run_all_scripts.py](/run_all_scripts.py),
-that will run all of the above scripts when executed. This produces .svg
-and .pdf versions of each figure in the paper.
+that will run all of the above scripts when executed. This produces `.svg`
+and `.pdf` versions of each figure in the paper.
 
 ### 3.1 Supplementary scripts
 
@@ -166,7 +188,7 @@ This code and the accompanying data are freely available.
 
 - [O. Newton et al. (2025)](https://doi.org/10.1093/mnras/staf1226)
 
-### 5.3 Contact
+## 6.0 Contact
 
 If you have any questions or would like help in using the scripts, please
 email:
