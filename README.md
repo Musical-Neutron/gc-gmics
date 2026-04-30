@@ -192,4 +192,4 @@ This code and the accompanying data are freely available.
 
 If you have any questions or would like help in using the scripts, please
 email:
-> onewton 'at' cft.edu.pl
+> o.newton 'at' surrey.ac.uk
